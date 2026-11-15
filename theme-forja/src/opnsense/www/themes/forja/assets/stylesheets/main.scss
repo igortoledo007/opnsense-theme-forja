@@ -1,0 +1,2468 @@
+// Nexo theme for OPNsense.
+// Copyright (C) 2026 Igor Toledo <contato@igor.eti.br>
+// Derived from the OPNsense default theme. BSD 2-Clause License, see LICENSE-nexo.
+
+// Nexo theme — main stylesheet (global layout + Bootstrap components).
+// A single source for both families ($variant: nexo | sec) and both modes ($mode: light | dark).
+// Colors only via tk(); the structure (selectors, widths, positions) is that of the default `opnsense` theme:
+// the look changes, never the classes the JS/layout depend on.
+@import "config/colors";
+
+// "Source Sans Pro" with real weights (the default declares one family per weight, which makes the
+// browser fake-bold the regular face). Same files as the default theme.
+@each $weight, $file in (400: Regular, 600: Semibold, 700: Bold) {
+  @font-face {
+    font-family: 'Source Sans Pro';
+    font-weight: $weight;
+    font-style: normal;
+    font-display: swap;
+    src: url('#{$font-base-url}/SourceSansPro-#{$file}/SourceSansPro-#{$file}.woff') format('woff'),
+         url('#{$font-base-url}/SourceSansPro-#{$file}/SourceSansPro-#{$file}.ttf') format('truetype');
+  }
+}
+
+@font-face {
+  font-family: 'SourceSansProBold';
+  src: url('/ui/themes/opnsense/build/fonts/SourceSansPro-Bold/SourceSansPro-Bold.woff') format('woff'),
+       url('/ui/themes/opnsense/build/fonts/SourceSansPro-Bold/SourceSansPro-Bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'SourceSansProSemibold';
+  src: url('/ui/themes/opnsense/build/fonts/SourceSansPro-Semibold/SourceSansPro-Semibold.woff') format('woff'),
+       url('/ui/themes/opnsense/build/fonts/SourceSansPro-Semibold/SourceSansPro-Semibold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'SourceSansProRegular';
+  src: url('/ui/themes/opnsense/build/fonts/SourceSansPro-Regular/SourceSansPro-Regular.woff') format('woff'),
+       url('/ui/themes/opnsense/build/fonts/SourceSansPro-Regular/SourceSansPro-Regular.ttf') format('truetype');
+}
+
+// Core variables and mixins
+@import "bootstrap/variables";
+@import "bootstrap/mixins";
+
+// Reset and dependencies
+@import "bootstrap/normalize";
+@import "bootstrap/print";
+@import "bootstrap/glyphicons";
+
+// Core CSS
+@import "bootstrap/scaffolding";
+@import "bootstrap/type";
+@import "bootstrap/code";
+@import "bootstrap/grid";
+@import "bootstrap/tables";
+@import "bootstrap/forms";
+@import "bootstrap/buttons";
+
+// Components
+@import "bootstrap/component-animations";
+@import "bootstrap/dropdowns";
+@import "bootstrap/button-groups";
+@import "bootstrap/input-groups";
+@import "bootstrap/navs";
+@import "bootstrap/navbar";
+@import "bootstrap/breadcrumbs";
+@import "bootstrap/pagination";
+@import "bootstrap/pager";
+@import "bootstrap/labels";
+@import "bootstrap/badges";
+@import "bootstrap/jumbotron";
+@import "bootstrap/thumbnails";
+@import "bootstrap/alerts";
+@import "bootstrap/progress-bars";
+@import "bootstrap/media";
+@import "bootstrap/list-group";
+@import "bootstrap/panels";
+@import "bootstrap/responsive-embed";
+@import "bootstrap/wells";
+@import "bootstrap/close";
+
+// Components w/ JavaScript
+@import "bootstrap/modals";
+@import "bootstrap/tooltip";
+@import "bootstrap/popovers";
+@import "bootstrap/carousel";
+
+// Utility classes
+@import "bootstrap/utilities";
+@import "bootstrap/responsive-utilities";
+
+
+// =====================================================================
+// Base
+// =====================================================================
+
+*{
+  -webkit-font-smoothing: antialiased;
+}
+
+html, body{
+  height: 100%;
+  background-color: tk(bg-app);
+}
+
+body{
+  touch-action: manipulation;
+  min-width: 320px;
+  font-family: $font-sans;
+  color: tk(text);
+  font-feature-settings: "cv11", "ss01";
+}
+
+// Text selection and accessible focus
+::selection {
+  background: rgba(tk(primary), .25);
+  color: tk(text);
+}
+
+a {
+  transition: color $transition-fast;
+}
+
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible,
+summary:focus-visible {
+  outline: 2px solid tk(primary);
+  outline-offset: 2px;
+  border-radius: $radius-sm;
+}
+
+// Technical values (IPs, ports, MACs, counters) in mono with tabular digits
+code, kbd, pre, samp, .text-mono, .font-mono {
+  font-family: $font-mono;
+  font-variant-numeric: tabular-nums;
+}
+
+code {
+  border: 1px solid tk(border);
+  border-radius: $radius-sm;
+  padding: 1px 5px;
+  font-size: 88%;
+}
+
+kbd {
+  border-radius: $radius-sm;
+  box-shadow: none;
+}
+
+pre {
+  border-radius: $radius;
+  font-size: 13px;
+}
+
+.text-muted { color: tk(text-muted); }
+
+.widget-sort-handle {
+  touch-action: none; }
+
+// =====================================================================
+// Top bar (fixed navbar)
+// =====================================================================
+
+.page-head{
+  top: 0;
+  left: 0;
+  position: fixed;
+  width: 100%;
+  z-index: 2;
+
+  // 3px brand line above the top bar
+  &:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: $gradient-brand;
+    box-shadow: tk(glow);
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .navbar {
+    margin-bottom: 0;
+  }
+
+  .navbar-default {
+    background-color: tk(topbar-bg);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    border-width: 0 0 1px 0;
+    border-color: tk(border);
+    box-shadow: tk(shadow-sm);
+  }
+
+  .navbar-text {
+    color: tk(text-muted);
+    font-family: $font-mono;
+    font-size: 12.5px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .navbar-form {
+    .input-group-addon {
+      background: tk(input-bg);
+      border-right: 0;
+      color: tk(text-muted);
+    }
+    .form-control {
+      border-left: 0;
+      transition: width $transition, border-color $transition-fast, box-shadow $transition-fast;
+    }
+    .input-group:focus-within .input-group-addon {
+      border-color: tk(primary);
+      color: tk(primary);
+    }
+  }
+
+  .navbar-toggle {
+    border-radius: $radius;
+  }
+}
+
+// system status indicator in the top bar: becomes an "LED"
+#system_status {
+  transition: color $transition-fast, text-shadow $transition-fast;
+  &.text-success { color: tk(success); text-shadow: 0 0 8px rgba(tk(success), .55); }
+  &.text-warning { color: tk(warning); text-shadow: 0 0 8px rgba(tk(warning), .55); }
+  &.text-danger  { color: tk(danger);  text-shadow: 0 0 8px rgba(tk(danger), .60); }
+}
+
+// =====================================================================
+// Content
+// =====================================================================
+
+// fixed footer: one compact line (the default is ~57 px tall); the content reserves exactly its height
+$foot-h: 28px;
+
+.page-content{
+  background: tk(bg-app);
+  height: calc(100% - #{$foot-h});
+  padding-top: 62px;
+  position: relative;
+  z-index: 1;
+
+  > .row{
+    height: 100%;
+  }
+}
+
+.page-content-head {
+  background: tk(surface);
+  border-bottom: 1px solid tk(border);
+  padding-bottom: 15px;
+  padding-top: 20px;
+
+  .navbar-nav {
+    width: 100%;
+  }
+
+  h1,h2,h3 {
+    line-height: 1;
+    margin: 0;
+  }
+
+  h1 {
+    font-family: $font-sans;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: tk(text);
+  }
+}
+
+.menu-favorite-star {
+  margin-left: 10px;
+  font-size: 15px;
+  color: tk(text-muted);
+  cursor: pointer;
+  vertical-align: 2px;
+  transition: color $transition-fast;
+
+  &:hover, &.fa-star { color: tk(warning); }
+}
+
+.page-content-main {
+  background: tk(bg-app);
+  padding: 15px 0 (15px + $foot-h);
+}
+
+// Nexo Sec: subtle "network" grid behind the content (CSS only, ≤ 4% opacity via the grid-line token)
+@if $variant == sec {
+  .page-content-main,
+  .page-login {
+    background-image:
+      linear-gradient(tk(grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, tk(grid-line) 1px, transparent 1px);
+    background-size: 28px 28px;
+    background-position: -1px -1px;
+  }
+}
+
+.page-side{
+  background: tk(sidebar-bg);
+  border-right: 1px solid tk(sidebar-border);
+  height: 100% !important;
+  height: calc(100% - 62px) !important;
+  left: 0;
+  overflow: auto;
+  margin-top: 62px;
+  position: fixed;
+  top: 0;
+  z-index: 3;
+  scrollbar-width: thin;
+  scrollbar-color: tk(sidebar-bg-2) transparent;
+
+  &::-webkit-scrollbar-thumb {
+    background: tk(sidebar-border);
+    border-color: transparent;
+  }
+
+  @extend .hidden-xs;
+}
+
+.page-foot {
+  background: tk(surface);
+  bottom: 0;
+  border-top: 1px solid tk(border);
+  color: tk(text-muted);
+  font-size: 12px;
+  line-height: $foot-h - 1px;     // + 1 px border = $foot-h
+  height: $foot-h;
+  padding: 0;
+  position: fixed;
+  width: 100%;
+  z-index: 2;
+
+  // product and company stand out from the "(c) years" text: product in the accent, company in the text colour
+  a {
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    transition: color $transition-fast;
+    &:first-child { color: tk(primary); font-size: 13px; font-weight: 700; }
+    &:last-child { color: tk(text); }
+    &:hover, &:focus { color: tk(accent); text-decoration: none; }
+  }
+}
+
+// Page title bar (the <header> only: .content-box-head @extends .page-content-head and must not change):
+// compact, title on the left vertically centred with the page buttons on the right (flex row).
+header.page-content-head {
+  padding-top: 4px;
+  padding-bottom: 4px;
+  > .container-fluid > .list-inline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    min-height: 36px;
+    margin: 0;
+    > li { padding-top: 0; padding-bottom: 0; }
+    > .btn-group-container { margin-left: auto; float: none; }
+  }
+}
+
+// Desktop: the page title and its buttons go up into the top bar (one line instead of two).
+// Same markup: <main> stops being a stacking context so the header (z-index 3) can sit over the fixed
+// top bar (z-index 2); it leaves the right part free for the user name and the search, and only the
+// title and the buttons take pointer events. Phones and narrow windows keep the original header.
+$topbar-h: 62px;
+$topbar-right-reserve: 470px;   // user name, status dot and search box (180px at rest, see below)
+@media (min-width: 992px) {
+  html main.page-content { z-index: auto; }
+  html body header.page-content-head {
+    // fixed like the top bar (it must not scroll away); left:auto keeps the horizontal position it has in <main>
+    position: fixed;
+    top: 0;
+    z-index: 3;
+    height: $topbar-h;
+    max-width: var(--nexo-title-max, calc(83.333vw - #{$topbar-right-reserve} - var(--nexo-head-btns, 0px)));
+    padding: 0;
+    background: transparent;
+    background-image: none;
+    border-bottom: 0;
+    box-shadow: none;
+    pointer-events: none;
+
+    > .container-fluid { height: 100%; }
+    > .container-fluid > .list-inline { height: 100%; min-height: 0; flex-wrap: nowrap; }
+    h1, .btn-group-container { pointer-events: auto; }
+    h1 { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    > .container-fluid > .list-inline > li:first-child { min-width: 0; }
+    // page buttons at the right end of the top bar, after the search box (width measured by theme.js)
+    > .container-fluid > .list-inline > .btn-group-container {
+      position: fixed;
+      top: 0;
+      right: 12px;
+      height: $topbar-h;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin: 0;
+      // Firewall > Aliases: alias.volt moves its table-entries meter (#aliases_stat: icon + progress bar) in here
+      // and sets the box to 250px, made for block layout; as a flex item it shrank to its content, the bar to a
+      // few px and the icon sat over the "3%" text. It now fills the box: icon, then the bar with the full text.
+      > #aliases_stat {
+        flex: 1 1 auto;
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        > .col-xs-1 { float: none; width: auto; padding: 0; }
+        > .progress { flex: 1 1 auto; position: relative; margin: 0; }
+      }
+    }
+  }
+  // title width: main is 75% wide (sm), 83.3% (lg) or the full width with the collapsed menu
+  @media (max-width: 1199px) {
+    html body header.page-content-head { max-width: var(--nexo-title-max, calc(75vw - #{$topbar-right-reserve} - var(--nexo-head-btns, 0px))); }
+  }
+  html body main.col-lg-12 header.page-content-head { max-width: var(--nexo-title-max, calc(100vw - 110px - #{$topbar-right-reserve} - var(--nexo-head-btns, 0px))); }
+  // search box: 180px at rest, 300px while typing (leaves room for the page title in the bar).
+  // !important only because default.volt sets the width inline (250px, and 450px on focus via jQuery).
+  html body .page-head #menu_search_box { width: 180px !important; }
+  html body .page-head #menu_search_box:focus { width: 300px !important; }
+  // user name, status and search move left to make room for the page buttons
+  html body .page-head .navbar-nav.navbar-right:last-child { margin-right: calc(var(--nexo-head-btns, 0px) - 20px); transition: margin-right $transition-fast; }
+}
+
+.content-box {
+  background: tk(surface);
+  border: 1px solid tk(border);
+  border-radius: $radius-lg;
+  box-shadow: tk(shadow-sm);
+
+  @extend .clearfix;
+
+  &-head {
+    @extend .page-content-head;
+    border-radius: $radius-lg $radius-lg 0 0;
+    font-family: $font-heading;
+    font-weight: 600;
+  }
+
+  &-main {
+    padding-bottom: 15px;
+    padding-top: 15px;
+  }
+}
+
+.tab-content{
+  border-top: 0px;
+  padding: 0px 0;
+
+  > .tab-content{
+  margin-bottom: 0;
+  padding: 0 15px;
+  }
+
+  .tab-content:last-child{
+  margin-bottom: 0;
+  }
+}
+
+.page-content-main section[class^="col-"] + section[class^="col-"]{
+  padding-top: ($grid-gutter-width / 2);
+}
+
+.brand-logo{
+    display: none;
+
+    @media (min-width: $screen-sm-min) {
+        display: inline-block;
+    }
+}
+
+.brand-icon{
+    display: inline-block;
+
+    @media (min-width: $screen-sm-min) {
+        display: none;
+    }
+}
+
+.col-sm-disable-spacer{
+    @media (min-width: $screen-sm-min) {
+        padding-top: 0 !important;
+    }
+}
+
+.col-md-disable-spacer{
+    @media (min-width: $screen-md-min) {
+        padding-top: 0 !important;
+    }
+}
+
+.col-lg-disable-spacer{
+    @media (min-width: $screen-lg-min) {
+        padding-top: 0 !important;
+    }
+}
+
+// =====================================================================
+// Login
+// =====================================================================
+
+.page-login {
+    background-color: tk(bg-app);
+
+    .container{
+        min-height: 100%;
+        margin-bottom: -60px;
+
+        &:after{
+            height: 60px;
+        }
+    }
+}
+
+.login-foot{
+    font-size: 12px;
+    color: tk(text-muted);
+}
+
+.login-modal{
+
+    &-container{
+        background: tk(surface);
+        border: 1px solid tk(border);
+        border-radius: $radius-lg;
+        box-shadow: tk(shadow-lg);
+        max-width: 400px;
+        margin: 100px auto 15px auto;
+        overflow: hidden;
+        position: relative;
+
+        &:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: $gradient-brand;
+            box-shadow: tk(glow);
+        }
+    }
+
+    &-head{
+        background: tk(surface);
+        border-bottom: 1px solid tk(border);
+        height: 75px !important;
+        padding: 0 20px;
+        .navbar-brand {
+          padding: 7px 0px !important;
+          img {
+            height: 60px ;
+          }
+        }
+    }
+
+    &-content{
+        padding: 0px 20px 20px 20px;
+        form.clearfix {
+          margin-right: 9px;
+        }
+        .btn-primary { min-width: 120px; }
+    }
+}
+
+.list-inline .btn-group-container{
+    @media (min-width:$screen-sm-min){
+        float:right;
+    }
+}
+
+.btn.btn-fixed{
+    max-width: 174px;
+    width: 100%;
+}
+
+.progress-bar-placeholder{
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    z-index: 1;
+}
+
+// =====================================================================
+// Sidebar menu (sidebar-* tokens: light in light themes, dark in dark ones)
+// =====================================================================
+
+/* BOOTSTRAP EDIT */
+.list-group-item{
+  border-left: none;
+  border-right: none;
+
+  &.collapsed .caret{
+    border-bottom: 4px solid tk(sidebar-active);
+    border-top: 0;
+  }
+}
+
+#mainmenu,
+#mainmenu > .panel,
+#mainmenu .panel.list-group {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  margin-bottom: 0;
+}
+
+#mainmenu .list-group-item {
+  background-color: transparent;
+  border-color: transparent;
+  border-radius: 0;
+  color: tk(sidebar-text);
+  font-size: 14px;
+  transition: background-color $transition-fast, color $transition-fast;
+
+  .__iconspacer, .fa, .glyphicon {
+    color: tk(sidebar-text);
+    opacity: .85;
+    transition: color $transition-fast, opacity $transition-fast;
+  }
+
+  &:hover, &:focus {
+    background-color: tk(sidebar-bg-2);
+    color: tk(sidebar-text-hi);
+
+    .__iconspacer, .fa, .glyphicon { color: tk(sidebar-text-hi); opacity: 1; }
+  }
+
+  &:focus-visible {
+    outline: 2px solid tk(sidebar-active);
+    outline-offset: -2px;
+    border-radius: 0;
+  }
+
+  // open top-level section (aria-expanded) gets highlighted text
+  &[aria-expanded="true"] {
+    color: tk(sidebar-text-hi);
+  }
+}
+
+// open group: slightly highlighted background, visually separates the section
+#mainmenu .collapse.in,
+#mainmenu .collapsing {
+  background-color: rgba(tk(sidebar-bg-2), .55);
+}
+
+/* COLLAPSE SIDEBAR */
+
+main.page-content.col-lg-12 {
+  padding-left: 90px;
+}
+
+#navigation.col-sidebar-left {
+  width: 70px;
+  overflow: hidden;
+  background-color: transparent !important;
+  border: none !important;
+  > div {
+    &.row {
+      height: 100% !important;
+      > nav.page-side-nav {
+        width: 70px;
+        height: 100% !important;
+        background-color: tk(sidebar-bg);
+        border-right: 1px solid tk(sidebar-border);
+      }
+    }
+    > nav > #mainmenu > div > {
+      a.list-group-item {
+        font-size: 14px;
+        text-align: center;
+        width: 70px;
+        height: 40px;   // compact (was 70px): fits short windows
+        padding-left: 0px;
+        padding-right: 0px;
+        padding-top: 5px;
+        border-bottom: 2px transparent;
+        border-right: 1px solid tk(sidebar-border);
+        > span {
+          &.fa, &.fa-solid, &.glyphicon {
+            visibility: visible;
+            font-size: 17px;
+          }
+          &.__iconspacer {
+            width: 50px;
+            height: 28px;
+            padding: 0px;
+          }
+          // section name under the icon: no room in the compact 40px item (the hover flyout shows the section)
+          &:not([class]) { display: none; }
+        }
+      }
+      div {
+        &.collapsing > a.list-group-item {
+          padding-left: 10px !important;
+          font-size: 14px !important;
+          display: block !important;
+          position: absolute !important;
+          left: 70px !important;
+        }
+        &.collapse {
+          &.in {
+            > {
+              div.collapsing > a.list-group-item {
+                padding-left: 10px !important;
+                font-size: 14px !important;
+                display: block !important;
+                position: absolute !important;
+                left: 166px !important;
+              }
+              a.list-group-item, div.collapse.in > a.list-group-item {
+                background-color: tk(sidebar-bg-2) !important;
+              }
+            }
+            > div.collapse.in > a.list-group-item {
+              padding-left: 10px !important;
+              font-size: 14px !important;
+            }
+          }
+          > {
+            div.collapse > a.list-group-item, a.list-group-item {
+              padding-left: 10px !important;
+              font-size: 14px !important;
+            }
+          }
+        }
+        &.collapsed > a.list-group-item {
+          padding-left: 10px !important;
+          font-size: 14px !important;
+        }
+        &.collapse {
+          > {
+            a.list-group-item, div.collapse > a.list-group-item {
+              padding: 3px 8px !important;
+            }
+          }
+          &.in {
+            width: 168px;
+            font-size: 14px;
+            z-index: 10;
+            position: absolute;
+            left: 70px;
+            margin-top: -40px;
+            background-color: tk(sidebar-bg-2);
+            border: 1px solid tk(sidebar-border);
+            border-radius: 0 $radius $radius 0;
+            -webkit-box-shadow: tk(shadow-lg);
+            -moz-box-shadow: tk(shadow-lg);
+            box-shadow: tk(shadow-lg);
+            > div.collapse.in {
+              width: 168px;
+              font-size: 14px;
+              z-index: 10;
+              position: absolute;
+              left: 166px;
+              margin-top: -26px;
+              background-color: tk(sidebar-bg-2);
+              border: 1px solid tk(sidebar-border);
+              border-radius: 0 $radius $radius 0;
+              -webkit-box-shadow: tk(shadow-lg);
+              -moz-box-shadow: tk(shadow-lg);
+              box-shadow: tk(shadow-lg);
+            }
+          }
+        }
+        &.collapsing, &.collapse.in > div.collapsing {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+// OPNsense (opnsense_theme.js) hides this button with an inline style when the window is shorter than
+// 12 items x 70px; with the compact collapsed menu (40px items) it fits, so keep it visible on desktop.
+@media (min-width: 769px) {
+  button.toggle-sidebar { display: inline-block !important; }
+}
+
+button.toggle-sidebar {
+  color: tk(text-muted);
+  background-color: transparent;
+  font-size: 14px;
+  border: none;
+  margin-top: 23px;
+  float: left;
+  outline: none;
+  border-radius: $radius-sm;
+  transition: color $transition-fast;
+
+  &:hover { color: tk(primary); }
+  &:focus-visible { outline: 2px solid tk(primary); outline-offset: 2px; }
+}
+
+/* COLLAPSE SIDEBAR END*/
+
+#navigation.collapse.in{
+    display: block !important;
+}
+
+.list-group-submenu .list-group-item:last-child,
+.collapse .list-group-item:last-child {
+  border-bottom: none;
+}
+
+// =====================================================================
+// Dropdowns
+// =====================================================================
+
+.dropdown-menu {
+  border-radius: $radius;
+  box-shadow: tk(shadow-md);
+  padding: 4px;
+  font-size: 14px;
+
+  > li > a {
+    border-radius: $radius-sm;
+    transition: background-color $transition-fast, color $transition-fast;
+  }
+
+  > .active > a,
+  > .active > a:hover,
+  > .active > a:focus {
+    background-color: tk(primary-soft);
+    color: tk(primary);
+  }
+
+  .divider { margin: 4px 0; }
+}
+
+.dropdown-header {
+  font-family: $font-label;
+  font-size: 11px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+ul.nav > li.dropdown > ul.dropdown-menu > li > a {
+  padding: 3px 10px;
+}
+
+// =====================================================================
+// Tabs (underline in the accent, no "ear")
+// =====================================================================
+
+.nav-tabs {
+  margin-right: 1px;
+  border-bottom: 1px solid tk(border);
+}
+
+.nav-tabs > li {
+  border-radius: 0px;
+  margin-right: 2px;
+}
+
+.nav-tabs > li > a {
+  background: transparent;
+  border-radius: $radius-sm $radius-sm 0 0;
+  color: tk(text-muted);
+  font-weight: 500;
+  margin-right: 0px;
+  transition: color $transition-fast, border-color $transition-fast, background-color $transition-fast;
+}
+
+.nav-tabs > li > a,
+.nav-tabs > li > a:hover,
+.nav-tabs > li > a:focus {
+  border-right: 1px solid transparent;
+  border-top: 1px solid transparent;
+  border-left: 1px solid transparent;
+  border-bottom: 2px solid transparent;
+}
+
+.nav-tabs > li > a:hover,
+.nav-tabs > li > a:focus {
+  background: tk(surface-2);
+  color: tk(text);
+  border-bottom-color: tk(border-strong);
+}
+
+.nav-tabs > li.active > a {
+  background: transparent !important;
+}
+
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
+  color: tk(primary);
+  font-weight: 600;
+  border-right: 1px solid transparent;
+  border-top: 1px solid transparent;
+  border-left: 1px solid transparent;
+  border-bottom: 2px solid tk(primary);
+}
+
+.nav-tabs > li > a.visible-lg-inline-block:not(.pull-right) {
+  border-top-right-radius: 0px !important;
+  padding-left: 10px !important;
+  padding-right: 5px !important;
+}
+
+.nav-tabs > li > a.visible-lg-inline-block.pull-right {
+  border-left: 0px !important;
+  padding-left: 5px !important;
+  padding-right: 10px !important;
+}
+
+.nav-tabs .dropdown-toggle .caret {
+  border-top-color: currentColor;
+}
+
+.nav-pills > li > a {
+  border-radius: $radius;
+  color: tk(text-muted);
+  &:hover, &:focus { color: tk(text); }
+}
+
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:hover,
+.nav-pills > li.active > a:focus {
+  background-color: tk(primary-soft);
+  color: tk(primary);
+}
+
+
+> li.active + li > a {
+  @media (min-width:$screen-sm-min){
+    border-left: 1px solid transparent;
+  }
+}
+
+li:last-child > a{
+  @media (max-width:$screen-xs-max){
+    margin-bottom: 0;
+  }
+}
+
+// =====================================================================
+// Buttons
+// =====================================================================
+
+.btn {
+  border-radius: $radius;
+  font-weight: 500;
+  transition: background-color $transition-fast, border-color $transition-fast,
+              color $transition-fast, box-shadow $transition-fast;
+
+  &:focus, &.focus,
+  &:active:focus, &.active:focus {
+    outline: 0;
+    box-shadow: 0 0 0 3px tk(focus-ring);
+  }
+
+  &:active, &.active {
+    box-shadow: none;
+  }
+
+  &.btn-lg { border-radius: $radius; }
+  &.btn-sm, &.btn-xs { border-radius: $radius-sm; }
+}
+
+// default (and .btn without a variant, which OPNsense paints as default): Bootstrap's darken()
+// would make hover/focus almost black in dark mode; uses token surfaces instead.
+.btn-default,
+.btn:not(.btn-primary):not(.btn-success):not(.btn-info):not(.btn-warning):not(.btn-danger):not(.btn-link) {
+  box-shadow: none;
+
+  &:hover, &:focus {
+    background-color: tk(surface-2);
+    border-color: tk(text-muted);
+    color: tk(text);
+  }
+
+  &:active, &.active, .open > &.dropdown-toggle {
+    background-color: tk(surface-3);
+    border-color: tk(text-muted);
+    color: tk(text);
+  }
+
+  &.disabled, &[disabled], fieldset[disabled] & {
+    &, &:hover, &:focus { background-color: tk(surface); border-color: tk(border-strong); }
+  }
+}
+
+.bg-primary { color: tk(primary-contrast); }
+
+.btn-primary {
+  &:hover, &:active, &.active, .open > &.dropdown-toggle {
+    background-color: tk(primary-hover);
+    border-color: tk(primary-hover);
+    color: tk(primary-contrast);
+  }
+}
+
+.btn-link {
+  color: tk(primary);
+  &:hover, &:focus { color: tk(primary-hover); }
+}
+
+.btn .glyphicon {
+    vertical-align: -1px;
+}
+
+.btn-default .glyphicon {
+    color: tk(text-muted);
+}
+
+.close {
+  opacity: .55;
+  &:hover, &:focus { opacity: 1; }
+}
+
+// =====================================================================
+// Generic tables
+// =====================================================================
+
+table{
+    width: 100%;
+}
+
+.table {
+    margin-bottom: 0px !important;
+
+    > thead > tr > th {
+      color: tk(text-muted);
+      font-family: $font-label;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      border-bottom: 1px solid tk(border);
+      vertical-align: middle;
+    }
+
+    > tbody > tr > td,
+    > tbody > tr > th,
+    > tfoot > tr > td {
+      border-top-color: tk(border);
+      font-variant-numeric: tabular-nums;
+      vertical-align: middle;
+    }
+
+    > tbody > tr {
+      transition: background-color $transition-fast;
+    }
+}
+
+.table-hover > tbody > tr:hover {
+  background-color: tk(primary-soft);
+}
+
+// no vertical borders, even on .table-bordered
+.table-bordered {
+  border-left: 0;
+  border-right: 0;
+  > thead, > tbody, > tfoot {
+    > tr > th, > tr > td {
+      border-left: 0;
+      border-right: 0;
+    }
+  }
+}
+
+.nav-tabs-justified, .nav-tabs.nav-justified {
+    .nav-tabs.nav-justified > .active > a:focus {
+        border: 0px !important;
+    }
+}
+
+.table > tbody > tr > td:last-child{
+    padding-right: 10px;
+}
+
+.table > tbody > tr > td:first-child {
+  padding-left: 10px;
+}
+
+.table > thead > tr > th:first-child {
+  padding-left: 10px;
+}
+
+
+/* helpers */
+.__nowrap{
+    white-space: nowrap;
+}
+
+.__nomb{
+    margin-bottom: 0;
+}
+
+.__mb{
+    margin-bottom: 15px;
+}
+
+.__mt{
+    margin-top: 15px;
+}
+
+.__ml{
+    margin-left: 15px;
+}
+
+.__mr{
+    margin-right: 15px;
+}
+
+.__iconspacer{
+    padding-right: 10px;
+    width: 30px;
+    text-align: center;
+}
+
+hr {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    border-top-color: tk(border);
+}
+
+#mainmenu .glyphicon{
+    vertical-align: -2px;
+}
+
+.list-group-item{
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    + div.collapse{
+        margin-bottom: -1px;
+    }
+
+    + div > a{
+        padding-left: 44px;
+    }
+
+    &:before{
+        background: $gradient-brand-vertical;
+        content: "";
+        height: 42px;
+        min-height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0px;
+        width: 0;
+
+        -webkit-transition: width .2s;
+        -moz-transition: width .2s;
+        -o-transition: width .2s;
+        transition: width .2s;
+
+    }
+
+}
+
+.list-group-submenu a{
+    padding-left: 56px;
+}
+
+// section of the current item: title highlighted with the bar; section items with a thin line;
+// current page with a 3px gradient bar and primary-soft background
+.active-menu-title, .active-menu a{
+    text-decoration: none;
+    position: relative;
+    background-color: transparent;
+
+    &:before{
+        width: 3px;
+    }
+
+    &.active{
+        background-color: tk(primary-soft);
+    }
+}
+
+.active-menu a:before{
+    background: rgba(tk(sidebar-active), .35);
+    width: 1px;
+}
+
+#mainmenu .active-menu-title {
+    color: tk(sidebar-text-hi);
+    background-color: tk(sidebar-bg-2);
+    font-weight: 600;
+
+    .__iconspacer, .fa, .glyphicon { color: tk(sidebar-active); opacity: 1; }
+}
+
+#mainmenu .active-menu a.active,
+#mainmenu .list-group-item.active,
+#mainmenu .list-group-item.active:hover,
+#mainmenu .list-group-item.active:focus {
+    background-color: tk(primary-soft);
+    color: tk(sidebar-text-hi);
+    font-weight: 600;
+
+    &:before {
+        background: $gradient-brand-vertical;
+        width: 3px;
+    }
+
+    .fa, .glyphicon { color: tk(sidebar-active); }
+}
+
+// danger alert is now a state "tint": text in the strong state color
+.alert.alert-danger{
+    color: tk(danger-strong) !important;
+}
+
+.nav-tabs-justified>li>a, .nav-tabs.nav-justified>li>a{
+    border-radius: 0 !important;
+}
+
+.navbar-brand {
+    padding: 6px 11px;
+
+    img.brand-logo {
+      height: 48px;
+    }
+    img.brand-icon {
+      height: 48px;
+    }
+}
+
+// =====================================================================
+// Labels and badges (pills: state background at ~14%, text in the strong color)
+// =====================================================================
+
+@mixin nexo-pill($bg, $fg) {
+  background-color: rgba($bg, .14);
+  color: $fg;
+  &[href]:hover, &[href]:focus { background-color: rgba($bg, .24); color: $fg; }
+}
+
+.label {
+  border-radius: $radius-pill;
+  font-size: 75%;
+  font-weight: 600;
+  letter-spacing: .02em;
+  padding: .25em .75em;
+  vertical-align: middle;
+}
+
+.label-default { @include nexo-pill(tk(text-muted), tk(text)); }
+.label-primary { @include nexo-pill(tk(primary), tk(primary)); }
+.label-success { @include nexo-pill(tk(success), tk(success-strong)); }
+.label-info    { @include nexo-pill(tk(info), tk(info-strong)); }
+.label-warning { @include nexo-pill(tk(warning), tk(warning-strong)); }
+.label-danger  { @include nexo-pill(tk(danger), tk(danger-strong)); }
+
+.label-opnsense {
+  /* emulates btn */
+  border: 1px solid transparent;
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: $radius-pill;
+}
+
+.label-opnsense-sm {
+  /* emulates btn-sm */
+  padding: 5px 10px;
+}
+
+.label-opnsense-xs,
+.btn-xs {
+  /* emulates btn-xs */
+  padding: 1px 3px;
+}
+
+.label-opnsense-xs { padding: 1px 6px; }
+
+.badge {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  padding: 3px 8px;
+}
+
+.btn .badge {
+  background-color: rgba(tk(text), .12);
+  color: inherit;
+}
+
+// Status LED (glowing dot) for service/gateway: <span class="nexo-led nexo-led-success"></span>
+.nexo-led {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  vertical-align: middle;
+  margin: 0 6px 2px 0;
+  background-color: tk(text-muted);
+  box-shadow: 0 0 0 2px rgba(tk(text-muted), .18);
+
+  &.nexo-led-success { background-color: tk(success); box-shadow: 0 0 0 2px rgba(tk(success), .20), 0 0 8px rgba(tk(success), .70); }
+  &.nexo-led-warning { background-color: tk(warning); box-shadow: 0 0 0 2px rgba(tk(warning), .20), 0 0 8px rgba(tk(warning), .70); }
+  &.nexo-led-danger  { background-color: tk(danger);  box-shadow: 0 0 0 2px rgba(tk(danger), .22), 0 0 10px rgba(tk(danger), .75);
+                       animation: nexo-led-pulse 1.6s ease-in-out infinite; }
+  &.nexo-led-info    { background-color: tk(info);    box-shadow: 0 0 0 2px rgba(tk(info), .20), 0 0 8px rgba(tk(info), .70); }
+}
+
+@keyframes nexo-led-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: .45; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nexo-led.nexo-led-danger { animation: none; }
+  * { transition-duration: 0s !important; }
+}
+
+// =====================================================================
+// Alerts, panels, wells, progress
+// =====================================================================
+
+.alert {
+  border-left-width: 3px;
+  color: tk(text);
+
+  &.alert-success { border-left-color: tk(success); color: tk(success-strong); }
+  &.alert-info    { border-left-color: tk(info);    color: tk(info-strong); }
+  &.alert-warning { border-left-color: tk(warning); color: tk(warning-strong); }
+  &.alert-danger  { border-left-color: tk(danger); }
+
+  .alert-link { color: inherit; text-decoration: underline; }
+}
+
+.panel {
+  border-color: tk(border);
+  box-shadow: tk(shadow-sm);
+
+  > .panel-heading {
+    background-color: transparent;
+    border-bottom: 1px solid tk(border);
+    font-family: $font-heading;
+    font-weight: 600;
+  }
+
+  .panel-title {
+    font-family: $font-heading;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  > .panel-footer {
+    border-top-color: tk(border);
+  }
+}
+
+.well {
+  border-radius: $radius;
+  box-shadow: none;
+}
+
+.progress {
+  background-color: tk(surface-3);
+  border-radius: $radius-pill;
+  box-shadow: none;
+}
+
+.progress-bar {
+  box-shadow: none;
+  transition: width .4s ease;
+}
+
+// bar without an explicit state: brand gradient
+.progress-bar:not([class*="progress-bar-"]) {
+  background-image: $gradient-brand;
+}
+
+// =====================================================================
+// Forms
+// =====================================================================
+
+.form-control {
+  border-radius: $radius;
+  box-shadow: none;
+  transition: border-color $transition-fast, box-shadow $transition-fast;
+
+  &:focus {
+    border-color: tk(primary);
+    box-shadow: 0 0 0 3px tk(focus-ring);
+    outline: 0;
+  }
+
+  &::placeholder { color: tk(text-muted); opacity: 1; }
+
+  &[disabled], &[readonly], fieldset[disabled] & {
+    color: tk(text-muted);
+  }
+}
+
+.input-group-addon {
+  border-radius: $radius;
+  color: tk(text-muted);
+}
+
+.help-block { color: tk(text-muted); }
+
+input[type="checkbox"], input[type="radio"], progress, input[type="range"] {
+  accent-color: tk(primary);
+}
+
+legend {
+  font-family: $font-heading;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+label { font-weight: 600; }
+
+// =====================================================================
+// Breadcrumbs and pagination
+// =====================================================================
+
+.breadcrumb {
+  font-family: $font-heading;
+  font-size: 12px;
+  padding-left: 0;
+  margin-bottom: 10px;
+  > li + li:before { padding: 0 6px; }
+  > li > a { color: tk(text-muted); &:hover { color: tk(primary); } }
+}
+
+.pagination {
+  > li > a, > li > span {
+    font-variant-numeric: tabular-nums;
+    transition: background-color $transition-fast, color $transition-fast;
+  }
+}
+
+// =====================================================================
+// Modals, tooltips, popovers
+// =====================================================================
+
+.modal-content {
+  border-radius: $radius-lg;
+  box-shadow: tk(shadow-lg);
+  overflow: hidden;
+}
+
+.modal-header {
+  border-bottom-color: tk(border);
+  .modal-title {
+    font-family: $font-heading;
+    font-weight: 600;
+  }
+  // 27.1: action icon before the title (fa-plus / fa-pencil / fa-clone, swapped by UIBootgrid)
+  .model-header-icon {
+    color: tk(primary);
+    font-size: 16px;
+    line-height: 1;
+    vertical-align: -1px;
+  }
+}
+
+.modal-backdrop.in {
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+}
+
+.tooltip {
+  font-family: $font-sans;
+  font-size: 12px;
+}
+
+.tooltip-inner {
+  border-radius: $radius-sm;
+  box-shadow: tk(shadow-md);
+  padding: 6px 10px;
+}
+
+.popover {
+  border-radius: $radius;
+  box-shadow: tk(shadow-md);
+  font-family: $font-sans;
+  color: tk(text);
+}
+
+.popover-title {
+  border-bottom-color: tk(border);
+  border-radius: $radius $radius 0 0;
+  font-family: $font-heading;
+  font-weight: 600;
+}
+
+// =====================================================================
+// Thin scrollbar
+// =====================================================================
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: tk(border-strong) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-button {
+  width: 8px;
+  height:5px;
+  display: none;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+  box-shadow: 0px 0px 0px;
+  border-radius:0;
+}
+::-webkit-scrollbar-thumb {
+  background: tk(border-strong);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  border-radius: $radius-pill;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: tk(text-muted);
+  background-clip: padding-box;
+}
+
+.widgetdiv {
+    padding-top:0px !important;
+    padding-bottom:20px;
+}
+
+select {
+  overflow: hidden;
+  border: 1px solid tk(border-strong);
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 24px;
+  background-image: url("/ui/themes/#{$theme-name}/build/images/caret.png") !important;}
+
+// Bootstrap gives select.form-control/.input-sm/.input-lg line-height = height (made for the native
+// widget). With appearance: none the select honours it, so the text sits below the centre and is cut
+// at the bottom (e.g. "auto" in Policy Analyzer > AI setup > Fallback provider).
+select.form-control:not([multiple]),
+select.input-sm:not([multiple]),
+select.input-lg:not([multiple]) {
+  line-height: normal;
+}
+
+// Secret-looking property fields drawn as plain text inputs (e.g. Intrusion Detection > Download > Settings:
+// et_telemetry.token, abuse_ch.token): the value is masked with discs and shown again only while the field
+// has focus, so it can still be read and edited. Display only: the value sent on save is unchanged.
+input.rulesetprop[data-id$="token" i],
+input.rulesetprop[data-id$="key" i],
+input.rulesetprop[data-id$="secret" i],
+input.rulesetprop[data-id$="password" i] {
+  -webkit-text-security: disc;
+  &:focus { -webkit-text-security: none; }
+}
+
+// A status colour wins over .text-muted on the same element, as in stock Bootstrap. The dashboard Gateways widget
+// sets both ("fa fa-circle text-muted text-success"); the auto themes emit .text-muted again in the dark block, so
+// every dot came out grey. Grey stays only for a gateway without a status class.
+// Tabulator grids: text cells centred vertically in the row. A row is as tall as its tallest cell (a wrapped log
+// line, the command button), and the cells are inline-blocks aligned to the top, so a one-line cell such as
+// "exiting on signal 15" sat at the top with a gap below. Same as Tabulator's own vertAlign: "middle". The frozen
+// command column keeps its own layout (rule below).
+// (no :has here: a descendant :has on every cell is re-checked on each DOM change and stalled heavy pages)
+.tabulator-row .tabulator-cell:not(.tabulator-frozen) {
+  display: inline-flex;
+  align-items: center;
+}
+// command cells (edit / clone / more): the frozen column is 82px, three 24px buttons plus the whitespace gaps and
+// 4px padding came to 86px, so the last button was clipped and the grid scrolled sideways (Services > Monit >
+// Service Tests). Tight spacing: 2px between buttons, 2px padding, no whitespace gaps.
+.tabulator-row .tabulator-cell.tabulator-frozen:has(> .btn, > button) {
+  padding-left: 2px;
+  padding-right: 2px;
+  font-size: 0;
+  white-space: nowrap;
+  > .btn, > button { font-size: 12px; margin: 0; }
+  > * + * { margin-left: 2px !important; }
+}
+// ... and its header ("Edit | Delete") fits the same 82px: tighter padding and letters
+.tabulator-col.tabulator-frozen.tabulator-frozen-right .tabulator-col-content { padding-left: 4px; padding-right: 4px; }
+.tabulator-col.tabulator-frozen.tabulator-frozen-right .tabulator-col-title { font-size: 10px; letter-spacing: 0; text-overflow: clip; }
+
+// filter list moved out of the top bar by theme.js (nexo-extras.js): beside the grid search (at first the right
+// end of the tab row); full width on phones
+.nexo-page-filter {
+  float: right;
+  width: 320px;
+  max-width: 45%;
+  margin: 4px 0 0 12px;
+  position: relative;
+  z-index: 2;
+  .bootstrap-select { width: 100% !important; }
+  @media (max-width: 767px) {
+    float: none;
+    width: 100%;
+    max-width: none;
+    margin: 0 0 8px;
+  }
+  // once the grid is drawn: in its action bar, right before the search box
+  .actionBar > & {
+    float: none;
+    flex: 0 0 280px;
+    max-width: none;
+    margin: 0 0 0 auto;     // takes the search box's auto margin: the two sit side by side
+    align-self: center;
+    @media (max-width: 767px) { flex: 1 1 100%; margin: 0 0 6px; }
+  }
+  // (by id: the grid header rules that centre the search box are more specific than a class)
+  &#nexo-page-filter + .search { margin-left: 0; padding-left: 0; }
+}
+
+// log pages: All / None buttons added by theme.js in the header of the severity list
+// one line: toggle + "Multiselect", then All / None, the close button at the end
+.popover-title:has(.nexo-sev-all) {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  > a { order: 1; white-space: nowrap; }
+  > .nexo-sev-all { order: 2; float: none; display: inline-flex; }
+  > .close { order: 3; float: none; margin-left: auto; }
+  .nexo-sev-all .btn { padding: 1px 8px; }
+}
+
+// Power > Reboot / Power Off: a bare question and two buttons, the dangerous one in the same orange as any Save,
+// and "Yes" acts at once (no second dialog). Theme only, same markup and behaviour: a danger panel with an icon and
+// a line on the impact, the safe "No" first and "Yes" in red on the right. (section:has, never *:has: a universal
+// :has is re-checked for every element on every DOM change and froze heavy pages such as Intrusion Detection)
+section:has(> #do-reboot), section:has(> #do-halt) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  max-width: 620px;
+  float: none;                 // the page column floats: centring needs it off
+  margin: 28px auto 0;
+  padding: 22px 26px 24px;
+  border: 1px solid rgba(tk(danger), 0.45);
+  border-top: 4px solid tk(danger);
+  border-radius: 8px;
+  background-color: rgba(tk(danger), 0.08);
+  box-shadow: tk(shadow-md);
+  > p {
+    flex: 1 1 100%;
+    margin: 0 0 8px;
+    font-size: 17px;
+    line-height: 1.35;
+    &::before {
+      content: "\f071";                       // triangle-exclamation
+      font-family: "Font Awesome 6 Free", "FontAwesome";
+      font-weight: 900;
+      color: tk(danger);
+      margin-right: 10px;
+    }
+    &::after {
+      display: block;
+      margin-top: 8px;
+      font-size: 13px;
+      font-weight: 400;
+      opacity: 0.85;
+    }
+  }
+  > a.btn { order: 1; min-width: 130px; font-weight: 600; }
+  > #do-reboot, > #do-halt {
+    order: 2;
+    min-width: 130px;
+    margin-left: auto;
+    font-weight: 700;
+    // a fixed deep red (the dark themes' danger tokens are light pinks made for text, unreadable under white)
+    color: #fff;
+    background-color: #B91C1C;
+    background-image: none;
+    border-color: #991B1B;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.35);
+    &:hover, &:focus { background-color: #DC2626; border-color: #B91C1C; color: #fff; }
+  }
+}
+section:has(> #do-reboot) > p::after {
+  content: "The firewall restarts right away: internet access, VPNs and every connection drop for a few minutes.";
+}
+section:has(> #do-halt) > p::after {
+  content: "The firewall shuts down right away and stays off until someone powers it on at the device.";
+}
+
+// Firewall > Diagnostics > Aliases: the alias picker, refresh, Flush, quick add and Find references floated over the
+// page in three Bootstrap thirds (the picker wrapped under its buttons on narrower screens). One toolbar plate:
+// picker + refresh + Flush on the left, quick add growing in the middle, Find references at the right end; Flush
+// (empties the alias table) reads as a destructive button. Phones: the groups stack.
+.row:has(> .col-xs-4 > #flushtable) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  margin: 0 0 12px;
+  padding: 10px 14px;
+  border: 1px solid tk(border);
+  border-radius: $radius;
+  background-color: tk(surface);
+  box-shadow: tk(shadow-sm);
+  &::before, &::after { display: none; }        // Bootstrap clearfix pseudo-elements would be flex items
+  > .col-xs-4 { float: none; width: auto; padding: 0; min-height: 0; }
+  > .col-xs-4:nth-child(1) { display: flex; align-items: center; gap: 6px; flex: 0 1 auto; }
+  > .col-xs-4:nth-child(1) .bootstrap-select { width: 280px !important; max-width: 100%; }
+  > .col-xs-4:nth-child(2) { flex: 1 1 260px; max-width: 460px; }
+  > .col-xs-4:nth-child(3) { margin-left: auto; }
+  > .col-xs-4:nth-child(3) .pull-right { float: none !important; }
+  #flushtable { color: tk(danger-strong); border-color: rgba(tk(danger), 0.55); }
+  #flushtable:hover, #flushtable:focus { color: #fff; background: #B91C1C; border-color: #991B1B; }
+  @media (max-width: 767px) {
+    > .col-xs-4 { flex: 1 1 100% !important; max-width: none !important; margin-left: 0 !important; }
+    > .col-xs-4:nth-child(1) .bootstrap-select { flex: 1 1 auto; width: auto !important; }
+    > .col-xs-4:nth-child(3) .btn { width: 100%; }
+  }
+}
+
+// Services > Monit > Status as a tree (built by theme.js from the status text): one collapsible branch per service
+.nexo-kvtree {
+  font-size: 13px;
+  .nexo-kvtree-head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .nexo-kvtree-summary { font-weight: 600; }
+  .nexo-tree-tools { margin-left: auto; }
+  details.nexo-kvtree-node { margin: 2px 0; }
+  summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    &::-webkit-details-marker { display: none; }
+    &::before {
+      content: "";
+      align-self: center;
+      border-style: solid;
+      border-width: 4px 0 4px 6px;
+      border-color: transparent transparent transparent tk(primary);
+      transition: transform 0.15s;
+    }
+    &:hover { background-color: rgba(127, 127, 127, 0.12); }
+  }
+  details[open] > summary::before { transform: rotate(90deg); }
+  .nexo-kvtree-kind { color: tk(text-muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .nexo-kvtree-name { font-weight: 600; color: tk(text); }
+  .nexo-kvtree-status { font-size: 11px; padding: 0 7px; border-radius: 9px; border: 1px solid tk(success); color: tk(success); }
+  .nexo-kvtree-status.bad { border-color: tk(danger); color: tk(danger); }
+  .nexo-kvtree-bad > summary .nexo-kvtree-name { color: tk(danger); }
+  dl {
+    display: grid;
+    grid-template-columns: minmax(150px, max-content) 1fr;
+    gap: 2px 18px;
+    margin: 2px 0 8px 12px;
+    padding: 4px 0 4px 14px;
+    border-left: 1px solid rgba(127, 127, 127, 0.3);
+  }
+  dt { font-weight: 400; color: tk(text-muted); font-family: $font-family-monospace; font-size: 12.5px; }
+  dd { margin: 0; color: tk(info); font-family: $font-family-monospace; font-size: 12.5px; overflow-wrap: anywhere; }
+  @media (max-width: 767px) {
+    dl { grid-template-columns: 1fr; gap: 0; }
+    dd { margin-bottom: 6px; }
+  }
+}
+
+// a Bootstrap .row straight inside the page section (Services > SMART: #genericActions) keeps its -20px gutters,
+// but the theme gives that section no padding to absorb them: it stuck 12px out of the page (sideways scrollbar)
+.page-content-main > .container-fluid > .row > section.col-xs-12 > .row { margin-left: 0; margin-right: 0; }
+
+// Services > SMART health panel (theme.js, from the plugin's JSON): one card per disk, tiles coloured by health
+.nexo-smart { margin: 0 0 14px; }
+.nexo-smart-card {
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  border: 1px solid tk(border);
+  border-radius: $radius;
+  background-color: tk(surface);
+  box-shadow: tk(shadow-sm);
+}
+.nexo-smart-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; margin-bottom: 12px; font-size: 14px; }
+.nexo-smart-verdict {
+  font-size: 12px; font-weight: 700; letter-spacing: 0.06em; padding: 2px 10px; border-radius: 10px; color: #fff;
+  &.ok { background: #15803D; } &.bad { background: #B91C1C; } &.warn { background: #B45309; }
+}
+.nexo-smart-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+.nexo-smart-tile {
+  --t: #64748B;
+  display: flex; flex-direction: column; gap: 2px;
+  padding: 8px 12px;
+  border: 1px solid rgba(127, 127, 127, 0.28);
+  border-left: 4px solid var(--t);
+  border-radius: 6px;
+  background: rgba(127, 127, 127, 0.07);
+  .v { font-size: 18px; font-weight: 700; color: var(--t); font-variant-numeric: tabular-nums; }
+  .l { font-size: 11px; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.04em; }
+}
+.nexo-smart-ok { --t: #22C55E; }
+.nexo-smart-warn { --t: #F59E0B; }
+.nexo-smart-bad { --t: #EF4444; }
+.nexo-smart-info { --t: #38BDF8; }
+
+// grid heading (base bootgrid tables: "Access Control Lists" in Unbound DNS > Access Lists and the like): it floated
+// in italics at the left of the toolbar, half a line above the search box. Now a title strip of its own above the
+// toolbar: stamped capitals, a divider under it.
+.bootgrid-header .theading-text {
+  float: none;
+  display: block;
+  width: 100%;
+  margin: 0 0 10px;
+  padding: 2px 4px 8px;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: tk(text);
+  border-bottom: 1px solid tk(border);
+}
+
+// Unbound DNS > Statistics key figures (theme.js)
+.nexo-dnsstats { clear: both; padding: 6px 15px 14px; }   // clear: the "Auto refresh" row above is a full-width float
+.nexo-kpis { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 8px; margin-bottom: 12px; }
+.nexo-kpi {
+  --kpi: #38BDF8;
+  display: flex; flex-direction: column; gap: 1px;
+  padding: 8px 12px;
+  border: 1px solid rgba(127, 127, 127, 0.28);
+  border-left: 4px solid var(--kpi);
+  border-radius: 6px;
+  background: rgba(127, 127, 127, 0.07);
+  .v { font-size: 19px; font-weight: 700; color: var(--kpi); font-variant-numeric: tabular-nums; }
+  .l { font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; opacity: 0.85; }
+  .s { font-size: 11px; opacity: 0.65; }
+}
+.nexo-kpi-ok { --kpi: #22C55E; }
+.nexo-kpi-warn { --kpi: #F59E0B; }
+.nexo-kpi-bad { --kpi: #EF4444; }
+.nexo-bars-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px 24px; }
+.nexo-bars {
+  --kpi: #38BDF8;
+  .t { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.8; margin-bottom: 4px; }
+  .b { display: grid; grid-template-columns: 90px 1fr 130px; align-items: center; gap: 8px; font-size: 12px; margin: 3px 0; }
+  .bar { height: 8px; border-radius: 4px; background: rgba(127, 127, 127, 0.18); overflow: hidden; }
+  .bar i { display: block; height: 100%; border-radius: 4px; }
+  .n { text-align: right; font-variant-numeric: tabular-nums; opacity: 0.85; }
+}
+
+// Services > VnStat tabs as figures, chart and table (theme.js)
+.nexo-vn { padding: 10px 15px 4px; }
+.nexo-vn-iface { font-size: 12px; margin-bottom: 8px; }
+.nexo-vn-legend {
+  font-size: 11px; opacity: 0.85; margin: 2px 0 4px;
+  span { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin: 0 4px 0 10px; vertical-align: -1px; }
+  .rx { background: #38BDF8; } .tx { background: #F97316; } .est { border: 1px dashed currentColor; }
+}
+.nexo-vn-chart {
+  position: relative;
+  margin: 4px 0 26px;
+  svg { display: block; width: 100%; height: 180px; }
+  line { stroke: currentColor; opacity: 0.1; vector-effect: non-scaling-stroke; }
+  .rx { fill: #38BDF8; }
+  .tx { fill: #F97316; }
+  .bar:hover rect { opacity: 0.8; }
+  .bar.est rect { fill-opacity: 0.25; stroke: currentColor; stroke-dasharray: 3 2; stroke-width: 1; vector-effect: non-scaling-stroke; }
+  .nexo-vn-x { position: absolute; left: 0; right: 0; top: 184px; height: 16px; font-size: 10px; opacity: 0.75; }
+  .nexo-vn-x span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+  .nexo-vn-top { position: absolute; top: -2px; left: 2px; font-size: 10px; opacity: 0.6; }
+}
+.nexo-vn-table {
+  font-variant-numeric: tabular-nums;
+  th, td { text-align: right; } th:first-child, td:first-child { text-align: left; }
+  tr.peak td { color: #F59E0B; }
+}
+
+// secrets in plain text fields (Security > Q-Feeds Connect: API key, and any "*.apikey" / "*.api_key" / "*.token" /
+// "*.secret" field): shown masked, revealed only while the field has focus (to check or edit it). Value unchanged.
+input[type="text"]:is([id$=".apikey" i], [id$=".api_key" i], [id$=".token" i], [id$=".secret" i], [id$=".apisecret" i]) {
+  -webkit-text-security: disc;
+  &:focus { -webkit-text-security: none; }
+}
+
+// dashboard CPU graph (small SmoothieChart canvas): a soft orange glow around the line
+.grid-stack-item[gs-id="cpu"] canvas[id^="cpu-usage"] {
+  filter: drop-shadow(0 0 3px rgba(249, 115, 22, 0.65));
+}
+
+// jqTree search box with the expand/collapse-all buttons added by theme.js (nexo-extras.js)
+.searchbox:has(.nexo-tree-tools) {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  .tree_search { flex: 0 1 360px; min-width: 0; }
+  .nexo-tree-tools { display: inline-flex; flex: none; }   // the two buttons side by side, never squeezed
+}
+
+.text-muted {
+  &.text-success { color: $state-success-text; }
+  &.text-warning { color: $state-warning-text; }
+  &.text-danger  { color: $state-danger-text; }
+}
+
+#grid-log th[data-column-id="__timestamp__"],
+#filter-log-entries th[data-column-id="__timestamp__"] {
+  min-width: 3.5em;
+}
+
+.table-responsive {
+  border-color: tk(border);
+  @media screen and (max-width: $screen-xs-max) {
+    margin-bottom: 0;
+    > .table {
+      > thead,
+      > tbody,
+      > tfoot {
+        > tr {
+          > th,
+          > td {
+            white-space: normal;
+          }
+        }
+      }
+    }
+  }
+}
+
+label>input[type="checkbox"],
+label>input[type="radio"] {
+  margin-right: .4em;
+  float:left;
+}
+
+div[data-for*="help_for"] {
+  padding-top: .4em;
+}
+
+#log-settings label[for^="act"] {
+  margin-right: 1.5em;
+}
+
+#log-settings table>tbody>tr>td {
+  vertical-align: middle;
+}
+
+#log-settings select#filterlogentries,
+#log-settings select#filterlogentriesupdateinterval {
+  width: 5em;
+}
+
+#log-settings select#filterlogentriesinterfaces {
+  min-width: 100%;
+  max-width: 100%;
+}
+
+/* fields in firewall schedule */
+[data-state="lightcoral"] {
+  background-color: rgba(tk(danger), .45);
+}
+[data-state="white"] {
+  background-color: tk(surface);
+}
+[data-state="red"] {
+  background-color: tk(danger);
+}
+
+.tokens-container {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.bootstrap-dialog-body {
+  padding: 15px;
+}
+
+#OPNsenseStdWaitDialog div.modal-body {
+  padding: 15px;
+}
+
+.modal-body {
+  max-height: calc(100vh - 265px);
+  overflow-y: auto;
+}
+
+.modal-footer {
+  padding: 15px;
+  border-top-color: tk(border);
+}
+
+// ---------------------------------------------------------------------------
+// Command/log output in textareas (System > Firmware, Monit, IDS...): same text style as
+// the dashboard Live Log — mono at $mono-scale, tabular digits, section label.
+// firmware.volt sets font-family inline, hence the !important.
+// ---------------------------------------------------------------------------
+#update_status,
+textarea.form-control[readonly][style*="monospace"] {
+    font-family: $font-mono !important;
+    font-size: 12px;
+    line-height: 1.6;
+    font-variant-numeric: tabular-nums;
+    color: tk(text);
+    background-color: tk(surface-2);
+    border: 1px solid tk(border);
+    border-radius: $radius;
+    padding: 12px 16px;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, if($mode == dark, .35, .04));
+    resize: vertical;
+    tab-size: 4;
+
+    &:focus {
+        border-color: tk(border-strong);
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, if($mode == dark, .35, .04));
+    }
+}
+
+// "OUTPUT" label above the log, like "LIVE LOG" on the dashboard
+#update_status_container::before {
+    content: "Output";
+    display: block;
+    margin: 12px 0 8px;
+    padding-left: 8px;
+    border-left: 2px solid tk(primary);
+    font-family: $font-label;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: tk(text-muted);
+}
+
+// note below the log ("Output shown here for diagnostic purposes...")
+#update_status_container > .table {
+    margin-top: 6px;
+    background: transparent;
+    td { border: 0 !important; background: transparent !important; color: tk(text-muted); font-size: 12px; }
+}
+
+// menu: at the 3rd level OPNsense marks as active every item pointing to the same
+// page with a different #anchor (e.g. Firmware > Status/Settings/Updates...). Subtle active state here.
+#mainmenu .list-group-item.menu-level-3-item.active,
+#mainmenu .list-group-item.menu-level-3-item.active:hover,
+#mainmenu .list-group-item.menu-level-3-item.active:focus {
+    background-color: transparent;
+    font-weight: 400;
+    color: tk(sidebar-text-hi);
+
+    &:before { background: rgba(tk(sidebar-active), .35); width: 1px; }
+}
+
+// ---------------------------------------------------------------------------
+// Firewall > Log Files > Live View: all options on a single compact row.
+// The page blocks (filters-left/middle/right, filters-wrap, toggle-group) become
+// display:contents and all controls flow in a single flex bar. Section labels are hidden;
+// toggles become icon buttons (tooltip via title, set by theme.js); "Table size" and
+// "History size" become small selects with a prefix. Look only: IDs/classes untouched.
+// ---------------------------------------------------------------------------
+$fb-h: 28px;
+
+.filters-bar {
+    display: flex !important;
+    flex-wrap: nowrap;             // one row; wraps below 1100px (media query at the end)
+    align-items: center !important;
+    gap: 6px !important;
+    min-height: 0 !important;
+    margin: 0 0 8px !important;
+    padding: 6px 8px;
+    background: tk(surface-2);
+    border: 1px solid tk(border);
+    border-radius: $radius;
+
+    .filters-left, .filters-ui, .filters-wrap,
+    .filters-middle, .filters-middle > div,
+    .filters-right, .toggle-group {
+        display: contents !important;
+    }
+
+    // "Filters", "Templates", "Options", "Active filters" labels: hidden
+    .muted { display: none !important; }
+
+    // active filters: only when present, on a second row
+    .filters-list {
+        order: 99;
+        flex: 1 0 100%;
+        margin: 2px 0 0 !important;
+        gap: 4px !important;
+        &:empty { display: none !important; }
+    }
+    .filter-sep {
+        font-family: $font-label;
+        font-size: 10px;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+        color: tk(text-muted);
+    }
+    .filter-chip {
+        padding: 1px 8px !important;
+        background: tk(primary-soft);
+        color: tk(primary);
+        border: 1px solid rgba(tk(primary), .28);
+        font-family: $font-mono;
+        font-size: 11px;
+        font-weight: 500;
+        button { color: inherit; opacity: .7; padding: 0; &:hover { opacity: 1; } }
+    }
+
+    // ---- controls: same height, 12.5px font ----
+    input[type="text"] {
+        height: $fb-h;
+        padding: 3px 8px;
+        font-size: 12.5px;
+        color: tk(text);
+        background: tk(input-bg);
+        border: 1px solid tk(border-strong);
+        border-radius: $radius-sm;
+        transition: border-color $transition-fast, box-shadow $transition-fast;
+        &:focus { outline: 0; border-color: tk(primary); box-shadow: 0 0 0 2px tk(focus-ring); }
+    }
+    .btn,
+    .bootstrap-select > .dropdown-toggle {
+        height: $fb-h;
+        padding: 3px 8px;
+        font-size: 12.5px;
+        line-height: 20px;
+        border-radius: $radius-sm;
+    }
+    .btn:not(.dropdown-toggle) { min-width: $fb-h; padding-left: 7px; padding-right: 7px; }
+    .bootstrap-select .filter-option-inner-inner { font-size: 12.5px; }
+
+    // order in the row: quick search | actions | filter (field, operator, value, apply) | templates | options | sizes
+    #globalSearch      { order: 1; flex: 1 1 140px; min-width: 90px; }
+    #refresh           { order: 2; }
+    #table-reset       { order: 3; }
+    .nexo-fit-columns { order: 4; }
+    .bootstrap-select:has(#filter-field)     { order: 10; width: 80px !important; }
+    .bootstrap-select:has(#filter-operator)  { order: 11; width: 94px !important; }
+    .bootstrap-select:has(#interface-select) { order: 12; width: 130px !important; }
+    #filter-value      { order: 12; flex: 1 1 100px; width: auto !important; min-width: 70px; }
+    #apply-filter {
+        order: 13;
+        background: tk(primary);
+        border-color: tk(primary);
+        color: tk(primary-contrast);
+        &:hover { background: tk(primary-hover); border-color: tk(primary-hover); }
+    }
+
+    // thin separators between groups
+    #apply-filter::after, #deleteTemplate::after { content: none; }
+    #stageTemplate, #cancelTemplate { order: 20; margin-left: 6px; }
+    #stageTemplate { box-shadow: -7px 0 0 -6px tk(border-strong); }
+    .bootstrap-select:has(#templateSelect) { order: 21; width: 104px !important; }
+    #templateName      { order: 21; width: 130px !important; }
+    #deleteTemplate, #saveTemplate { order: 22; }
+
+    // toggles as icon buttons (the checkbox is hidden; the state shows on the button)
+    label.toggle {
+        order: 30;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: $fb-h;
+        height: $fb-h;
+        margin: 0;
+        border: 1px solid tk(border-strong);
+        border-radius: $radius-sm;
+        background: tk(surface);
+        color: tk(text-muted);
+        cursor: pointer;
+        position: relative;
+        transition: background $transition-fast, color $transition-fast, border-color $transition-fast;
+
+        input[type="checkbox"] { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+        .toggle-ui, .toggle-label { display: none; }
+        .fa { font-size: 12px; }
+
+        &:hover { color: tk(primary); border-color: tk(primary); }
+        &:has(input:checked) {
+            background: tk(primary-soft);
+            border-color: tk(primary);
+            color: tk(primary);
+        }
+        &:has(input:focus-visible) { box-shadow: 0 0 0 2px tk(focus-ring); }
+    }
+    label.toggle:first-of-type { margin-left: 6px; box-shadow: -7px 0 0 -6px tk(border-strong); }
+    label.toggle:first-of-type:has(input:checked) { box-shadow: -7px 0 0 -6px tk(border-strong); }
+
+    // Table size / History size: small select with a short prefix instead of the label
+    .filters-right > div:not(.toggle-group) {
+        order: 40;
+        display: inline-flex !important;
+        align-items: center;
+        margin: 0 !important;
+        border: 1px solid tk(border-strong);
+        border-radius: $radius-sm;
+        background: tk(surface);
+        // visible: the bootstrap-select menu opens below and must not be clipped (Rows/Hist were unusable)
+        overflow: visible;
+
+        > .bootstrap-select > .dropdown-toggle { border-radius: 0 $radius-sm $radius-sm 0; }
+        > .bootstrap-select > .dropdown-menu { margin-top: 2px; z-index: 1035; }
+        > label { display: none; }
+        &::before {
+            padding: 0 2px 0 8px;
+            font-family: $font-label;
+            font-size: 10px;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            color: tk(text-muted);
+            white-space: nowrap;
+        }
+        > .bootstrap-select { width: 62px !important; }
+        > .bootstrap-select > .dropdown-toggle { border: 0; height: $fb-h - 2; background: transparent; padding-left: 6px; }
+    }
+    .filters-right > div:has(#table-size)::before   { content: "Rows"; }
+    .filters-right > div:has(#history-size)::before { content: "Hist"; }
+    .filters-right > div:has(#table-size) { margin-left: 6px !important; }
+    .filters-right > div:not(.toggle-group) { flex: none; }
+    > *, .filters-wrap > *, .filters-middle > div > *, .toggle-group > * { flex-shrink: 0; }
+    #globalSearch, #filter-value { flex-shrink: 1; }
+}
+@media (max-width: 1100px) {
+    .filters-bar { flex-wrap: wrap; }
+}
+
+// Phone/narrow tablet: the OPNsense page puts the bar in a column (max-width: 800px) and each
+// control becomes a row, with the search stretched. Here: rows of 2–4 controls, 36px touch height.
+//   1) quick search + refresh/reset/adjust   2) field + operator
+//   3) value + Apply                         4) templates
+//   5) toggles + Rows + Hist
+@media (max-width: 800px) {
+    $tap-target: 36px;
+
+    .filters-bar {
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        align-items: center !important;
+        gap: 6px !important;
+        padding: 8px;
+
+        input[type="text"],
+        .btn,
+        .bootstrap-select > .dropdown-toggle {
+            height: $tap-target;
+            font-size: 14px;     // 16px would avoid zoom on iOS, but 14px fits better; Android does not zoom
+        }
+        .btn:not(.dropdown-toggle) { min-width: $tap-target; }
+        label.toggle { width: $tap-target; height: $tap-target; }
+        label.toggle:first-of-type,
+        #stageTemplate,
+        .filters-right > div:has(#table-size) { margin-left: 0 !important; box-shadow: none; }
+
+        // 1) search + 3 buttons
+        #globalSearch { flex: 1 1 calc(100% - 3 * (#{$tap-target} + 6px)); min-width: 0; }
+
+        // 2) field + operator, half each (wraps before the field)
+        .bootstrap-select:has(#filter-field),
+        .bootstrap-select:has(#filter-operator),
+        .bootstrap-select:has(#interface-select) {
+            flex: 1 1 calc(50% - 3px);
+            width: auto !important;
+        }
+        .bootstrap-select:has(#filter-field) { margin-left: 0; }
+
+        // 3) value + Apply
+        #filter-value { flex: 1 1 calc(100% - 90px); min-width: 0; }
+        #apply-filter { flex: 0 0 auto; }
+
+        // 4) templates: load | select | delete/save
+        #stageTemplate, #cancelTemplate { margin-left: 0; }
+        .bootstrap-select:has(#templateSelect),
+        #templateName { flex: 1 1 0; width: auto !important; min-width: 0; }
+
+        // 5) three toggles + Rows + Hist
+        .filters-right > div:not(.toggle-group) { flex: 1 1 0; min-width: 0; }
+        .filters-right > div:not(.toggle-group) > .bootstrap-select { flex: 1 1 auto; width: auto !important; }
+        .filters-right > div:not(.toggle-group) > .bootstrap-select > .dropdown-toggle { height: $tap-target - 2; }
+
+        // forces the line breaks at the right points (pseudo-breaks with order)
+        &::before, &::after { content: none; }
+    }
+    // breaks: invisible "full width" elements do not exist in the HTML; the sum of the bases is used
+    // (field+operator = 100%, value+Apply = 100%) and templates/toggles with flex 1 to close the row.
+    .filters-bar .bootstrap-select:has(#filter-field) { flex-basis: calc(50% - 3px); }
+    .filters-bar #stageTemplate { margin-right: 0; }
+    .filters-bar .bootstrap-select:has(#templateSelect) { flex-basis: calc(100% - 2 * (#{$tap-target} + 6px)); }
+
+    // bootstrap-select selects: text centered in the touch height
+    .filters-bar .bootstrap-select > .dropdown-toggle { padding-top: 7px; padding-bottom: 7px; }
+    // Rows/Hist: smaller prefix so the value does not touch the arrow
+    .filters-bar .filters-right > div:not(.toggle-group)::before { padding: 0 0 0 6px; font-size: 9px; letter-spacing: .04em; }
+    .filters-bar .filters-right > div:not(.toggle-group) > .bootstrap-select > .dropdown-toggle { padding-left: 4px; padding-right: 18px; }
+
+    // table: scrolls horizontally inside the card; time shows the END (…09:54:42-03:00), not the date
+    #livelog-table { font-size: 13px; }
+    #livelog-table .tabulator-cell[tabulator-field="__timestamp__"] {
+        direction: rtl;
+        text-align: left;
+    }
+
+    // fixed footer takes over the phone screen: moves to the end of the page
+    .page-foot { position: static !important; }
+}
+
+
+// "Adjust columns" button (src/js/nexo-extras.js): on = theme highlight
+.btn.nexo-fit-columns.active,
+.btn.nexo-fit-columns[aria-pressed="true"] {
+    background: tk(primary-soft);
+    border-color: tk(primary);
+    color: tk(primary);
+    box-shadow: none;
+}
+
+// ---------------------------------------------------------------------------
+// Per-page tweaks (desktop and mobile teams). One file per agent; fixed order.
+// ---------------------------------------------------------------------------
+@import "pages/desktop-mvc";
+@import "pages/desktop-legacy";
+@import "pages/mobile-mvc";
+@import "pages/mobile-legacy";
+
+// Network data in grids in mono: the .nexo-mono class is set by nexo-extras.js, which
+// then widens only the columns that got clipped (see the grid mono routine in nexo-extras.js).
+.tabulator .tabulator-cell.nexo-mono {
+    font-family: $font-mono;
+    font-size: $mono-scale;
+    font-variant-numeric: tabular-nums;
+}
+
+// Phone: row command buttons (edit/clone/delete) at 36×36px. Only after
+// nexo-extras.js has widened the commands column (.nexo-cmd-touch), so no button disappears.
+@media (max-width: 800px) {
+    .tabulator.nexo-cmd-touch .tabulator-row .tabulator-cell .btn.btn-xs {
+        min-width: 36px;
+        height: 36px;
+        padding: 0 8px;
+        margin: 0 1px;
+        line-height: 34px;
+    }
+    .tabulator.nexo-cmd-touch .tabulator-row .tabulator-cell:has(.btn.btn-xs) {
+        white-space: nowrap;
+        overflow: visible;
+    }
+}
+@import "pages/forja";
+
+// Every page: the content boxes get the room — thin outer margin instead of the container/row/column paddings
+// stacked up (≈30px on each side); side-by-side columns (col-md-6 etc.) keep their gutter between them.
+.page-content-main {
+  padding-top: 8px;
+  > .container-fluid { padding-left: 8px; padding-right: 8px; }
+  > .container-fluid > .row { margin-left: 0; margin-right: 0; }
+  > .container-fluid > .row > section.col-xs-12:not([class*="col-sm-"]):not([class*="col-md-"]):not([class*="col-lg-"]),
+  > .container-fluid > .row > .col-xs-12:only-child { padding-left: 0; padding-right: 0; }
+}
+@media (max-width: 767px) {
+  .page-content-main > .container-fluid { padding-left: 6px; padding-right: 6px; }
+}
+
+// Grid toolbars (log files and every bootgrid/tabulator page): one tidy row — search, filters side by side,
+// grid actions and command buttons (download, clear) side by side; thinner side padding.
+.bootgrid-header.container-fluid { padding-left: 8px; padding-right: 8px; }
+.bootgrid-header.container-fluid > .row { margin-left: 0; margin-right: 0; }
+.bootgrid-header .actionBar { width: 100%; box-sizing: border-box; }
+.tabulator-cell[tabulator-field="timestamp"] { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.bootgrid-header .actionBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding-left: 0;
+  padding-right: 0;
+  > .search { padding-left: 0; margin: 0; }
+  > #filter_container { flex-wrap: nowrap; gap: 8px; margin: 0; }
+  > #filter_container > .bootstrap-select { margin: 0 !important; width: 170px !important; }
+  > #command-wrapper { flex-wrap: nowrap; gap: 4px; margin: 0; }
+  > #command-wrapper > .btn { margin: 0 !important; }
+  > .actions { margin: 0 0 0 auto; }
+}
+@media (max-width: 767px) {
+  .bootgrid-header .actionBar > #filter_container { flex-wrap: wrap; }
+  .bootgrid-header .actionBar > #filter_container > .bootstrap-select { width: calc(50% - 4px) !important; }
+}
+
+// System > Firmware > Plugins: All / Installed / Not installed filter added by theme.js next to the name search.
+// Installed rows are the ones with the Remove button (the page renders Install otherwise).
+.nexo-pl-search {
+  white-space: nowrap;
+  > #plugin_search { width: auto; min-width: 0; max-width: 220px; display: inline-block; vertical-align: middle; }
+}
+.nexo-pl-filter {
+  display: inline-block;
+  width: auto;
+  margin-left: 6px;
+  vertical-align: middle;
+  color: tk(text);
+  background-color: tk(input-bg);
+  border: 1px solid tk(border-strong);
+  border-radius: 4px;
+}
+#pluginlist.nexo-pl-inst tbody tr.plugin_entry:not(:has(.act_remove)),
+#pluginlist.nexo-pl-avail tbody tr.plugin_entry:has(.act_remove) {
+  display: none !important;
+}
+@media (max-width: 800px) {
+  .nexo-pl-search { white-space: normal; }
+  .nexo-pl-filter { margin: 4px 0 0; display: block; }
+  // phones: size, tier and repository columns out, so name, version and comment read as words, not letter stacks
+  #pluginlist {
+    > thead > tr > th:nth-child(3), > thead > tr > th:nth-child(4), > thead > tr > th:nth-child(5),
+    > tbody > tr > td:nth-child(3), > tbody > tr > td:nth-child(4), > tbody > tr > td:nth-child(5) { display: none; }
+    > tbody > tr > td { word-break: normal; overflow-wrap: anywhere; }
+    > tbody > tr > td:nth-child(2) { white-space: nowrap; overflow-wrap: normal; font-size: 12px; }
+    #plugin_search { width: 100%; max-width: none; }
+  }
+}
+
+// System > Configuration > History: the diff as a modern code review (tinted lines with a state bar, hunk headers
+// as chips) instead of coloured text on stripes. The page sets an inline colour on each cell: overridden.
+td.diff_record {
+  font-family: $font-mono;
+  font-size: 12.5px;
+  line-height: 1.55;
+  white-space: pre;
+  padding: 1px 12px !important;
+  border: 0 !important;
+  background: transparent;
+  color: tk(text) !important;
+}
+tr:has(> td.diff_record) { background: transparent !important; }
+td.diff_record_plus { background: rgba(tk(success), 0.12) !important; color: tk(success-strong) !important; box-shadow: inset 3px 0 0 tk(success); }
+td.diff_record_minus { background: rgba(tk(danger), 0.12) !important; color: tk(danger-strong) !important; box-shadow: inset 3px 0 0 tk(danger); }
+td.diff_record_at {
+  background: rgba(tk(info), 0.10) !important;
+  color: tk(info-strong) !important;
+  font-weight: 600;
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+}
+#diff_records { display: table-row-group; }
+
+// System > Firmware > Reporter (crash_reporter.php): a card layout, readable report box
+.content-box:has(textarea[name="Desc"]) {
+  padding: 18px 22px;
+  input[name="Email"], textarea[name="Desc"] {
+    width: 100%;
+    max-width: 640px;
+    border-radius: 8px;
+  }
+  pre {
+    max-height: 340px;
+    overflow: auto;
+    border-radius: 10px;
+    border: 1px solid tk(border);
+    background: rgba(0, 0, 0, 0.35);
+    padding: 12px 14px;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .btn { margin-left: 8px; }
+}

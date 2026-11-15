@@ -1,0 +1,225 @@
+// Nexo theme for OPNsense.
+// Copyright (C) 2026 Igor Toledo <contato@igor.eti.br>
+// Derived from the OPNsense default theme. BSD 2-Clause License, see LICENSE-nexo.
+
+@import "config/colors";
+
+// pill chips primary-soft / primary
+$chip-bg:     tk(primary-soft);
+$chip-fg:     tk(primary);
+$chip-border: rgba(tk(primary), 0.28);   // token suggestion: primary-border
+
+.tokenize > .tokens-container {
+    position: relative;
+    list-style: none;
+    padding: 0 0 5px 5px;
+    height: auto;
+    min-height: 34px;
+    cursor: text;
+    background-color: tk(surface);
+    color: tk(text);
+    border: 1px solid tk(border-strong);
+    border-radius: $radius;
+    transition: border-color $transition-fast, box-shadow $transition-fast;
+}
+
+.tokenize > .tokens-container.disabled {
+    background-color: tk(surface-3);
+    color: tk(text-muted);
+    cursor: not-allowed;
+}
+
+.tokenize.focus > .tokens-container {
+    outline: 0;
+    border-color: tk(primary);
+    -webkit-box-shadow: 0 0 0 3px tk(focus-ring);
+            box-shadow: 0 0 0 3px tk(focus-ring);
+}
+
+.tokenize > .tokens-container.input-sm {
+    padding: 0 0 4px 4px;
+    min-height: 30px;
+}
+
+.tokenize > .tokens-container.input-lg {
+    padding: 0 0 9px 9px;
+    min-height: 46px;
+}
+
+.tokenize > .tokens-container > .token {
+    padding: 0 1.6em 0 0.7em;
+    background-color: $chip-bg;
+    color: $chip-fg;
+    font-weight: 500;
+    -webkit-border-radius: 999px;
+       -moz-border-radius: 999px;
+            border-radius: 999px;
+    transition: background-color $transition-fast, border-color $transition-fast;
+}
+
+.tokenize > .tokens-container > .token,
+.tokenize > .tokens-container > .placeholder,
+.tokenize > .tokens-container > .token-search {
+    border: 1px solid $chip-border;
+    display: inline-block;
+    margin: 5px 5px 0 0;
+    position: relative;
+    vertical-align: middle;
+}
+
+.tokenize.sortable > .tokens-container > .token {
+    cursor: move;
+}
+
+.tokenize.single > .tokens-container > .token {
+    display: block;
+    border-color: transparent;
+    background-color: transparent;
+    color: tk(text);
+    font-weight: 400;
+}
+
+.tokenize.sortable > .tokens-container > .token.shadow {
+    border-color: tk(border-strong);
+    background-color: tk(border-strong);
+    filter: alpha(opacity=50);
+    opacity: .2;
+}
+
+.tokenize > .tokens-container > .placeholder,
+.tokenize > .tokens-container > .token-search {
+    padding: 0;
+    border-color: transparent;
+}
+
+.tokenize > .tokens-container > .placeholder {
+    color: tk(text-muted);
+}
+
+.tokenize > .tokens-container > .token-search > input {
+    padding: 0;
+    margin: 0;
+    line-height: 1em;
+    border: 1px solid transparent;
+    background: transparent;
+    color: tk(text);
+    border-left: none;
+    border-right: none;
+    outline: none;
+    width: 100%;
+}
+
+.tokenize > .tokens-container > .token-search > input::-ms-clear {
+    display: none;
+}
+
+.tokenize > .tokens-container.input-sm > .placeholder,
+.tokenize > .tokens-container.input-sm > .token-search,
+.tokenize > .tokens-container.input-sm > .token {
+    margin: 4px 4px 0 0;
+}
+
+.tokenize > .tokens-container.input-lg > .placeholder,
+.tokenize > .tokens-container.input-lg > .token-search,
+.tokenize > .tokens-container.input-lg > .token {
+    margin: 9px 9px 0 0;
+}
+
+.tokenize > .tokens-container > .token.pending-delete {
+    background-color: rgba(tk(danger), 0.14);
+    border-color: tk(danger);
+    color: tk(danger-strong)
+}
+
+.tokenize > .tokens-container > .token > .dismiss {
+    position: absolute;
+    right: 7px;
+    color: $chip-fg;
+    opacity: 0.6;
+    transition: opacity $transition-fast;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.tokenize > .tokens-container > .token > .dismiss:after {
+    content: "\00D7";
+}
+
+.tokenize > .tokens-container > .token.pending-delete > .dismiss {
+    color: tk(danger-strong);
+    opacity: 1;
+}
+
+.tokenize-dropdown {
+    position: absolute;
+    display: none;
+}
+
+.tokenize-dropdown > .dropdown-menu {
+    min-height: 10px;
+    width: 100%;
+    display: block;
+    margin: -1px 0 0 0;
+    visibility: visible;
+    opacity: 1;
+}
+
+.tokenize-dropdown > .dropdown-menu li {
+    cursor: pointer;
+}
+
+.tokenize-dropdown > .dropdown-menu li > a .tokenize-highlight {
+    font-weight: 600;
+    color: tk(primary);
+}
+
+.tokenize-dropdown > .dropdown-menu li.locked {
+    padding: 3px 20px;
+    color: tk(text-muted);
+    white-space: nowrap;
+}
+
+.tokenize-dropdown > .dropdown-menu li.locked,
+.tokenize-dropdown > .dropdown-menu li > a {
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+}
+
+.tokenize-dropdown > .dropdown-menu li:not(.active) a:hover,
+.tokenize-dropdown > .dropdown-menu li:not(.active) a:focus {
+    background-color: transparent;
+}
+
+/* Nexo: dismiss with hover and autocomplete menu */
+.tokenize > .tokens-container > .token > .dismiss:hover {
+    opacity: 1;
+    color: $chip-fg;
+}
+
+.tokenize > .tokens-container > .token:hover {
+    border-color: $chip-fg;
+}
+
+.tokenize.single > .tokens-container > .token:hover {
+    border-color: transparent;
+}
+
+.tokenize-dropdown > .dropdown-menu {
+    background-color: tk(surface);
+    border: 1px solid tk(border);
+    border-radius: $radius;
+    box-shadow: tk(shadow-md);
+    padding: 4px;
+}
+
+.tokenize-dropdown > .dropdown-menu li > a {
+    color: tk(text);
+    border-radius: $radius-sm;
+}
+
+.tokenize-dropdown > .dropdown-menu li.active > a,
+.tokenize-dropdown > .dropdown-menu li.active > a:hover,
+.tokenize-dropdown > .dropdown-menu li.active > a:focus {
+    background-color: tk(primary-soft);
+    color: tk(primary);
+}

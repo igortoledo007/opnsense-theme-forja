@@ -1,0 +1,5 @@
+Build (sassc or dart-sass), one entry per sheet, e.g. for main.css:
+  printf '$mode: dark;\n$variant: forja;\n$theme-name: forja;\n$with-sonar: false;\n@import "main";\n' > e.scss
+  sassc -t expanded -I stylesheets e.scss ../build/css/main.css
+Inline data: SVGs are then moved to build/images/svg-<hash>.svg, because legacy pages forbid data: images (CSP).
+Fonts come from the default theme (/ui/themes/opnsense/build/fonts).

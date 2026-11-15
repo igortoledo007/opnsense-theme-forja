@@ -1,0 +1,725 @@
+// Nexo theme for OPNsense.
+// Copyright (C) 2026 Igor Toledo <contato@igor.eti.br>
+// Derived from the OPNsense default theme. BSD 2-Clause License, see LICENSE-nexo.
+
+/* nvd3 version 1.8.6 (https://github.com/novus/nvd3) 2017-08-23 */
+@import "config/colors";
+
+$variant: nexo !default;
+$font-heading: $font-sans !default;
+
+// Charts: text/axes in text-muted, grids in border
+$nv-text:     tk(text-muted);
+$nv-axis:     tk(border-strong);
+$nv-grid:     tk(border);
+$nv-positive: tk(success);
+$nv-negative: tk(danger);
+
+$nv-series: null;
+// Series palette per family (8 colors, derived from the tokens).
+// Nexo: blue -> violet -> cyan, then states. Sec: green/cyan first;
+// amber (Sec accent-2) and red are reserved for alerts (not used as series).
+@if $variant == sec {
+    $nv-series: (
+        tk(primary), tk(accent), tk(text-muted), mix(tk(primary), tk(accent), 50%),
+        tk(primary-hover), mix(tk(accent), tk(text), 55%),
+        mix(tk(primary), tk(text-muted), 45%), mix(tk(text-muted), tk(accent), 60%)
+    ) !global;
+} @else {
+    $nv-series: (
+        tk(primary), tk(accent-2), tk(accent), tk(success),
+        tk(warning), mix(tk(primary), tk(accent-2), 50%),
+        mix(tk(accent), tk(success), 50%), tk(text-muted)
+    ) !global;
+}
+.nvd3 .nv-axis {
+    pointer-events:none;
+    opacity: 1;
+}
+
+.nvd3 .nv-axis path {
+    fill: none;
+    stroke: $nv-axis;
+    stroke-opacity: .75;
+    shape-rendering: crispEdges;
+}
+
+.nvd3 .nv-axis path.domain {
+    stroke-opacity: .75;
+}
+
+.nvd3 .nv-axis.nv-x path.domain {
+    stroke-opacity: 0;
+}
+
+.nvd3 .nv-axis line {
+    fill: none;
+    stroke: $nv-grid;
+    shape-rendering: crispEdges;
+}
+
+.nvd3 .nv-axis .zero line,
+    /*this selector may not be necessary*/ .nvd3 .nv-axis line.zero {
+    stroke-opacity: .75;
+}
+
+.nvd3 .nv-axis .nv-axisMaxMin text {
+    font-weight: bold;
+}
+
+.nvd3 .x  .nv-axis .nv-axisMaxMin text,
+.nvd3 .x2 .nv-axis .nv-axisMaxMin text,
+.nvd3 .x3 .nv-axis .nv-axisMaxMin text {
+    text-anchor: middle;
+}
+
+.nvd3 .nv-axis.nv-disabled {
+    opacity: 0;
+}
+
+.nvd3 .nv-bars rect {
+    fill-opacity: .75;
+
+    transition: fill-opacity 250ms linear;
+}
+
+.nvd3 .nv-bars rect.hover {
+    fill-opacity: 1;
+}
+
+.nvd3 .nv-bars .hover rect {
+    fill: tk(primary-hover);
+}
+
+.nvd3 .nv-bars text {
+    fill: rgba(tk(text), 0);
+}
+
+.nvd3 .nv-bars .hover text {
+    fill: tk(danger);
+}
+
+.nvd3 .nv-multibar .nv-groups rect,
+.nvd3 .nv-multibarHorizontal .nv-groups rect,
+.nvd3 .nv-discretebar .nv-groups rect {
+    stroke-opacity: 0;
+
+    transition: fill-opacity 250ms linear;
+}
+
+.nvd3 .nv-multibar .nv-groups rect:hover,
+.nvd3 .nv-multibarHorizontal .nv-groups rect:hover,
+.nvd3 .nv-candlestickBar .nv-ticks rect:hover,
+.nvd3 .nv-discretebar .nv-groups rect:hover {
+    fill-opacity: 1;
+}
+
+.nvd3 .nv-discretebar .nv-groups text,
+.nvd3 .nv-multibarHorizontal .nv-groups text {
+    font-weight: bold;
+    fill: tk(danger);
+    stroke: transparent;
+}
+
+/* boxplot CSS */
+.nvd3 .nv-boxplot circle {
+  fill-opacity: 0.5;
+}
+
+.nvd3 .nv-boxplot circle:hover {
+  fill-opacity: 1;
+}
+
+.nvd3 .nv-boxplot rect:hover {
+  fill-opacity: 1;
+}
+
+.nvd3 line.nv-boxplot-median {
+  stroke: tk(text-muted);
+}
+
+.nv-boxplot-tick:hover {
+  stroke-width: 2.5px;
+}
+/* bullet */
+.nvd3.nv-bullet { font: 10px $font-sans; }
+.nvd3.nv-bullet .nv-measure { fill-opacity: .8; }
+.nvd3.nv-bullet .nv-measure:hover { fill-opacity: 1; }
+.nvd3.nv-bullet .nv-marker { stroke: $nv-axis; stroke-width: 2px; }
+.nvd3.nv-bullet .nv-markerTriangle { stroke: $nv-axis; fill: tk(text-muted); stroke-width: 1.5px; }
+.nvd3.nv-bullet .nv-markerLine { stroke: $nv-axis; stroke-width: 1.5px; }
+.nvd3.nv-bullet .nv-tick line { stroke: tk(text-muted); stroke-width: .5px; }
+.nvd3.nv-bullet .nv-range.nv-s0 { fill: tk(surface-3); }
+.nvd3.nv-bullet .nv-range.nv-s1 { fill: tk(border); }
+.nvd3.nv-bullet .nv-range.nv-s2 { fill: tk(border-strong); }
+.nvd3.nv-bullet .nv-title { font-size: 14px; font-weight: bold; }
+.nvd3.nv-bullet .nv-subtitle { fill: tk(text-muted); }
+
+.nvd3.nv-bullet .nv-range {
+    fill: tk(border-strong);
+    fill-opacity: .4;
+}
+
+.nvd3.nv-bullet .nv-range:hover {
+    fill-opacity: .1;
+}
+
+.nvd3.nv-candlestickBar .nv-ticks .nv-tick {
+    stroke-width: 1px;
+}
+
+.nvd3.nv-candlestickBar .nv-ticks .nv-tick.hover {
+    stroke-width: 2px;
+}
+
+.nvd3.nv-candlestickBar .nv-ticks .nv-tick.positive rect {
+    stroke: $nv-positive;
+    fill: $nv-positive;
+}
+
+.nvd3.nv-candlestickBar .nv-ticks .nv-tick.negative rect {
+    stroke: $nv-negative;
+    fill: $nv-negative;
+}
+
+.with-transitions .nv-candlestickBar .nv-ticks .nv-tick {
+    transition: stroke-width 250ms linear, stroke-opacity 250ms linear;
+}
+
+.nvd3.nv-candlestickBar .nv-ticks line {
+    stroke: tk(text);
+}
+
+.nv-force-node {
+    stroke: tk(surface);
+    stroke-width: 1.5px;
+}
+
+.nv-force-link {
+    stroke: tk(text-muted);
+    stroke-opacity: .6;
+}
+
+.nv-force-node text {
+    stroke-width: 0px;
+}
+
+.nvd3 .nv-legend .nv-disabled rect {
+    /*fill-opacity: 0;*/
+}
+
+.nvd3 .nv-check-box .nv-box {
+    fill-opacity:0;
+    stroke-width:2;
+}
+
+.nvd3 .nv-check-box .nv-check {
+    fill-opacity:0;
+    stroke-width:4;
+}
+
+.nvd3 .nv-series.nv-disabled .nv-check-box .nv-check {
+    fill-opacity:0;
+    stroke-opacity:0;
+}
+
+.nvd3 .nv-controlsWrap .nv-legend .nv-check-box .nv-check {
+    opacity: 0;
+}
+
+/* line plus bar */
+.nvd3.nv-linePlusBar .nv-bar rect {
+    fill-opacity: .75;
+}
+
+.nvd3.nv-linePlusBar .nv-bar rect:hover {
+    fill-opacity: 1;
+}
+.nvd3 .nv-groups path.nv-line {
+    fill: none;
+}
+
+.nvd3 .nv-groups path.nv-area {
+    stroke: none;
+}
+
+.nvd3.nv-line .nvd3.nv-scatter .nv-groups .nv-point {
+    fill-opacity: 0;
+    stroke-opacity: 0;
+}
+
+.nvd3.nv-scatter.nv-single-point .nv-groups .nv-point {
+    fill-opacity: .5 !important;
+    stroke-opacity: .5 !important;
+}
+
+
+.with-transitions .nvd3 .nv-groups .nv-point {
+    transition: stroke-width 250ms linear, stroke-opacity 250ms linear;
+}
+
+.nvd3.nv-scatter .nv-groups .nv-point.hover,
+.nvd3 .nv-groups .nv-point.hover {
+    stroke-width: 7px;
+    fill-opacity: .95 !important;
+    stroke-opacity: .95 !important;
+}
+
+
+.nvd3 .nv-point-paths path {
+    stroke: $nv-axis;
+    stroke-opacity: 0;
+    fill: tk(surface-3);
+    fill-opacity: 0;
+}
+
+
+.nvd3 .nv-indexLine {
+    cursor: ew-resize;
+}
+
+/********************
+ * SVG CSS
+ */
+
+/********************
+  Default CSS for an svg element nvd3 used
+*/
+svg.nvd3-svg {
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+    display: block;
+    width:100%;
+    height:100%;
+}
+
+/********************
+  Box shadow and border radius styling
+*/
+.nvtooltip.with-3d-shadow, .with-3d-shadow .nvtooltip {
+    box-shadow: tk(shadow-md);
+    border-radius: $radius-sm;
+}
+
+
+.nvd3 text {
+    font: normal 12px $font-sans;
+    fill: $nv-text;
+}
+
+.nvd3 .title {
+    font: 600 14px $font-heading;
+    fill: tk(text);
+}
+
+.nvd3 .nv-background {
+    fill: tk(surface);
+    fill-opacity: 0;
+}
+
+.nvd3.nv-noData {
+    font-size: 18px;
+    font-weight: 600;
+    fill: tk(text-muted);
+}
+
+
+/**********
+*  Brush
+*/
+
+.nv-brush .extent {
+    fill-opacity: .125;
+    shape-rendering: crispEdges;
+}
+
+.nv-brush .resize path {
+    fill: tk(surface-3);
+    stroke: tk(text-muted);
+}
+
+
+/**********
+*  Legend
+*/
+
+.nvd3 .nv-legend .nv-series {
+    cursor: pointer;
+}
+
+.nvd3 .nv-legend .nv-disabled circle {
+    fill-opacity: 0;
+}
+
+/* focus */
+.nvd3 .nv-brush .extent {
+    fill-opacity: 0 !important;
+}
+
+.nvd3 .nv-brushBackground rect {
+    stroke: $nv-axis;
+    stroke-width: .4;
+    fill: tk(surface);
+    fill-opacity: .7;
+}
+
+/**********
+*  Print
+*/
+
+@media print {
+    .nvd3 text {
+        fill: black; /* print: always black on paper */
+        stroke-width: 0;
+        fill-opacity: 1;
+    }
+}
+
+.nvd3.nv-ohlcBar .nv-ticks .nv-tick {
+    stroke-width: 1px;
+}
+
+.nvd3.nv-ohlcBar .nv-ticks .nv-tick.hover {
+    stroke-width: 2px;
+}
+
+.nvd3.nv-ohlcBar .nv-ticks .nv-tick.positive {
+    stroke: $nv-positive;
+}
+
+.nvd3.nv-ohlcBar .nv-ticks .nv-tick.negative {
+    stroke: $nv-negative;
+}
+
+
+.nvd3 .background path {
+    fill: none;
+    stroke: $nv-grid;
+    stroke-opacity: .4;
+    shape-rendering: crispEdges;
+}
+
+.nvd3 .foreground path {
+    fill: none;
+    stroke-opacity: .7;
+}
+
+.nvd3 .nv-parallelCoordinates-brush .extent {
+    fill: tk(surface);
+    fill-opacity: .6;
+    stroke: tk(text-muted);
+    shape-rendering: crispEdges;
+}
+
+.nvd3 .nv-parallelCoordinates .hover  {
+    fill-opacity: 1;
+	stroke-width: 3px;
+}
+
+
+.nvd3 .missingValuesline line {
+  fill: none;
+  stroke: tk(text-muted);
+  stroke-width: 1;
+  stroke-opacity: 1;
+  stroke-dasharray: 5, 5;
+}
+
+.nvd3.nv-pie path {
+    stroke-opacity: 0;
+    transition: fill-opacity 250ms linear, stroke-width 250ms linear, stroke-opacity 250ms linear;
+}
+
+.nvd3.nv-pie .nv-pie-title {
+    font-size: 24px;
+    fill: tk(primary);
+}
+
+.nvd3.nv-pie .nv-slice text {
+    fill: tk(text);
+    stroke: $nv-axis;
+    stroke-width: 0;
+}
+
+.nvd3.nv-pie path {
+    stroke: tk(surface);
+    stroke-width: 1px;
+    stroke-opacity: 1;
+}
+
+.nvd3.nv-pie path {
+    fill-opacity: .7;
+}
+
+.nvd3.nv-pie .hover path {
+    fill-opacity: 1;
+}
+
+.nvd3.nv-pie .nv-label {
+    pointer-events: none;
+}
+
+.nvd3.nv-pie .nv-label rect {
+    fill-opacity: 0;
+    stroke-opacity: 0;
+}
+
+/* scatter */
+.nvd3 .nv-groups .nv-point.hover {
+    stroke-width: 20px;
+    stroke-opacity: .5;
+}
+
+.nvd3 .nv-scatter .nv-point.hover {
+    fill-opacity: 1;
+}
+
+.nv-noninteractive {
+    pointer-events: none;
+}
+
+.nv-distx, .nv-disty {
+    pointer-events: none;
+}
+
+/* sparkline */
+.nvd3.nv-sparkline path {
+    fill: none;
+}
+
+.nvd3.nv-sparklineplus g.nv-hoverValue {
+    pointer-events: none;
+}
+
+.nvd3.nv-sparklineplus .nv-hoverValue line {
+    stroke: tk(text);
+    stroke-width: 1.5px;
+}
+
+.nvd3.nv-sparklineplus,
+.nvd3.nv-sparklineplus g {
+    pointer-events: all;
+}
+
+.nvd3 .nv-hoverArea {
+    fill-opacity: 0;
+    stroke-opacity: 0;
+}
+
+.nvd3.nv-sparklineplus .nv-xValue,
+.nvd3.nv-sparklineplus .nv-yValue {
+    stroke-width: 0;
+    font-size: .9em;
+    font-weight: normal;
+}
+
+.nvd3.nv-sparklineplus .nv-yValue {
+    stroke: tk(danger);
+}
+
+.nvd3.nv-sparklineplus .nv-maxValue {
+    stroke: $nv-positive;
+    fill: $nv-positive;
+}
+
+.nvd3.nv-sparklineplus .nv-minValue {
+    stroke: $nv-negative;
+    fill: $nv-negative;
+}
+
+.nvd3.nv-sparklineplus .nv-currentValue {
+    font-weight: bold;
+    font-size: 1.1em;
+}
+/* stacked area */
+.nvd3.nv-stackedarea path.nv-area {
+    fill-opacity: .7;
+    stroke-opacity: 0;
+    transition: fill-opacity 250ms linear, stroke-opacity 250ms linear;
+}
+
+.nvd3.nv-stackedarea path.nv-area.hover {
+    fill-opacity: .9;
+}
+
+
+.nvd3.nv-stackedarea .nv-groups .nv-point {
+    stroke-opacity: 0;
+    fill-opacity: 0;
+}
+
+.nvtooltip {
+    position: absolute;
+    background-color: tk(surface);
+    color: tk(text);
+    padding: 1px;
+    border: 1px solid tk(border);
+    z-index: 10000;
+    display: block;
+
+    font-family: $font-sans;
+    font-size: 13px;
+    text-align: left;
+    pointer-events: none;
+
+    white-space: nowrap;
+
+    -webkit-user-select: none;
+
+       -moz-user-select: none;
+
+        -ms-user-select: none;
+
+            user-select: none;
+}
+
+.nvtooltip {
+    background: tk(surface);
+    border: 1px solid tk(border);
+    border-radius: $radius-sm;
+    box-shadow: tk(shadow-md);
+    font-variant-numeric: tabular-nums;
+}
+
+/*Give tooltips that old fade in transition by
+    putting a "with-transitions" class on the container div.
+*/
+.nvtooltip.with-transitions, .with-transitions .nvtooltip {
+    transition: opacity 50ms linear;
+
+    transition-delay: 200ms;
+}
+
+.nvtooltip.x-nvtooltip,
+.nvtooltip.y-nvtooltip {
+    padding: 8px;
+}
+
+.nvtooltip h3 {
+    margin: 0;
+    padding: 4px 14px;
+    line-height: 18px;
+    font-weight: normal;
+    background-color: tk(surface-2);
+    color: tk(text);
+    font-weight: 600;
+    text-align: center;
+
+    border-bottom: 1px solid tk(border);
+
+    border-radius: $radius-sm $radius-sm 0 0;
+}
+
+.nvtooltip p {
+    margin: 0;
+    padding: 5px 14px;
+    text-align: center;
+}
+
+.nvtooltip span {
+    display: inline-block;
+    margin: 2px 0;
+}
+
+.nvtooltip table {
+    margin: 6px;
+    border-spacing:0;
+}
+
+
+.nvtooltip table td {
+    padding: 2px 9px 2px 0;
+    vertical-align: middle;
+}
+
+.nvtooltip table td.key {
+    font-weight: normal;
+}
+
+.nvtooltip table td.key.total {
+    font-weight: bold;
+}
+
+.nvtooltip table td.value {
+    font-family: $font-mono;
+    text-align: right;
+    font-weight: bold;
+}
+
+.nvtooltip table td.percent {
+    color: tk(text-muted);
+}
+
+.nvtooltip table tr.highlight td {
+    padding: 1px 9px 1px 0;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-top-style: solid;
+    border-top-width: 1px;
+}
+
+.nvtooltip table td.legend-color-guide div {
+    width: 8px;
+    height: 8px;
+    vertical-align: middle;
+}
+
+.nvtooltip table td.legend-color-guide div {
+    width: 12px;
+    height: 12px;
+    border: 1px solid tk(border-strong);
+    border-radius: 3px;
+}
+
+.nvtooltip .footer {
+    padding: 3px;
+    text-align: center;
+}
+
+.nvtooltip-pending-removal {
+    pointer-events: none;
+    display: none;
+}
+
+
+/****
+Interactive Layer
+*/
+.nvd3 .nv-interactiveGuideLine {
+    pointer-events:none;
+}
+
+.nvd3 line.nv-guideline {
+    stroke: tk(border-strong);
+}
+
+/* ---------------------------------------------------------------------------
+ * Nexo: series colors (nvd3 applies color via inline style; !important to
+ * beat the inline). Groups and legend use the same series index.
+ * ------------------------------------------------------------------------- */
+@for $i from 1 through length($nv-series) {
+    $c: nth($nv-series, $i);
+    .nvd3 .nv-groups .nv-series-#{$i - 1},
+    .nvd3 .nv-stackedarea path.nv-area.nv-area-#{$i - 1},
+    .nvd3.nv-pie .nv-pie .nv-slice:nth-child(#{$i}) path {
+        fill: $c !important;
+        stroke: $c !important;
+    }
+    .nvd3.nv-pie .nv-pie .nv-slice:nth-child(#{$i}) path {
+        stroke: tk(surface) !important;
+    }
+    .nvd3 .nv-legend .nv-series:nth-child(#{$i}) .nv-legend-symbol {
+        fill: $c !important;
+        stroke: $c !important;
+    }
+}
+
+.nvd3 .nv-legend .nv-legend-text {
+    fill: tk(text);
+}
+
+.nvd3 .nv-legend .nv-disabled .nv-legend-text {
+    fill: tk(text-muted);
+}

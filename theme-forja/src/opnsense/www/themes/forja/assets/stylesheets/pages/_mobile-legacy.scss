@@ -1,0 +1,228 @@
+// Nexo theme for OPNsense.
+// Copyright (C) 2026 Igor Toledo <contato@igor.eti.br>
+// BSD 2-Clause License, see LICENSE-nexo.
+
+// Page tweaks — mobile-legacy team. Only this agent edits this file.
+// Rules: tk() tokens only; no structural changes (OPNsense classes/IDs untouched).
+//
+// Legacy screens (*.php) and non-MVC plugin screens, on phones (≤ 767px) and narrow tablets (≤ 800px).
+// Scope: only pages that load opnsense_legacy.js (the legacy head.inc includes it; the MVC layout does not),
+// detected via :has() on <html> — does not collide with mobile-mvc nor change desktop.
+//
+// OPNsense already stacks legacy forms on phones: opnsense_legacy.js clones the label of
+// each row into a <tr class="opnsense-table-mobile-header hidden-sm hidden-md hidden-lg"> and the
+// original label <td> is .hidden-xs. Here we only fix what is left: fixed-width fields (348px of
+// bootstrap-select and inputs' max-width) that overflowed the screen, touch targets, help texts and lists.
+
+$legacy: ':root:has(> head > script[src*="opnsense_legacy.js"])';
+$tap-target: 36px;   // minimum touch target
+// legacy form table without the standard class (no <thead>, with a field in the last cell)
+// "elastic" bootstrap-select: no width of its own (data-width auto/fit = netmask etc. stay as they are)
+$bs-elastic: '.bootstrap-select:not(.fit-width):not(.input-group-btn):not(:has(> select[data-width="auto"], > select[data-width="fit"]))';
+$form-like: 'table.table:not(.opnsense_standard_table_form):not(:has(> thead)):has(> tbody > tr > td + td:last-child :is(input, select, textarea))';
+
+// ---------------------------------------------------------------- phone and narrow tablet
+@media (max-width: 800px) {
+    #{$legacy} .page-content-main {
+
+        // ---- forms (label td + field td)
+        .opnsense_standard_table_form {
+            > tbody > tr > td,
+            > thead > tr > th {
+                overflow-wrap: break-word;   // "anywhere" split labels mid-word on tablets
+            }
+            // fields: fill the cell, never overflow it
+            input[type="text"], input[type="password"], input[type="number"], input[type="email"],
+            input[type="url"], input[type="search"], input[type="tel"], input:not([type]),
+            select, textarea, .form-control {
+                max-width: 100%;
+                min-height: $tap-target;
+            }
+            textarea { width: 100%; }
+            #{$bs-elastic} {
+                width: 100% !important;
+                max-width: 100%;
+                // long selected text (nowrap) does not widen the table: clipped with ellipsis
+                contain: inline-size;
+                > .dropdown-toggle { min-height: $tap-target; }
+                > .dropdown-menu { max-width: calc(100vw - 32px); }
+            }
+            // IP + mask (Interfaces > static IPv4/IPv6, Virtual IPs...): classless layout table
+            // with <td style="width:348px"> for the IP and a bootstrap-select data-width="auto"
+            // that, without inline width, inherited the 348px and squeezed the IP to ~30px. Here: elastic IP,
+            // mask sized to its content.
+            td > table:not(.table) {
+                width: 100%;
+                > tbody > tr > td[style*="width"] { width: auto !important; }
+                > tbody > tr > td:has(> .bootstrap-select > select[data-width="auto"]) { width: 1%; padding-left: 4px; }
+                > tbody > tr > td > input { width: 100%; min-width: 0; }
+            }
+            .bootstrap-select:has(> select[data-width="auto"]) { width: auto !important; }
+            // token lists (tokenize2: DNS, aliases...) also had a fixed 348px
+            .tokenize, .tokenize > .tokens-container {
+                width: 100% !important;
+                max-width: 100%;
+            }
+            .tokenize { contain: inline-size; }
+            .bootstrap-select .dropdown-menu li a { padding-top: 8px; padding-bottom: 8px; white-space: normal; }
+            // input-group (e.g. IP + mask): field shrinks, mask stays beside it
+            .input-group { width: 100%; max-width: 100%; }
+            .input-group > .form-control, .input-group > input { min-width: 0; }
+            .input-group-btn > .bootstrap-select { width: auto !important; }
+
+            // checkboxes / radios: larger touch area around the label
+            label:has(> input[type="checkbox"]), label:has(> input[type="radio"]) {
+                display: inline-flex;
+                align-items: center;
+                min-height: 32px;
+                margin-right: 12px;
+                > input { margin-top: 0; margin-bottom: 0; }
+            }
+
+            // readable help texts
+            .hidden[data-for], div[data-for*="help_for"], .help-block, small.text-muted {
+                font-size: 13px;
+                line-height: 1.5;
+                color: tk(text-muted);
+                overflow-wrap: anywhere;
+            }
+            .showhelp, .fa-info-circle { padding: 4px; margin: -4px 0 -4px -4px; }
+
+            // long values (keys, certificates, pre)
+            pre, code { white-space: pre-wrap; overflow-wrap: anywhere; }
+        }
+
+        // ---- bootstrap-select outside the standard form (e.g. Backups > Restore): fixed 348px
+        // never overflows the card
+        // (width in % + contain: the fixed width does not enter the table's intrinsic sizing)
+        .content-box #{$bs-elastic} {
+            width: 100% !important;
+            max-width: 348px;
+            contain: inline-size;
+        }
+
+        // ---- buttons: touch target ≥ 36px
+        .content-box .btn,
+        .content-box input[type="submit"].btn,
+        .content-box input[type="button"].btn {
+            min-height: $tap-target;
+            min-width: $tap-target;
+        }
+        .content-box .btn-xs, .content-box .btn-sm {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 9px;
+            font-size: 13px;
+            line-height: 1;
+        }
+        // action icons in lists: a little space between them
+        .content-box td .btn-xs + .btn-xs,
+        .content-box td .btn-group + .btn-xs,
+        .content-box td a.btn + a.btn { margin-left: 4px; }
+
+        // ---- lists (tables that are not forms): scroll inside the card, not the page
+        // (only where there is no dropdown: a scroll container would scroll the card and clip the menu)
+        .content-box:has(> table.table:not(.opnsense_standard_table_form)):not(:has(.bootstrap-select, .dropdown-menu)),
+        .content-box:has(> form > table.table:not(.opnsense_standard_table_form)):not(:has(.bootstrap-select, .dropdown-menu)),
+        .content-box:has(> .table-responsive > table.table:not(.opnsense_standard_table_form)):not(:has(.bootstrap-select, .dropdown-menu)) {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        table.table:not(.opnsense_standard_table_form) > thead > tr > th { white-space: nowrap; }
+
+        // legacy tabs (nav-tabs): scroll horizontally instead of wrapping onto several rows
+        .nav-tabs:not(:has(.dropdown-menu)) {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            > li { float: none; flex: 0 0 auto; }
+            > li > a { white-space: nowrap; }
+        }
+    }
+}
+
+// ---------------------------------------------------------------- phone only (< 768px)
+@media (max-width: 767px) {
+    // smaller side margins (same pattern as the dashboard on phones)
+    #{$legacy} .page-content-main > .container-fluid > .row > section.col-xs-12,
+    #{$legacy} .page-content-main > .container-fluid > .row > .col-xs-12 {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    #{$legacy} .page-content-main {
+        .opnsense_standard_table_form {
+            // label row cloned by opnsense_legacy.js: label above the field, right next to it
+            > tbody > tr.opnsense-table-mobile-header > td {
+                padding: 10px 12px 2px;
+                border-bottom: 0;
+                font-weight: 600;
+                > td { display: block; width: auto !important; padding: 0; border: 0; }
+            }
+            // section title (thead) aligned with the labels
+            > thead > tr > th { padding-left: 12px; padding-right: 12px; }
+            > tbody > tr.opnsense-table-mobile-header + tr > td {
+                border-top: 0;
+                padding: 4px 12px 10px;
+            }
+            // field cell (78%) without the label beside it: full width
+            > tbody > tr > td:not(.hidden-xs) { width: auto !important; }
+
+            // fields at 100% on phones (on tablets they keep the desktop size, up to the cell)
+            input[type="text"], input[type="password"], input[type="number"], input[type="email"],
+            input[type="url"], input[type="search"], input[type="tel"], input:not([type]),
+            select, .form-control {
+                width: 100%;
+            }
+            // tables inside the form (e.g. NTP servers, DNS per gateway): header wraps
+            // by word and the text field does not vanish squeezed between checkbox columns
+            td table.table {
+                > thead > tr > th { white-space: normal; overflow-wrap: normal; padding: 4px; vertical-align: bottom; }
+                > tbody > tr > td { padding: 4px; }
+                input[type="text"] { min-width: 110px; }
+            }
+            // Firewall > Schedules calendar: clickable days with touch height
+            table[id^="calTable"] > tbody > tr > td[onclick] { height: $tap-target; vertical-align: middle; }
+            // except the small side-by-side ones (input-group mask, selects with their own width)
+            .input-group-btn select, select.input-sm, select[style*="width"] { width: auto; }
+        }
+        // Legacy forms WITHOUT the opnsense_standard_table_form class (e.g. Lobby > Password,
+        // Configuration > Backups): OPNsense does not clone the label, so the two cells stayed
+        // side by side and the table scrolled. Here: rows with a field become label on top, field below.
+        // "Form" = table without <thead> with some field in the last cell of a row.
+        #{$form-like} {
+            > tbody > tr:has(> td:last-child :is(input, select, textarea)) > td {
+                display: block;
+                width: auto !important;
+                overflow-wrap: break-word;
+                &:first-child:not(:last-child) { padding-bottom: 2px; border-bottom: 0; font-weight: 600; }
+                & + td { border-top: 0; padding-top: 4px; }
+                &:empty { padding: 0; }
+            }
+            :is(input[type="text"], input[type="password"], input[type="number"], input:not([type]),
+                select, textarea, .form-control) {
+                width: 100%;
+                max-width: 100%;
+            }
+            #{$bs-elastic} {
+                width: 100% !important;
+                max-width: 100%;
+                contain: inline-size;
+            }
+        }
+
+        // lists: tighter cells to fit more columns before scrolling
+        table.table:not(.opnsense_standard_table_form) {
+            > thead > tr > th, > tbody > tr > td, > tfoot > tr > td {
+                padding-left: 6px;
+                padding-right: 6px;
+                &:first-child { padding-left: 10px; }
+                &:last-child  { padding-right: 10px; }
+            }
+        }
+        // button row at the end of the form (Save etc.): buttons with breathing room
+        .opnsense_standard_table_form td > input.btn + input.btn,
+        .opnsense_standard_table_form td > .btn + .btn { margin-left: 6px; }
+    }
+}

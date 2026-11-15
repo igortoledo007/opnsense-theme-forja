@@ -1,0 +1,469 @@
+// Nexo theme for OPNsense.
+// Copyright (C) 2026 Igor Toledo <contato@igor.eti.br>
+// BSD 2-Clause License, see LICENSE-nexo.
+
+// Page tweaks — mobile-mvc team. Only this agent edits this file.
+// Rules: tk() tokens only; no structural changes (OPNsense classes/IDs untouched).
+//
+// MVC screens (/ui/...) on phones (≤ 800px) and narrow tablets (≤ 991px). Same pattern as Live View
+// (main.scss) and the dashboard on phones: 36px touch targets, controls in compact rows, no
+// horizontal scrolling of the whole page (wide tables scroll inside their own container).
+// Nothing here applies above 991px.
+
+$mm-tap: 36px;     // minimum touch height
+$mm-gap: 6px;
+
+// ---------------------------------------------------------------------------------------------
+// Narrow tablet and phone (≤ 991px)
+// ---------------------------------------------------------------------------------------------
+@media (max-width: 991px) {
+
+    // Tabs: a single row that scrolls horizontally instead of wrapping onto several rows.
+    // Only on tabs without a submenu (the dropdown would be clipped by the overflow).
+    .page-content-main .nav-tabs:not(:has(> li.dropdown)):not(:has(.dropdown-menu)) {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+        &::-webkit-scrollbar { display: none; }
+        &::before, &::after { content: none; }  // Bootstrap clearfix would become a flex item
+
+        > li {
+            float: none;
+            flex: 0 0 auto;
+            margin-bottom: 0;
+        }
+        > li > a {
+            white-space: nowrap;
+            margin-bottom: 0;
+        }
+    }
+
+    // Edit forms and dialogs: fields take the available width
+    // (OPNsense hardcodes data-width="346px" on selects and size="50" on inputs).
+    .page-content-main,
+    .modal-dialog {
+        tr:has(> td > .control-label) > td {
+            .form-control:not([type="checkbox"]):not([type="radio"]),
+            .bootstrap-select:not(.bs-container),
+            .tokenize,
+            .tokenize > .tokens-container,
+            textarea,
+            .input-group {
+                width: 100% !important;
+                max-width: 100%;
+                min-width: 0 !important;
+            }
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------------------------
+// Phone (≤ 800px)
+// ---------------------------------------------------------------------------------------------
+@media (max-width: 800px) {
+
+    // ---- page: tight title and margins --------------------------------------------------
+    .page-content-head {
+        padding-top: 12px;
+        padding-bottom: 10px;
+        h1 { font-size: 18px; line-height: 1.2; }
+    }
+    .page-content-main {
+        padding-top: 8px;
+        > .container-fluid { padding-left: 8px; padding-right: 8px; }
+        > .container-fluid > .row { margin-left: -8px; margin-right: -8px; }
+        > .container-fluid > .row > section[class*="col-"] { padding-left: 8px; padding-right: 8px; }
+        // .row directly in the section (e.g. Services > SMART) follows the section's smaller indent
+        > .container-fluid > .row > section[class*="col-"] > .row { margin-left: -8px; margin-right: -8px; }
+    }
+    .page-content-main .content-box { margin-bottom: 10px; }
+
+    // no horizontal page scrolling: wide blocks scroll inside
+    .page-content-main {
+        // wide blocks scroll inside only when they hold no dropdown: a scroll container (overflow-x: auto also
+        // clips vertically) would scroll the box and clip the bootstrap-select menu when one opens near its
+        // bottom (System: Settings: Miscellaneous, Interfaces > [if] on a phone, 2026-11-09). Boxes with a
+        // dropdown stay visible (overriding Bootstrap's own .table-responsive rule at <= 767px) and their
+        // cells wrap instead.
+        .table-responsive:not(:has(.bootstrap-select, .dropdown-menu)) { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .table-responsive:has(.bootstrap-select, .dropdown-menu) { overflow: visible; }
+        .table-responsive:has(.bootstrap-select, .dropdown-menu) > table.table > * > tr > :is(td, th) { overflow-wrap: anywhere; white-space: normal; }
+        pre { max-width: 100%; overflow-x: auto; }
+        // fixed-width selects (data-width) do not overflow the container
+        .bootstrap-select:not(.bs-container) { max-width: 100%; }
+        // loose table directly in the tab/card (no .table-responsive): the container scrolls horizontally
+        // (only where there is no dropdown, which would be clipped)
+        :is(.tab-pane, .content-box):has(> table.table):not(:has(.dropdown-menu, .bootstrap-select)) {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        // ...and where there is a dropdown, cells wrap long text (IPv6, MAC) instead of widening
+        // the table (e.g. Interfaces > Virtual IPs > Status)
+        :is(.tab-pane, .content-box) > table.table > * > tr > :is(td, th) { overflow-wrap: anywhere; }
+        // ...but never the label column: "Type", "Architecture" were split letter by letter (Firmware › Status)
+        :is(.tab-pane, .content-box) > table.table > * > tr > :is(td, th):first-child {
+            overflow-wrap: normal;
+            word-break: normal;
+            min-width: 6.5em;
+        }
+        // centered chart row inside the tab (e.g. Reporting > Unbound DNS): no negative
+        // margin and no empty spacer columns
+        .tab-pane .container-fluid > .row.justify-content-center {
+            margin-left: 0;
+            margin-right: 0;
+            > [class*="col-"] { min-width: 0; max-width: 100%; }
+            > [class*="col-"]:not(:has(*)) { display: none; }
+        }
+        // nested rows without a container (e.g. .row directly in the tab/card) overflowed the screen by 10px
+        :is(.tab-pane, .content-box) > .row { margin-left: 0; margin-right: 0; }
+        :is(.tab-pane, .content-box) > .row > [class*="col-"] { padding-left: 0; padding-right: 0; }
+    }
+
+    // service buttons in the title (start/restart/stop): touch target
+    .page-content-head .btn { min-width: $mm-tap; min-height: $mm-tap; }
+
+    // ---- tabs: touch height -------------------------------------------------------------
+    .page-content-main .nav-tabs > li > a {
+        min-height: $mm-tap + 4;
+        padding: 10px 12px;
+        line-height: 18px;
+    }
+
+    // ---- grids (bootgrid/tabulator) --------------------------------------------------------
+    // action bar: search + filters and buttons in compact rows, as in Live View
+    .bootgrid-header {
+        padding: 8px;
+        > .row { margin: 0; }
+        .actionBar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: $mm-gap;
+            padding: 0;
+            float: none;
+            width: 100%;
+
+            > * { margin: 0 !important; float: none !important; }
+
+            // 1) full-width search
+            > .search { flex: 1 1 100%; width: auto !important; max-width: none; padding: 0; }
+            .search .input-group { width: 100%; }
+            .search .input-group-addon,
+            .search .icon { min-width: $mm-tap; }
+
+            // 2) extra page filters (type, category, interface...): share the row
+            > .btn-group:not(.actions),
+            > .dropdown.bootstrap-select,
+            > select {
+                display: flex !important;
+                flex: 1 1 calc(50% - #{$mm-gap});
+                gap: $mm-gap;
+                min-width: 0;
+                width: auto !important;
+                > .bootstrap-select { flex: 1 1 0; min-width: 0; width: auto !important; float: none; margin: 0; }
+            }
+
+            // 3) refresh | rows | columns | reset | maximize | adjust: a single row
+            > .actions.btn-group {
+                display: flex;
+                flex: 1 1 100%;
+                flex-wrap: nowrap;
+                gap: $mm-gap;
+                width: auto;
+                > .btn,
+                > .btn-group,
+                > .dropdown {
+                    flex: 1 1 0;
+                    min-width: $mm-tap;
+                    margin: 0 !important;
+                    float: none;
+                    border-radius: $radius-sm !important;
+                }
+                > .btn,
+                > .btn-group > .btn,
+                > .dropdown > .btn { padding-left: 0; padding-right: 0; }
+                > .btn-group > .btn,
+                > .dropdown > .btn { width: 100%; border-radius: $radius-sm !important; }
+            }
+
+            input[type="text"],
+            input[type="search"],
+            .input-group-addon,
+            .search > .input-group > .icon,
+            .btn,
+            .bootstrap-select > .dropdown-toggle {
+                min-height: $mm-tap;
+                font-size: 14px;
+            }
+            .btn,
+            .bootstrap-select > .dropdown-toggle { padding-top: 7px; padding-bottom: 7px; }
+        }
+    }
+
+    // row command buttons (edit, clone, delete...): taller; the width stays OPNsense's,
+    // because the commands column has a fixed width computed by the JS
+    .tabulator-row .tabulator-cell .btn.btn-xs {
+        min-height: 32px;
+        padding-top: 6px;
+        padding-bottom: 6px;
+        line-height: 18px;
+    }
+    .tabulator-row .tabulator-cell input[type="checkbox"] { width: 18px; height: 18px; }
+
+    // grid footer: pagination on one row, counter and commands (add, delete, import...)
+    // wrap below instead of disappearing off the right
+    .tabulator .tabulator-footer {
+        padding: 6px 8px;
+        .tabulator-footer-contents {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: $mm-gap;
+        }
+        .tabulator-paginator { flex: 0 0 auto; order: 1; }
+        .tabulator-page-counter { order: 2; flex: 1 1 auto; text-align: right; margin: 0; }
+        .tabulator-page { min-width: $mm-tap; min-height: $mm-tap; }
+        .bootgrid-footer-commands,
+        .tabulator-footer-contents > .btn {
+            order: 3;
+        }
+        .bootgrid-footer-commands {
+            display: flex;
+            flex: 1 1 auto;
+            flex-wrap: wrap;
+            gap: $mm-gap;
+            margin: 0;
+            padding: 0;
+        }
+        .bootgrid-footer-commands .btn,
+        .tabulator-footer-contents > .btn {
+            min-width: $mm-tap + 8;
+            min-height: $mm-tap;
+            padding: 8px 10px;
+            margin: 0;
+        }
+    }
+
+    // ---- forms: one column, label above the field -------------------------------------
+    // applies to the page form (base_form) and to the edit dialog (base_dialog)
+    .page-content-main,
+    .modal-dialog {
+        // the form table becomes blocks (block tr/td), without the 25/40/35% column widths
+        table:has(> tbody > tr > td > .control-label) {
+            display: block;
+            width: 100% !important;
+            table-layout: auto !important;
+            > colgroup { display: none; }
+            > thead, > tbody { display: block; width: 100%; }
+            > thead > tr { display: block; }
+            > thead > tr > th { display: block; padding: 8px 10px; }
+            > tbody > tr > td[colspan] { display: block; }
+            > tbody > tr:has(> td[colspan]) { display: block; }
+        }
+        tr:has(> td > .control-label),
+        tr:has(> td > div[id$="Btns"]) {
+            display: block;
+            border-bottom: 1px solid tk(border);
+            padding: 6px 0;
+
+            > td {
+                display: block;
+                width: 100% !important;
+                border-top: 0 !important;
+                padding: 2px 10px !important;
+            }
+            > td:first-child { padding-top: 6px !important; }
+            > td:last-child:has(> .help-block:empty) { padding: 0 !important; }
+            > td > .help-block:empty { display: none; }
+        }
+        tr:has(> td > div[id$="Btns"]) > td:first-child { display: none; } // empty cell (&nbsp;)
+        tr:has(> td > div[id$="Btns"]) > td:last-child { display: none; }
+
+        .control-label { line-height: 1.35; }
+        .control-label .showhelp {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 28px;
+            min-height: 28px;
+            margin: -6px 0 -6px -6px;
+        }
+
+        tr:has(> td > .control-label) {
+            .form-control:not([type="checkbox"]):not([type="radio"]),
+            .bootstrap-select > .dropdown-toggle,
+            .input-group-btn > .btn,
+            .input-group-addon {
+                min-height: $mm-tap + 4;
+                font-size: 16px;    // avoids iOS auto-zoom on focus
+            }
+            input[type="checkbox"], input[type="radio"] { width: 20px; height: 20px; margin-top: 2px; }
+            textarea.form-control { min-height: 80px; }
+        }
+    }
+
+    // "advanced mode" / "full help" rows at the top of the form: larger targets
+    [id^="show_advanced_"], [id^="show_all_help_"] {
+        font-size: 18px;
+        padding: 6px;
+    }
+
+    // ---- edit dialogs: full screen, button footer always visible --------------------
+    // common dialogs: below the top bar, small margins
+    .modal .modal-dialog {
+        width: auto;
+        margin: 70px 8px 12px;
+    }
+    // the OPNsense top bar (62px) stays above the dialog (the dialog is inside .page-content)
+    .modal .modal-dialog.modal-lg {
+        margin: 62px 0 0;
+        height: calc(100% - 62px);
+        > .modal-content {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            max-height: 100dvh;
+            border-radius: 0;
+            border-left: 0;
+            border-right: 0;
+        }
+        .modal-header {
+            flex: 0 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: $mm-gap;
+            padding: 10px 12px;
+            border-radius: 0;
+            &::before, &::after { content: none; }
+
+            // 27.1 icon before the title: the "&nbsp;" between them becomes an anonymous flex item
+            // that adds one more gap; the negative margin takes it back
+            .model-header-icon { order: 0; margin-right: -#{$mm-gap}; font-size: 16px; }
+            .modal-title { order: 1; flex: 1 1 0; min-width: 0; font-size: 16px; }
+            .close { order: 2; float: none; min-width: $mm-tap; min-height: $mm-tap; margin: 0; font-size: 26px; }
+            // form search: moves below the title, full width
+            .form-search {
+                order: 3;
+                float: none !important;
+                flex: 1 1 100%;
+                width: 100% !important;
+                margin: 0 !important;
+                .form-control, .input-group-addon { min-height: $mm-tap; font-size: 16px; }
+            }
+        }
+        .modal-body {
+            flex: 1 1 auto;
+            min-height: 0;
+            max-height: none;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 0;
+        }
+        .modal-footer {
+            flex: 0 0 auto;
+            display: flex;
+            justify-content: flex-end;
+            gap: $mm-gap;
+            padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
+            border-radius: 0;
+            &::before, &::after { content: none; }
+            .btn { min-height: $mm-tap + 4; min-width: 96px; margin: 0; }
+        }
+    }
+    // confirmation dialogs (BootstrapDialog): small side margins, tall buttons
+    .bootstrap-dialog .modal-dialog { margin: 12px 8px; }
+    .bootstrap-dialog .modal-footer .btn { min-height: $mm-tap + 4; }
+
+    // ---- Reporting > Health: chart selectors in two columns (they overflowed the screen) ----------
+    #health-header {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        align-items: flex-end;
+        gap: $mm-gap;
+        height: auto;
+        padding: 8px;
+        > * { margin: 0 !important; }
+        > .label-select-pair { flex: 1 1 calc(50% - #{$mm-gap}); min-width: 0; width: auto; }
+        > .label-select-pair .bootstrap-select { width: 100% !important; }
+        > .btn { flex: 1 1 calc(50% - #{$mm-gap}); min-height: $mm-tap; }
+    }
+
+    // ---- Reporting > Unbound DNS: four counters in 2 × 2 -------------------------------
+    .page-content-main .banner:has(> .stats-element) {
+        width: 50%;
+        padding-left: 4px;
+        padding-right: 4px;
+        margin-bottom: 8px;
+    }
+    .page-content-main .banner > .stats-element { width: 100%; }
+    .page-content-main .stats-element > .stats-icon { flex: 0 0 48px; width: 48px; }
+    .page-content-main .stats-element > .stats-text { flex: 1 1 auto; width: auto; min-width: 0; }
+
+    // ---- Shaper: Status: wide table scrolls inside ---------------------------------------
+    #activityTbl { display: block; max-width: 100%; overflow-x: auto; }
+
+    // ---- loose page buttons (Apply, Save, service actions) --------------------------
+    .page-content-main .content-box .btn:not(.btn-xs):not(.dropdown-toggle),
+    .page-content-main .content-box .bootstrap-select > .dropdown-toggle {
+        min-height: $mm-tap;
+    }
+}
+
+
+// ---- phones: forms and tabs fit the window --------------------------------------------------------------
+@media (max-width: 767px) {
+    .page-content-main {
+        // settings forms laid out as a 2–3 column table (label | field | help): stack them, label on top,
+        // field at full width (Firmware › Settings, Unbound, …). Grids (bootgrid/tabulator) are untouched.
+        :is(.tab-pane, .content-box, form) table.table:not(.bootgrid-table):not(.tabulator-table):has(> tbody > tr > td :is(input, select, textarea, .bootstrap-select)) {
+            display: block;
+            width: 100% !important;
+            > tbody { display: block; }
+            > tbody > tr { display: flex; flex-direction: column; padding: 6px 0; }
+            > tbody > tr > td {
+                display: block;
+                width: 100% !important;
+                max-width: 100%;
+                border-top: 0;
+                padding: 4px 10px;
+            }
+            > tbody > tr > td:first-child:not(:only-child) { font-weight: 600; padding-bottom: 0; }
+            > tbody > tr > td:empty { display: none; }
+            > tbody > tr + tr { border-top: 1px solid tk(border); }
+            // (not the hidden native <select> inside a bootstrap-select: it sits at left: 50% with 0.5px of
+            // width, and at 100% it would stick out of the box and widen the page sideways)
+            .bootstrap-select:not(.bs-container), select:not(.bootstrap-select > select), input[type="text"],
+            input[type="password"], input[type="number"], input[type="email"], input[type="url"], textarea {
+                width: 100% !important;
+                max-width: 100%;
+            }
+        }
+        // label | value tables (2 columns, e.g. Firmware › Status): fixed layout at the window width, long values
+        // (mirror URL, repositories) wrap and the button row wraps too — no sideways scrolling
+        // (a 3rd column is allowed when it only holds an icon/help, as in Firmware › Status)
+        :is(.tab-pane, .content-box) > table.table:not(:has(> * > tr > :nth-child(4))):not(:has(> thead)) {
+            table-layout: fixed;
+            width: 100% !important;
+            > * > tr > :is(td, th):first-child { width: 8em; }
+            > * > tr > :is(td, th):nth-child(3) { width: 24px; padding-left: 0; padding-right: 0; }
+            > * > tr > td:has(.btn) { white-space: normal; }
+            > * > tr > td .btn { margin: 0 4px 4px 0; white-space: normal; }
+        }
+        // tab rows scroll sideways instead of being cut at the right edge
+        > .container-fluid .nav-tabs, .tab-content-head .nav-tabs, ul.nav.nav-tabs {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            &::-webkit-scrollbar { display: none; }
+            > li { float: none; flex: 0 0 auto; }
+        }
+    }
+}

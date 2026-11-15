@@ -1,0 +1,376 @@
+// Nexo theme for OPNsense.
+// Copyright (C) 2026 Igor Toledo <contato@igor.eti.br>
+// BSD 2-Clause License, see LICENSE-nexo.
+
+// Page tweaks — desktop-legacy team. Only this agent edits this file.
+// Rules: tk() tokens only; no structural changes (OPNsense classes/IDs untouched).
+//
+// Legacy screens (*.php: System > Settings, Interfaces > [if], Firewall > Settings, legacy
+// Services, Diagnostics *.php, non-MVC plugins). Scope:
+//   - `table.opnsense_standard_table_form` only exists in legacy pages (MVC uses base_form.volt);
+//   - `$legacy`: the MVC layout always puts `#messageregion` in the content section; legacy (fbegin.inc)
+//     does not. So nothing here touches the desktop-mvc /ui/ pages.
+// Everything inside min-width: 801px (phone/tablet belongs to mobile-legacy).
+
+$legacy: ".page-content-main:not(:has(#messageregion))";
+// "top-level" table (not the small tables nested inside a value cell)
+$legacy-tbl: "#{$legacy} table.table:not(td table)";
+
+@media (min-width: 801px) {
+
+  // ===================================================================
+  // 1. Stacked section boxes (content-box): same spacing as MVC
+  // ===================================================================
+  // No overflow clipping on the box: `overflow: hidden` makes it a scroll container, and when a
+  // bootstrap-select opens near the bottom of a short box the browser scrolls the box to show the focused
+  // list, so the row label and the field disappear behind the top bar (System: Settings: Miscellaneous,
+  // 2026-11-09). The corners are rounded on the outer cells instead, so the zebra rows still fit the box.
+  #{$legacy} .content-box {
+    > table.table:first-child > :first-child > tr:first-child > :first-child { border-top-left-radius: $radius-lg - 1; }
+    > table.table:first-child > :first-child > tr:first-child > :last-child { border-top-right-radius: $radius-lg - 1; }
+    > table.table:last-child > :last-child > tr:last-child > :first-child { border-bottom-left-radius: $radius-lg - 1; }
+    > table.table:last-child > :last-child > tr:last-child > :last-child { border-bottom-right-radius: $radius-lg - 1; }
+  }
+
+  // ===================================================================
+  // 2. Standard form (label | value)
+  // ===================================================================
+  table.opnsense_standard_table_form {
+    > tbody > tr > td,
+    > thead > tr > td,
+    > thead > tr > th {
+      padding: 7px 12px;
+      vertical-align: middle;
+      line-height: 1.4;
+    }
+    > tbody > tr > td:first-child,
+    > thead > tr > td:first-child,
+    > thead > tr > th:first-child {
+      padding-left: 16px;
+    }
+    > tbody > tr > td:last-child,
+    > thead > tr > td:last-child {
+      padding-right: 16px;
+    }
+
+    // label/value ratio equal to MVC base_form.volt (25%); legacy pages set 22%/78% inline
+    > * > tr > td[style*="22%"] { width: 25% !important; }
+    > * > tr > td[style*="78%"] { width: 75% !important; }
+
+    // label column: semibold like the <label> of MVC screens, clean wrapping for long labels
+    > tbody > tr:not(.opnsense-table-mobile-header) > td:first-child:not([colspan]) {
+      color: tk(text);
+      font-weight: 600;
+      min-width: 200px;
+      padding-right: 16px;
+    }
+
+    // help icon left of the label: aligned and with a slightly larger click area
+    a.showhelp {
+      display: inline-block;
+      margin-right: 2px;
+      border-radius: $radius-pill;
+      color: tk(primary);
+      .fa { width: 1.05em; text-align: center; }
+      &:hover { color: tk(primary-hover); }
+      &:focus-visible { outline: 0; box-shadow: 0 0 0 3px tk(focus-ring); }
+    }
+    // field without help: dimmed icon, does not compete with the ones that have help
+    td > .fa-info-circle.text-muted {
+      width: 1.05em;
+      margin-right: 2px;
+      text-align: center;
+      opacity: .45;
+    }
+
+    // ---- help text (div.hidden[data-for=help_for_x], shown by "full help")
+    div[data-for^="help_for"],
+    .help-block {
+      color: tk(text-muted);
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1.5;
+      max-width: 90ch;
+      padding-top: 5px;
+      margin: 0;
+    }
+
+    // ---- loose values and text in the cell
+    > tbody > tr > td:last-child {
+      color: tk(text);
+    }
+    small { color: tk(text-muted); }
+    code { font-size: $mono-scale; }
+
+    // checkbox/radio with text beside it: aligned to the text baseline
+    td > input[type="checkbox"],
+    td > input[type="radio"],
+    td > label > input[type="checkbox"],
+    td > label > input[type="radio"] {
+      margin: 0 6px 0 0;
+      vertical-align: -2px;
+    }
+    td > label {
+      font-weight: 400;
+      margin-bottom: 0;
+    }
+    td > br + input[type="checkbox"],
+    td > br + label {
+      margin-top: 6px;
+    }
+
+    textarea {
+      max-width: 100%;
+      line-height: 1.45;
+    }
+
+    // form footnote (single-cell row with text only, e.g. Network Time > GPS):
+    // read as help, not as a value
+    > tbody > tr:last-child > td[colspan]:only-child:not(:has(input, select, textarea, .btn, table)),
+    > tfoot > tr > td[colspan]:only-child:not(:has(input, select, textarea, .btn, table)) {
+      border-top: 1px solid tk(border);
+      padding-left: 16px;
+      padding-right: 16px;
+      color: tk(text-muted);
+      font-size: 14px;
+      line-height: 1.5;
+      padding-top: 10px;
+      padding-bottom: 12px;
+    }
+
+    // buttons in the last row (Save/Cancel): uniform spacing
+    td > .btn + .btn,
+    td > input.btn + input.btn,
+    td > .btn + input.btn {
+      margin-left: 6px;
+    }
+  }
+
+  // legacy form built with a plain table.table (Lobby > Password, Backups > Google Drive...):
+  // the label cell is the one with the help icon; same weight as the standard form label
+  #{$legacy-tbl}:not(.opnsense_standard_table_form) > tbody > tr > td:first-child:has(> a.showhelp, > .fa-info-circle) {
+    color: tk(text);
+    font-weight: 600;
+    a.showhelp { color: tk(primary); margin-right: 2px; }
+    > .fa-info-circle.text-muted { opacity: .45; margin-right: 2px; }
+  }
+
+  // ---- section header ----------------------------------------------------
+  // 1st row "<td><strong>Title</strong></td><td>full help</td>" (System, Interfaces...) and
+  // "<thead><th colspan>Title</th>" (Interfaces > Generic configuration...): same look as the
+  // panel header (sans semibold 15px, 1px separator, no uppercase).
+  #{$legacy-tbl} > tbody > tr:nth-child(-n+2):has(> td:first-child > strong:only-child),
+  #{$legacy-tbl} > thead > tr:nth-child(-n+2):has(> td:first-child > strong:only-child),
+  table.opnsense_standard_table_form > thead > tr:nth-child(-n+2):has(> th[colspan]:only-child) {
+    background-color: tk(surface) !important;   // the zebra JS paints inline
+    > td, > th {
+      background-color: transparent !important;
+      border-top: 0 !important;
+      border-bottom: 1px solid tk(border);
+      color: tk(text);
+      font-family: $font-heading;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0;
+      text-transform: none;
+      padding-top: 11px;
+      padding-bottom: 11px;
+    }
+    strong { font-weight: 600; }
+  }
+  #{$legacy-tbl} > tbody > tr:nth-child(-n+2):has(> td:first-child > strong:only-child):hover,
+  #{$legacy-tbl} > tbody > tr:nth-child(-n+2):has(> td:first-child > strong:only-child):hover > td {
+    background-color: tk(surface) !important;
+  }
+
+  // "full help" (right corner of the header): subtle label and accent toggle when on.
+  // Off is no longer red (red is reserved for alerts, see DESIGN.md).
+  #{$legacy} #show_all_help_page {
+    font-size: 17px;
+    vertical-align: -2px;
+    margin-left: 4px;
+    transition: color $transition-fast;
+    &.fa-toggle-off { color: tk(text-muted) !important; }
+    &.fa-toggle-on  { color: tk(primary) !important; }
+    &:hover { color: tk(primary-hover) !important; }
+  }
+  #{$legacy} tr:has(> td > #show_all_help_page) small {
+    color: tk(text-muted);
+    font-family: $font-label;
+    font-size: 11px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+
+  // ---- small tables nested in the value cell (DNS servers, Adaptive timeouts, NTP...) -----
+  table.opnsense_standard_table_form td table,
+  #{$legacy} .content-box td > table {
+    background: transparent;
+    margin: 0;
+
+    > thead > tr,
+    > tbody > tr { background-color: transparent !important; }  // inline zebra from the JS
+    > thead > tr > th,
+    > thead > tr > td,
+    > tbody > tr > th {
+      background: transparent !important;
+      border-top: 0;
+      border-bottom: 1px solid tk(border);
+      color: tk(text-muted);
+      font-family: $font-label;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: 4px 8px 6px 0;
+    }
+    > tbody > tr > td {
+      background: transparent !important;
+      border-top: 0;
+      padding: 4px 8px 4px 0;
+      font-weight: 400;
+      min-width: 0;
+    }
+    > tbody > tr > td:first-child,
+    > thead > tr > :first-child { padding-left: 0; }
+    > tbody > tr:hover { background: transparent; }
+  }
+
+  // ---- address + mask (Interfaces > [if], static IPv4/IPv6, gateway/alias): small table with the
+  // <input> in one cell (width:348px inline) and the mask bootstrap-select (data-width="auto") in the other.
+  // The theme gives a fixed 348px to every bootstrap-select and the mask stole the IP width (down to ~110px
+  // at 900px; 348px of mask at 1350px). Mask sized to its content, small table shrinks to
+  // content: the IP keeps the default 348px of fields and the mask sits right next to it.
+  #{$legacy} td table:has(> tbody > tr > td > .bootstrap-select > select[data-width="auto"]) {
+    width: auto;
+  }
+  #{$legacy} td table td > .bootstrap-select:has(> select[data-width="auto"]) {
+    width: auto !important;
+    min-width: 80px;
+    max-width: none;
+  }
+  #{$legacy} td table td:has(> .bootstrap-select > select[data-width="auto"]) {
+    padding-left: 6px;
+  }
+
+  // ===================================================================
+  // 3. List tables (Schedules, Servers, PPPs, Normalization...)
+  // ===================================================================
+  #{$legacy-tbl}:not(.opnsense_standard_table_form) {
+    > thead > tr > th,
+    > thead > tr > td,
+    > tbody > tr > td {
+      padding: 8px 12px;
+      vertical-align: middle;
+    }
+    > thead > tr > :first-child,
+    > tbody > tr > td:first-child { padding-left: 16px; }
+    > thead > tr > :last-child,
+    > tbody > tr > td:last-child { padding-right: 16px; }
+
+    > thead > tr > th {
+      background: tk(surface);
+      border-bottom: 1px solid tk(border);
+      white-space: nowrap;
+    }
+    // column header made with <td> (Firewall > Schedules): same look as <th>
+    > thead > tr:only-child > td:not(:has(> strong:only-child)) {
+      background: tk(surface);
+      border-bottom: 1px solid tk(border);
+      color: tk(text-muted);
+      font-family: $font-label;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    // list title inside thead ("Detailed settings" in Normalization)
+    > thead > tr:first-child:not(:only-child) > th[colspan] {
+      color: tk(text);
+      font-family: $font-heading;
+      font-size: 15px;
+      letter-spacing: 0;
+      text-transform: none;
+      padding-top: 11px;
+      padding-bottom: 11px;
+    }
+
+    // hover on every list (like the bootgrid of MVC screens)
+    > tbody > tr:hover > td {
+      background-color: tk(primary-soft);
+    }
+
+    // actions column: small buttons side by side, right-aligned, no wrapping
+    > tbody > tr > td:last-child:has(> .btn),
+    > thead > tr > :last-child:has(> .btn) {
+      white-space: nowrap;
+      text-align: right;
+    }
+    .btn-xs, .btn-sm {
+      min-width: 26px;
+      margin: 1px 0 1px 3px;
+    }
+  }
+
+  // ===================================================================
+  // 4. Loose legacy controls
+  // ===================================================================
+  // legacy fields have no .form-control: same focus as the theme (focus-ring + primary border)
+  // instead of Bootstrap's diffuse glow
+  #{$legacy} {
+    input[type="text"], input[type="password"], input[type="number"], input[type="email"],
+    input[type="url"], input[type="search"], input[type="tel"], select, textarea {
+      border-color: tk(border-strong);
+      border-radius: $radius;
+      box-shadow: none;
+      &:focus {
+        border-color: tk(primary);
+        box-shadow: 0 0 0 3px tk(focus-ring);
+        outline: 0;
+      }
+    }
+  }
+
+  // file picker (Backups, General Picture, NTP leap): button in the .btn-default style
+  #{$legacy} input[type="file"] {
+    color: tk(text-muted);
+    font-size: 13px;
+    width: 100%;
+    max-width: 480px;
+
+    &::file-selector-button {
+      background: tk(surface);
+      border: 1px solid tk(border-strong);
+      border-radius: $radius;
+      color: tk(text);
+      cursor: pointer;
+      font: 500 14px $font-sans;
+      margin-right: 10px;
+      padding: 5px 12px;
+      transition: background-color $transition-fast, border-color $transition-fast;
+    }
+    &:hover::file-selector-button {
+      background: tk(surface-2);
+      border-color: tk(text-muted);
+    }
+    &:focus-visible {
+      outline: 0;
+      &::file-selector-button { box-shadow: 0 0 0 3px tk(focus-ring); border-color: tk(primary); }
+    }
+  }
+
+  // output/report textarea (Crash Reporter, config XML) in mono with tabular digits
+  #{$legacy} textarea[readonly],
+  #{$legacy} pre {
+    font-family: $font-mono;
+    font-size: $mono-scale;
+    font-variant-numeric: tabular-nums;
+  }
+  #{$legacy} pre {
+    background: tk(input-bg);
+    border: 1px solid tk(border);
+    border-radius: $radius;
+    color: tk(text);
+  }
+}

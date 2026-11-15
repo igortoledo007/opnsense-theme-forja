@@ -1,0 +1,269 @@
+.modal-backdrop {
+  z-index: -1;
+}
+
+.bootstrap-dialog {
+  /* dialog types: 3px stripe at the top + title with a marker in the state color */
+  /**
+     * Icon animation
+     * Copied from font-awesome: http://fontawesome.io/
+     **/
+  /** End of icon animation **/
+}
+
+.bootstrap-dialog .modal-content {
+  background-color: #1B1E22;
+  color: #DFE4EA;
+  border: 1px solid #3A3F46;
+  border-radius: 6px;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.7);
+}
+
+.bootstrap-dialog .modal-header {
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  border-bottom: 1px solid #3A3F46;
+  padding: 14px 18px 12px;
+  background-color: #1B1E22;
+  background-image: linear-gradient(#565D66, #565D66);
+  background-repeat: no-repeat;
+  background-position: top left;
+  background-size: 100% 3px;
+}
+
+.bootstrap-dialog .modal-body {
+  color: #DFE4EA;
+}
+
+.bootstrap-dialog .modal-footer {
+  border-top: 1px solid #3A3F46;
+  background-color: #1B1E22;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.bootstrap-dialog .bootstrap-dialog-title {
+  color: #DFE4EA;
+  display: inline-block;
+  font-family: "Source Sans Pro", "SourceSansProRegular", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 600;
+}
+
+.bootstrap-dialog .bootstrap-dialog-message code,
+.bootstrap-dialog .bootstrap-dialog-message pre {
+  font-family: "JetBrains Mono", "Cascadia Code", "Fira Code", "SFMono-Regular", Menlo, Consolas, "DejaVu Sans Mono", "Noto Sans Mono", "Droid Sans Mono", monospace;
+}
+
+.bootstrap-dialog .bootstrap-dialog-button-icon {
+  margin-right: 3px;
+}
+
+.bootstrap-dialog .bootstrap-dialog-close-button {
+  float: right;
+  filter: alpha(opacity=90);
+  -moz-opacity: 0.9;
+  -khtml-opacity: 0.9;
+  opacity: 0.9;
+}
+
+.bootstrap-dialog .bootstrap-dialog-close-button .close {
+  color: #A3AEBA;
+  text-shadow: none;
+  opacity: 0.8;
+  transition: color 120ms ease, opacity 120ms ease;
+}
+
+.bootstrap-dialog .bootstrap-dialog-close-button:hover {
+  cursor: pointer;
+  filter: alpha(opacity=100);
+  -moz-opacity: 1;
+  -khtml-opacity: 1;
+  opacity: 1;
+}
+
+.bootstrap-dialog .bootstrap-dialog-close-button:hover .close {
+  color: #DFE4EA;
+  opacity: 1;
+}
+
+.bootstrap-dialog.type-default .modal-header {
+  background-color: #1B1E22;
+  background-image: linear-gradient(#565D66, #565D66);
+  background-repeat: no-repeat;
+  background-position: top left;
+  background-size: 100% 3px;
+}
+
+.bootstrap-dialog.type-default .bootstrap-dialog-title {
+  color: #DFE4EA;
+}
+
+.bootstrap-dialog.type-info .modal-header {
+  background-color: #1B1E22;
+  background-image: linear-gradient(#7DD3FC, #7DD3FC);
+  background-repeat: no-repeat;
+  background-position: top left;
+  background-size: 100% 3px;
+}
+
+.bootstrap-dialog.type-primary .modal-header {
+  background-color: #1B1E22;
+  background-image: linear-gradient(90deg, #F97316 0%, #FBBF24 100%);
+  background-repeat: no-repeat;
+  background-position: top left;
+  background-size: 100% 3px;
+}
+
+.bootstrap-dialog.type-success .modal-header {
+  background-color: #1B1E22;
+  background-image: linear-gradient(#22C55E, #22C55E);
+  background-repeat: no-repeat;
+  background-position: top left;
+  background-size: 100% 3px;
+}
+
+.bootstrap-dialog.type-warning .modal-header {
+  background-color: #1B1E22;
+  background-image: linear-gradient(#F59E0B, #F59E0B);
+  background-repeat: no-repeat;
+  background-position: top left;
+  background-size: 100% 3px;
+}
+
+.bootstrap-dialog.type-danger .modal-header {
+  background-color: #1B1E22;
+  background-image: linear-gradient(#F87171, #F87171);
+  background-repeat: no-repeat;
+  background-position: top left;
+  background-size: 100% 3px;
+}
+
+.bootstrap-dialog.type-info .bootstrap-dialog-title::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 8px;
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
+  border-radius: 50%;
+  background-color: #7DD3FC;
+}
+
+.bootstrap-dialog.type-primary .bootstrap-dialog-title::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 8px;
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
+  border-radius: 50%;
+  background-color: #F97316;
+}
+
+.bootstrap-dialog.type-success .bootstrap-dialog-title::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 8px;
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
+  border-radius: 50%;
+  background-color: #22C55E;
+}
+
+.bootstrap-dialog.type-warning .bootstrap-dialog-title::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 8px;
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
+  border-radius: 50%;
+  background-color: #F59E0B;
+}
+
+.bootstrap-dialog.type-danger .bootstrap-dialog-title::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 8px;
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
+  border-radius: 50%;
+  background-color: #F87171;
+}
+
+.bootstrap-dialog.size-large .bootstrap-dialog-title {
+  font-size: 24px;
+}
+
+.bootstrap-dialog.size-large .bootstrap-dialog-close-button {
+  font-size: 30px;
+}
+
+.bootstrap-dialog.size-large .bootstrap-dialog-message {
+  font-size: 18px;
+}
+
+.bootstrap-dialog .icon-spin {
+  display: inline-block;
+  -moz-animation: spin 2s infinite linear;
+  -o-animation: spin 2s infinite linear;
+  -webkit-animation: spin 2s infinite linear;
+  animation: spin 2s infinite linear;
+}
+
+@-moz-keyframes spin {
+  0% {
+    -moz-transform: rotate(0deg);
+  }
+  100% {
+    -moz-transform: rotate(359deg);
+  }
+}
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+  }
+}
+
+@-o-keyframes spin {
+  0% {
+    -o-transform: rotate(0deg);
+  }
+  100% {
+    -o-transform: rotate(359deg);
+  }
+}
+
+@-ms-keyframes spin {
+  .bootstrap-dialog 0% {
+    -ms-transform: rotate(0deg);
+  }
+  .bootstrap-dialog 100% {
+    -ms-transform: rotate(359deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
+}

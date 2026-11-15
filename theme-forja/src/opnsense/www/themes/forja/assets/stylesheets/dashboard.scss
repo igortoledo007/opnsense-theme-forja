@@ -1,0 +1,791 @@
+// Nexo theme for OPNsense.
+// Copyright (C) 2026 Igor Toledo <contato@igor.eti.br>
+// Derived from the OPNsense default theme. BSD 2-Clause License, see LICENSE-nexo.
+
+@import "config/colors";
+
+// Fallbacks while config/_tokens.scss does not define these variables (family/heading).
+$variant: nexo !default;
+$font-heading: $font-sans !default;
+
+// Local derived values (no token of their own)
+$dash-line:        tk(border);
+$dash-hover-row:   tk(primary-soft);
+$dash-error-soft:  rgba(tk(danger), 0.10);   // token suggestion: danger-soft
+
+:root {
+    // read by dashboard.volt (26.7 and 27.1) into Chart.defaults: axes, legends and labels (color) and the
+    // grid lines of every Chart.js graph, HealthGraph included (borderColor). backgroundColor is left to the
+    // widgets: the default would also fill datasets that do not set their own.
+    --chart-js-font-color: #{tk(text-muted)};
+    --chart-js-border-color: #{tk(border)};
+}
+
+// ---------------------------------------------------------------------------
+// Grid / drag-and-drop (gridstack): look only, no dimension changes
+// ---------------------------------------------------------------------------
+.ui-resizable-handle {
+    opacity: 0 !important;
+    transition: opacity $transition-fast;
+}
+
+.grid-stack-item:hover > .ui-resizable-handle {
+    opacity: 0.55 !important;
+}
+
+.grid-stack-placeholder > .placeholder-content {
+    background: tk(primary-soft) !important;
+    border: 1px dashed tk(primary);
+    border-radius: $radius-lg;
+}
+
+#save-grid {
+    width: inherit;
+    height: inherit;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s ease;
+    position: relative;
+    width: 50px;
+    height: 30px;
+    margin-right: 10px;
+}
+
+#save-btn-text, #icon-container {
+    position: absolute;
+}
+
+#icon-container {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#save-spinner, #save-check {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+#save-check {
+    color: tk(success-strong);
+}
+
+.transition-spinner, transition-check {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.hide {
+    opacity: 0;
+    transform: scale(0);
+}
+
+.show {
+    opacity: 1;
+    transform: scale(1);
+}
+
+// Widget card
+.grid-stack-item-content {
+    text-align: center;
+    border: 1px solid tk(border);
+    border-radius: $radius-lg;
+    background-color: tk(surface);
+    box-shadow: tk(shadow-sm);
+    color: tk(text);
+    font-variant-numeric: tabular-nums;
+    transition: border-color $transition, box-shadow $transition;
+}
+
+.grid-stack-item:hover > .grid-stack-item-content {
+    border-color: tk(border-strong);
+    box-shadow: tk(shadow-md);
+}
+
+.grid-stack-item.ui-draggable-dragging > .grid-stack-item-content,
+.grid-stack-item.ui-resizable-resizing > .grid-stack-item-content {
+    border-color: tk(primary);
+    box-shadow: tk(shadow-lg);
+}
+
+.widget-error {
+    margin: 50px;
+    padding: 10px 14px;
+    color: tk(danger-strong);
+    background: $dash-error-soft;
+    border: 1px solid rgba(tk(danger), 0.30);
+    border-radius: $radius;
+    font-weight: 500;
+}
+
+.widget-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 1px;
+    cursor: default;
+}
+
+// Header: no background of its own, semibold title, subtle icons
+.widget-header {
+    margin-top: 0.5em;
+    margin-left: 1em;
+    margin-right: 1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 24px;
+}
+
+// Drag handle (dots) visible only on hover of a draggable card
+.grid-stack-item:not(.ui-draggable-disabled) .widget-header {
+    cursor: grab;
+}
+
+.grid-stack-item.ui-draggable-dragging .widget-header {
+    cursor: grabbing;
+}
+
+.widget-header-left::before {
+    content: "";
+    display: inline-block;
+    flex: none;
+    width: 10px;
+    height: 14px;
+    margin-right: 6px;
+    background-image: radial-gradient(circle, tk(text-muted) 1px, transparent 1.6px);
+    background-size: 5px 5px;
+    opacity: 0;
+    transition: opacity $transition-fast;
+}
+
+.grid-stack-item:not(.ui-draggable-disabled):hover .widget-header-left::before {
+    opacity: 0.7;
+}
+
+.widget-spinner {
+    margin-top: 20px;
+    font-size: 2em;
+    color: tk(primary);
+}
+
+// header buttons: link, edit (configurable widgets), duplicate (27.1, <multiple/> widgets) and close
+.link-handle,
+.close-handle,
+.edit-handle,
+.clone-handle {
+    margin-left: 0.5em;
+    vertical-align: middle;
+    text-align: right;
+    cursor: pointer;
+    color: tk(text-muted);
+    opacity: 0.6;
+    transition: opacity $transition-fast, color $transition-fast;
+}
+
+.link-handle > a {
+    color: inherit;
+}
+
+.grid-stack-item:hover .link-handle,
+.grid-stack-item:hover .close-handle,
+.grid-stack-item:hover .edit-handle,
+.grid-stack-item:hover .clone-handle {
+    opacity: 1;
+}
+
+.link-handle:hover,
+.edit-handle:hover,
+.clone-handle:hover {
+    color: tk(primary);
+}
+
+.close-handle:hover {
+    color: tk(danger-strong);
+}
+
+.link-handle > a,
+.close-handle > i,
+.edit-handle > i,
+.clone-handle > i {
+    font-size: 0.8em;
+}
+
+.widget-header-left {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex: 1;
+}
+
+.widget-command-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex: 1;
+}
+
+.widget-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: $font-heading;
+    font-size: if($variant == sec, 13px, 14px);
+    font-weight: 600;
+    color: tk(text);
+    letter-spacing: 0.01em;
+}
+
+.widget-title b,
+.widget-title strong {
+    font-weight: 600;
+}
+
+// 1px separator below the header
+.panel-divider {
+    width: 100%;
+    text-align: center;
+    height: 8px;
+    margin-bottom: 10px;
+}
+
+table {
+    table-layout: fixed;
+}
+
+td {
+    word-break: break-all;
+}
+
+.line {
+    display: inline-block;
+    height: 1px;
+    width: calc(100% - 2em);
+    background: $dash-line;
+    margin: 5px;
+}
+
+// Progress bars inside widgets
+.grid-stack .progress {
+    background-color: tk(surface-3);
+    border-radius: 999px;
+    box-shadow: none;
+    overflow: hidden;
+}
+
+.grid-stack .progress-bar {
+    background-color: tk(primary);
+    background-image: $gradient-brand;
+    color: tk(primary-contrast);
+    box-shadow: none;
+    font-family: $font-mono;
+    font-variant-numeric: tabular-nums;
+}
+
+.grid-stack .progress-bar-success { background-image: none; background-color: tk(success); }
+.grid-stack .progress-bar-info    { background-image: none; background-color: tk(info); }
+.grid-stack .progress-bar-warning { background-image: none; background-color: tk(warning); }
+.grid-stack .progress-bar-danger  { background-image: none; background-color: tk(danger); }
+
+// Numeric values, IPs, counters
+.grid-stack-item-content code,
+.grid-stack-item-content pre,
+.grid-stack-item-content kbd,
+.flextable-row .flex-cell + .flex-cell,
+.column .flex-subcell + .flex-subcell,
+.smoothie-chart-tooltip,
+.gateway-detail-container,
+.interfaces-detail-container,
+.grid-stack-item-content .badge {
+    font-family: $font-mono;
+    font-size: $mono-scale;
+    font-variant-numeric: tabular-nums;
+}
+
+.canvas-container-noaspectratio {
+    position: relative;
+}
+
+.canvas-container {
+    position: relative;
+}
+
+.canvas-container > canvas {
+    /* ChartJS v4 workaround: https://github.com/chartjs/Chart.js/issues/11005 */
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.cpu-canvas-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.smoothie-container {
+    width: 100%;
+}
+
+.smoothie-chart-tooltip {
+    z-index: 1; /* necessary to force to foreground */
+    background: tk(surface);
+    border: 1px solid tk(border);
+    box-shadow: tk(shadow-md);
+    padding-left: 12px;
+    padding-right: 12px;
+    color: tk(text);
+    font-size: 12px;
+    border-radius: $radius-sm;
+    pointer-events: none;
+}
+
+.flex-container {
+    display: flex;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+}
+
+.gateway-info {
+    margin: 5px;
+    padding: 5px;
+    font-size: 13px;
+}
+
+.gateway-detail-container {
+    display: none;
+    margin: 5px;
+    color: tk(text-muted);
+}
+
+.interface-info {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    height: 100%;
+}
+
+.nowrap {
+    flex-wrap: nowrap;
+}
+
+.gateway-graph {
+    display: none;
+}
+
+.flex-container > .gateway-graph {
+    font-size: 13px;
+}
+
+.vertical-center-row {
+    height: 100%;
+    display: inline;
+}
+
+.interfaces-info {
+    margin: 5px;
+    font-size: 13px;
+}
+
+.interface-descr {
+    margin-left: 10px;
+    font-size: 15px;
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-color: tk(border-strong);
+    text-underline-offset: 3px;
+    transition: color $transition-fast, text-decoration-color $transition-fast;
+}
+
+.interface-descr:hover {
+    color: tk(primary);
+    text-decoration-color: tk(primary);
+}
+
+.interfaces-detail-container {
+    margin: 5px;
+    display: none;
+    color: tk(text-muted);
+}
+
+.d-flex {
+    display: flex;
+}
+
+.d-flex > .justify-content-start {
+    justify-content: start;
+}
+
+.d-flex > .justify-content-end {
+    justify-content: end;
+}
+
+#chartjs-toolip {
+    z-index: 20;
+}
+
+/* CPU widget */
+.cpu-type {
+    margin-bottom: 10px;
+    margin-top: 10px;
+    color: tk(text-muted);
+}
+/* ----- */
+
+/* Custom flex table */
+div {
+    box-sizing: border-box;
+}
+
+.flextable-container {
+    display: block;
+    margin: 0.5em auto;
+    width: 95%;
+    max-width: 1200px;
+}
+
+.flextable-header {
+    display: flex;
+    flex-flow: row wrap;
+    padding: 0.5em 0.5em;
+    border-top: solid 1px $dash-line;
+}
+
+.flextable-row {
+    display: flex;
+    flex-flow: row wrap;
+    padding: 0.5em 0.5em;
+    border-top: solid 1px $dash-line;
+    align-items: center;
+    transition: background-color $transition-fast;
+}
+
+.flextable-header .flex-cell {
+    font-family: $font-label;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: tk(text-muted);
+}
+
+.flextable-row:hover {
+    background: $dash-hover-row !important;
+}
+
+.flex-cell {
+    text-align: left;
+    word-break: break-word;
+}
+
+.column {
+    display: flex;
+    flex-flow: column wrap;
+    width: 50%;
+    padding: 0;
+}
+.column .flex-cell {
+    display: flex;
+    flex-flow: row wrap;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    border-top-color: $dash-line;
+}
+.column .flex-cell:hover {
+    background: $dash-hover-row;
+}
+.flex-subcell {
+    width: 100%;
+    text-align: left;
+}
+
+.column .flex-cell:not(:last-child) {
+    border-bottom: 0;   // rows of the same value (e.g. Versions) stay together, no separator
+}
+
+// the header .line separator already acts as the first row's border
+.flextable-container > .flextable-header:first-child,
+.flextable-container > .flextable-row:first-child,
+.grid-table > .grid-header-container:first-child {
+    border-top: 0;
+}
+/* ----- */
+
+/* CSS grid responsive table */
+.grid-header-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+}
+
+.grid-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    border-top: 1px solid $dash-line;
+    opacity: 0.4;
+}
+
+.grid-row:hover {
+    background: $dash-hover-row !important;
+}
+
+.grid-header {
+    border-top: 1px solid $dash-line;
+    font-family: $font-label;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: tk(text-muted);
+}
+
+.grid-item {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 4px;
+    text-align: center;
+}
+
+// Widget grid tables (Live Log, Events, leases, tunnels...): compact and left-
+// aligned, one row per record (clipped text has a tooltip in the widget itself).
+.grid-table {
+    font-size: 12.5px;
+    line-height: 1.45;
+    font-variant-numeric: tabular-nums;
+}
+.grid-table .grid-item {
+    padding: 5px 8px;
+    text-align: left;
+    white-space: nowrap;
+}
+.grid-table .grid-header {
+    font-size: 10.5px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+}
+.grid-table .grid-item.sort {
+    text-align: right;
+    font-family: $font-mono;
+    font-size: $mono-scale;
+}
+
+// Firewall widget: "Live Log" / "Events" labels as section headers
+// (26.7: <div id="fw-table-container">; 27.1: <div class="fw-table-container">)
+#fw-table-container > b,
+#fw-table-container > div > b,
+.fw-table-container > b,
+.fw-table-container > div > b {
+    display: block;
+    margin: 6px 8px 4px;
+    padding-left: 8px;
+    border-left: 2px solid tk(primary);
+    font-family: $font-label;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: tk(text-muted);
+    text-align: left;
+}
+#fw-table-container > div[style],
+.fw-table-container > div[style] { margin-top: 1.2em !important; }
+
+// Live Log: action | time | interface | source | destination | port
+#fw-top-table {
+    // fixed columns on a single row (log style); overflow becomes an ellipsis with tooltip
+    > .grid-header-container,
+    > .grid-row {
+        grid-template-columns: 50px 52px minmax(56px, 0.8fr) minmax(70px, 1.3fr) minmax(70px, 1.3fr) 48px;
+    }
+    .grid-item:nth-child(1) { text-align: center; padding-left: 4px; padding-right: 4px; }
+    .grid-row .grid-item:nth-child(2),
+    .grid-row .grid-item:nth-child(4),
+    .grid-row .grid-item:nth-child(5),
+    .grid-row .grid-item:nth-child(6) {
+        font-family: $font-mono;
+        font-size: $mono-scale;
+    }
+    .grid-row .grid-item:nth-child(2) { color: tk(text-muted); }
+    .grid-row .grid-item:nth-child(3) {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        color: tk(text);
+    }
+    .grid-row .grid-item:nth-child(6) { color: tk(primary); }
+    .grid-item:nth-child(6) { text-align: right; }
+    .grid-row .grid-item .fa { font-size: 0.85em; }
+}
+
+// Events: rule | count
+#fw-rule-table {
+    > .grid-header-container,
+    > .grid-row {
+        grid-template-columns: minmax(0, 1fr) 64px;
+    }
+    .grid-row .grid-item:first-child a { color: tk(text); }
+    .grid-row .grid-item:first-child a:hover { color: tk(primary); text-decoration: none; }
+    .grid-item:nth-child(2) { text-align: right; }
+    .grid-row .grid-item:nth-child(2) { color: tk(primary); font-weight: 600; }
+}
+/* ----- */
+
+.ovpn-common-name {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+// ---------------------------------------------------------------------------
+// Nexo Sec: service/gateway/interface states as an "LED" (glowing dot)
+// ---------------------------------------------------------------------------
+@if $variant == sec {
+    $led-states: (success: success, danger: danger, warning: warning, info: info, primary: primary);
+
+    @each $cls, $tok in $led-states {
+        .grid-stack-item-content .fa-circle.text-#{$cls},
+        .grid-stack-item-content .fa-solid.fa-circle.text-#{$cls},
+        .grid-stack-item-content .fa-square.text-#{$cls} {
+            color: tk($tok);
+            font-size: 0.75em;
+            vertical-align: middle;
+            filter: drop-shadow(0 0 2px rgba(tk($tok), 0.9)) drop-shadow(0 0 6px rgba(tk($tok), 0.55));
+        }
+    }
+
+    // off: no glow
+    .grid-stack-item-content .fa-circle.text-muted {
+        font-size: 0.75em;
+        vertical-align: middle;
+        opacity: 0.6;
+    }
+
+    // state labels (Services) as a pill with an LED on the left
+    @each $cls, $tok in (success: success, danger: danger, warning: warning) {
+        .grid-stack-item-content .label-#{$cls} {
+            background-color: rgba(tk($tok), 0.14);
+            color: tk($tok);
+            border-radius: 999px;
+        }
+        .grid-stack-item-content .label-#{$cls}::before {
+            content: "";
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            margin-right: 5px;
+            vertical-align: middle;
+            border-radius: 50%;
+            background: tk($tok);
+            box-shadow: 0 0 6px rgba(tk($tok), 0.8);
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Phone: dashboard in gridstack's single-column mode (.gs-1). Only applies in that mode.
+// - list/info widgets grow with their content (no scrolling inside scrolling);
+// - charts with a tight fixed height (Chart.js needs a defined height on the container);
+// - Memory and Disk side by side; smaller side margins.
+// gridstack positions items with inline position:absolute/top/height; here the flow becomes
+// flex, ordered by gs-y (nexo-extras.js copies the attribute into style.order, so the one-column
+// layout the 27.1 saves, or the one gridstack derives in 26.7, is respected).
+// In edit mode (#edit-grid.active, 26.7 and 27.1) the override is off: gridstack keeps its own
+// absolute layout, so dragging and the saved order do not fight the flex flow.
+// ---------------------------------------------------------------------------
+
+// grid item of a widget by type: gs-id (26.7: id = type; 27.1: first instance) or data-widget-type
+// (27.1: any instance, duplicates "<type>-<uuid>" included)
+@mixin widget-item($type) {
+    > .grid-stack-item[gs-id="#{$type}"],
+    > .grid-stack-item:has(> .grid-stack-item-content > [data-widget-type="#{$type}"]) { @content; }
+}
+
+body:not(:has(#edit-grid.active)) .grid-stack.gs-1 {
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: 10px;
+    height: auto !important;
+    min-height: 0 !important;
+
+    > .grid-stack-item {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        flex: 1 1 100%;
+        width: 100% !important;
+        min-width: 0;
+        height: auto !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+
+        > .grid-stack-item-content {
+            position: relative !important;
+            inset: auto !important;
+            height: auto;
+            overflow: visible !important;
+        }
+        > .ui-resizable-handle { display: none !important; }
+    }
+
+    // charts whose canvas fills the card (Chart.js needs a defined height): fixed height. Widgets that
+    // size their own drawing area are left alone: HealthGraph (300px box, 27.1) and Sonar (min-height).
+    $self-sized: ':not(:has(.health-graph-widget))#{if($with-sonar, ':not(:has(.sonar-widget))', '')}:not(:has(> .grid-stack-item-content > [data-widget-type="healthgraph"]))';
+    // exclusions inside :where() (zero specificity): the per-widget heights below (traffic, cpu, …) must win
+    > .grid-stack-item:has(canvas):where(#{$self-sized}) > .grid-stack-item-content { height: 100%; overflow: hidden !important; }
+    > .grid-stack-item:has(canvas):where(#{$self-sized})     { height: 260px !important; }
+    @include widget-item(cpu)                 { height: 175px !important; }
+    @include widget-item(memory)              { flex: 1 1 calc(50% - 5px); width: auto !important; height: 175px !important; }
+    @include widget-item(disk)                { flex: 1 1 calc(50% - 5px); width: auto !important; height: 175px !important; }
+    @include widget-item(traffic)             { height: 420px !important; }
+    @include widget-item(interfacestatistics) { height: 240px !important; }
+
+    // Firewall: tables grow; the chart (when shown) has its own height
+    @include widget-item(firewall) {
+        height: auto !important;
+        > .grid-stack-item-content { height: auto; overflow: visible !important; }
+        .fw-chart-container .canvas-container { height: 220px; }
+    }
+
+    // HealthGraph (27.1): its 300px box plus the action buttons; nothing clipped
+    @include widget-item(healthgraph) {
+        height: auto !important;
+        > .grid-stack-item-content { height: auto; overflow: visible !important; }
+    }
+
+    // long text: limited and scrolls inside, only here
+    @include widget-item(announcements) {
+        > .grid-stack-item-content {
+            max-height: 360px;
+            overflow-y: auto !important;
+        }
+    }
+
+    // half-width gauges: smaller center text
+    @include widget-item(memory) { .widget-title { font-size: 12px; } }
+    @include widget-item(disk)   { .widget-title { font-size: 12px; } }
+}
+
+// HealthGraph (27.1): zoom/export buttons over the chart, on the card surface
+.health-graph-actions .btn {
+    background: tk(surface);
+    border-color: tk(border-strong);
+    color: tk(text-muted);
+    box-shadow: none;
+}
+.health-graph-actions .btn:hover {
+    color: tk(primary);
+    border-color: tk(primary);
+}
+
+// smaller side margins on phones
+@media (max-width: 767px) {
+    .col-xs-12:has(> .grid-stack.gs-1) { padding-left: 8px; padding-right: 8px; }
+}
+
+// Dashboard: the widgets get the room — thin outer margin around the grid instead of the page's
+// container/row/column paddings stacked up (≈30px on each side plus 15px on top)
+@media (min-width: 768px) {
+    .page-content-main:has(.grid-stack) {
+        padding-top: 4px;
+        > .container-fluid { padding-left: 4px; padding-right: 4px; }
+        > .container-fluid > .row { margin-left: 0; margin-right: 0; }
+        > .container-fluid > .row > [class*="col-"] { padding-left: 0; padding-right: 0; }
+    }
+}

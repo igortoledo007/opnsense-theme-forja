@@ -1,0 +1,210 @@
+// Nexo theme for OPNsense.
+// Copyright (C) 2026 Igor Toledo <contato@igor.eti.br>
+// BSD 2-Clause License, see LICENSE-nexo.
+
+// Page tweaks — desktop-mvc team. Only this agent edits this file.
+// Rules: tk() tokens only; no structural changes (OPNsense classes/IDs untouched).
+// Scope: /ui/... (MVC) pages on desktop. Everything inside @media (min-width: 801px) or 1025px.
+
+// Action bar: only above 1024px. Up to 1024px OPNsense itself (opnsense-bootgrid-layout.css)
+// stacks the bar in 100%-wide rows, and that layout belongs to the mobile team.
+@media (min-width: 1025px) {
+
+  // ===================================================================
+  // 1. Grid action bar (Tabulator/bootgrid)
+  // OPNsense lets each group (filters, buttons) wrap internally when space runs out:
+  // the last button ("adjust columns", maximize) dropped alone onto a 2nd row and the two
+  // Aliases filters got stacked. Here the group is unbreakable; what gives way is the search
+  // (200px basis, grows up to 400px) and, if still short, the whole group moves down a row.
+  // ===================================================================
+  .bootgrid-header .actionBar {
+    flex-wrap: wrap;
+    row-gap: 8px;
+    align-items: center;
+    justify-content: flex-end;   // if it wraps, the 2nd row stays on the right, like the buttons
+
+    > .search {
+      flex: 1 1 200px;
+      max-width: 400px;
+      // 20px indent + 20px margin only pushed the filters to the 2nd row (the gap already separates)
+      padding-left: 0;
+      margin-right: 0;
+    }
+    > .btn-group,
+    > .actions,
+    > .actions .btn-group {
+      flex: 0 0 auto;
+      flex-wrap: nowrap;
+    }
+    // filter group (selects): shrinks a little before wrapping the row
+    > .btn-group:not(.actions) {
+      flex: 0 1 auto;
+      min-width: 0;
+
+      > .bootstrap-select {
+        flex: 1 1 170px;
+        min-width: 150px;
+        max-width: 200px;
+      }
+      // side-by-side filters (Aliases: type + categories; logs: severity + period) were touching
+      > .bootstrap-select + .bootstrap-select { margin-left: 8px; }
+    }
+  }
+
+}
+
+@media (min-width: 801px) {
+
+  // ===================================================================
+  // 1b. Network data in grids: tabular digits (IPs, ports, MACs and counters line up
+  // column by column). Mono was tested and dropped here: grids use the fitColumns layout with
+  // fixed widths set by OPNsense, and mono (~11% wider) clipped IPs/routes
+  // (Interfaces > Overview: "192.0.2.10/2|"). The field comes in the tabulator-field attribute.
+  // ===================================================================
+  $nexo-data-fields: (
+    // addresses and networks
+    ip, ipaddress, ipAddress, address, sort_address, ipv4, ipv6, subnet, network, routes,
+    gateways, destination, src, dst, nat, external, target, tunneladdress, serveraddress,
+    "source_net", "destination_net", "source.network", "destination.network",
+    // ports
+    port, serverport, "source_port", "destination_port", "source.port", "destination.port",
+    "target_port", "local-port",
+    // MAC / client IDs / devices and tags
+    mac, macAddress, hwaddr, sort_hwaddr, etheraddr, client_id, sort_client_id,
+    device, netif, vlanif, vlan_tag, vhid, mtu,
+    // counters and dates
+    endpoint, "transfer-tx", "transfer-rx", "latest-handshake-age", bytes_in, bytes_out, pid,
+    timestamp, expire, valid_lifetime, lifetime, valid_from, valid_to
+  );
+  $nexo-data-selectors: ();
+  @each $field in $nexo-data-fields {
+    $nexo-data-selectors: append($nexo-data-selectors, '.tabulator-cell[tabulator-field="#{$field}"]', comma);
+  }
+  #{$nexo-data-selectors} {
+    font-variant-numeric: tabular-nums;
+  }
+  // Activity (top) and log line text: terminal output in mono (wide columns, it fits)
+  #grid-top .tabulator-row .tabulator-cell,
+  #grid-log .tabulator-row .tabulator-cell[tabulator-field="line"] {
+    font-family: $font-mono;
+    font-size: $mono-scale;
+    font-variant-numeric: tabular-nums;
+  }
+
+  // Logs: "clear log" is destructive; OPNsense paints it primary (green = main action).
+  // It becomes a neutral button, with the icon in red only on hover.
+  #command-wrapper #flushlog.btn-primary {
+    background: tk(surface);
+    border-color: tk(border-strong);
+    color: tk(text);
+    &:hover, &:focus {
+      background: tk(surface-2);
+      border-color: tk(danger);
+      color: tk(danger-strong);
+    }
+  }
+
+  // ===================================================================
+  // 2. base_form forms (page and dialogs)
+  // ===================================================================
+  form.form-inline > .table-responsive > table.table-condensed {
+    // vertical rhythm: checkbox row (26px) and input row (32px) had different heights
+    > tbody > tr > td {
+      height: 40px;
+      vertical-align: middle;
+    }
+    // 25/40/35% columns: the 3rd only gets the validation message and stayed empty, while the
+    // help ("full help") got squeezed under the field in the 2nd. Becomes 25/50/25 (only columns with
+    // the default inline width; forms with their own msgzone_width stay as they are).
+    > colgroup > col[style*="40%"] { width: 50% !important; }
+    > colgroup > col[style*="35%"] { width: 25% !important; }
+
+    // collapsible section: the whole header is clickable; show it on hover
+    > thead[style*="cursor"] > tr > th {
+      transition: color $transition-fast;
+      &:hover { color: tk(primary); }
+    }
+  }
+
+  // Help text ("full help"): secondary to the field, comfortable line height
+  [data-for^="help_for_"] {   // div in the standard form; span in some dialogs (Aliases)
+    color: tk(text-muted);
+    font-size: 13px;
+    line-height: 1.45;
+    max-width: 72ch;
+  }
+
+  // "advanced mode" / "full help" switches: off is not an error (red);
+  // it stays neutral and on gets the accent.
+  [id^="show_advanced_"],
+  [id^="show_all_help_"] {
+    &.fa-toggle-off { color: tk(text-muted); }
+    &.fa-toggle-on { color: tk(primary); }
+  }
+  a:hover > [id^="show_advanced_"],
+  a:hover > [id^="show_all_help_"] { color: tk(primary); }
+
+  // Helper links of list fields (Clear All / Select All / Copy / Paste / Text / Back):
+  // OPNsense paints them all text-danger; red stays only on "Clear All" hover.
+  a[id^="clear-options_"],
+  a[id^="select-options_"],
+  a[id^="copy-options_"],
+  a[id^="paste-options_"],
+  a[id^="to-text_"],
+  a[id^="to-select_"] {
+    &.text-danger {
+      color: tk(text-muted);
+      text-decoration: none;
+      transition: color $transition-fast;
+      &:hover, &:focus { color: tk(primary); }
+    }
+  }
+  a[id^="clear-options_"].text-danger:hover,
+  a[id^="clear-options_"].text-danger:focus { color: tk(danger-strong); }
+
+  // Tokenize2: the library leaves the .focus class on the field after blur, and the focus ring
+  // stayed lit on several fields at once. Ring only on real focus.
+  .tokenize.focus:not(:focus-within) > .tokens-container {
+    border-color: tk(border-strong);
+    box-shadow: none;
+  }
+
+  // ===================================================================
+  // 3. jqTree trees (Interfaces > Diagnostics > Netstat, System > Diagnostics > Statistics...)
+  // jqtree.css hardcodes #333 on the togglers and #1c4257 on the titles: in dark mode they were almost
+  // invisible (contrast ~1.5:1). Key in text-muted, value in mono, hover/selection states.
+  // ===================================================================
+  ul.jqtree-tree {
+    .jqtree-toggler {
+      color: tk(text-muted);
+      text-decoration: none;
+      &:hover { color: tk(primary); }
+    }
+    .jqtree-title {
+      color: tk(text-muted);
+    }
+    .jqtree-title-folder {
+      color: tk(text);
+      font-weight: 600;
+    }
+    .jqtree-element {
+      border-radius: $radius-sm;
+      padding: 1px 6px;
+      transition: background-color $transition-fast;
+      &:hover { background-color: tk(surface-2); }
+      // leaf value ("key : <strong>value</strong>")
+      > strong {
+        font-family: $font-mono;
+        font-size: $mono-scale;
+        font-weight: 500;
+        font-variant-numeric: tabular-nums;
+        color: tk(text);
+      }
+    }
+    li.jqtree-selected > .jqtree-element,
+    li.jqtree-selected > .jqtree-element:hover {
+      background: tk(primary-soft);
+      .jqtree-title { color: tk(text); }
+    }
+  }
+}

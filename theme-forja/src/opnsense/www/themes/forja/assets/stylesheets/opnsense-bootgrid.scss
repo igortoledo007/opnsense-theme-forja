@@ -1,0 +1,460 @@
+// Nexo theme for OPNsense.
+// Copyright (C) 2026 Igor Toledo <contato@igor.eti.br>
+// Derived from the OPNsense default theme. BSD 2-Clause License, see LICENSE-nexo.
+
+@import "config/colors";
+
+$font-heading: $font-sans !default;
+
+// Local derived values (no token of their own)
+$grid-selected-bg:       rgba(tk(primary), 0.16);   // token suggestion: primary-soft-2 (selection)
+$grid-selected-hover-bg: rgba(tk(primary), 0.22);
+$grid-highlight:         rgba(tk(warning), 0.28);   // token suggestion: warning-soft
+
+/**
+* Main theming elements
+*/
+.tabulator {
+    font-size: 14px;
+    background-color: transparent;
+    border: none;
+    border-top: none;
+    border-radius: $radius;
+    color: tk(text);
+    font-variant-numeric: tabular-nums;
+}
+
+/* theme: header */
+.tabulator .tabulator-header {
+    background-color: transparent;
+    border-bottom: none;
+    border-left: none;
+    color: tk(text-muted);
+}
+.tabulator .tabulator-header .tabulator-col {
+    border-right: none;
+    background-color: tk(surface);
+    color: tk(text-muted);
+    font-family: $font-label;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: color $transition-fast, background-color $transition-fast;
+}
+.tabulator .tabulator-header .tabulator-col.tabulator-sortable.tabulator-col-sorter-element:hover {
+    background-color: tk(surface-2);
+    color: tk(text);
+}
+.tabulator .tabulator-header .tabulator-col[aria-sort="ascending"],
+.tabulator .tabulator-header .tabulator-col[aria-sort="descending"] {
+    color: tk(text);
+}
+.tabulator .tabulator-header .tabulator-col .tabulator-col-content .tabulator-col-sorter .tabulator-arrow {
+    border-bottom-color: tk(border-strong);
+}
+.tabulator .tabulator-header .tabulator-col[aria-sort="ascending"] .tabulator-col-content .tabulator-col-sorter .tabulator-arrow {
+    border-bottom-color: tk(primary);
+}
+.tabulator .tabulator-header .tabulator-col[aria-sort="descending"] .tabulator-col-content .tabulator-col-sorter .tabulator-arrow {
+    border-top-color: tk(primary);
+}
+.tabulator .tabulator-headers {
+    height: 100% !important; /* make sure the border below appears */
+    border-bottom: 1px solid tk(border-strong);
+}
+/*------------*/
+
+/* theme: body */
+.tabulator .tabulator-tableholder .tabulator-table {
+    background-color: transparent;
+    border-left: none;
+    color: tk(text);
+}
+.tabulator-row {
+    background-color: transparent;
+    color: tk(text);
+    transition: background-color $transition-fast;
+}
+
+.tabulator-row.tabulator-row-odd {
+    background-color: tk(surface-2);
+}
+.tabulator-row.tabulator-row-odd.tabulator-selectable:hover:not(.tabulator-selected) {
+    background-color: tk(primary-soft);
+}
+
+.tabulator-row.tabulator-row-even {
+    background-color: tk(surface);
+}
+.tabulator-row.tabulator-row-even.tabulator-selectable:hover:not(.tabulator-selected) {
+    background-color: tk(primary-soft);
+}
+.tabulator .tabulator-tableholder {
+    background-color: transparent;
+}
+// selected row: soft background + primary left border (inset, does not shift columns)
+.tabulator-row.tabulator-selected {
+    background-color: $grid-selected-bg;
+    box-shadow: inset 3px 0 0 tk(primary);
+}
+.tabulator-row.tabulator-selected:hover {
+    cursor: pointer;
+    background-color: $grid-selected-hover-bg;
+}
+.tabulator .tabulator-alert .tabulator-alert-msg.tabulator-alert-state-msg {
+    color: tk(primary); /* spinner icon */
+}
+
+/* Command column styles */
+.tabulator-col.tabulator-frozen.tabulator-frozen-right {
+}
+.tabulator-row .tabulator-cell.tabulator-frozen.tabulator-frozen-right {
+}
+
+/* row action icons: "ghost" buttons with hover */
+.tabulator-row .tabulator-cell .btn.btn-xs.btn-default {
+    background-color: transparent;
+    border-color: transparent;
+    color: tk(text-muted);
+    box-shadow: none;
+    border-radius: $radius-sm;
+    transition: color $transition-fast, background-color $transition-fast, border-color $transition-fast;
+}
+.tabulator-row .tabulator-cell .btn.btn-xs.btn-default:hover,
+.tabulator-row .tabulator-cell .btn.btn-xs.btn-default:focus {
+    background-color: tk(primary-soft);
+    border-color: transparent;
+    color: tk(primary);
+}
+.tabulator-row .tabulator-cell .btn.btn-xs.btn-default:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px tk(focus-ring);
+}
+.tabulator-row .tabulator-cell .btn.btn-xs.btn-default.command-delete:hover,
+.tabulator-row .tabulator-cell .btn.btn-xs.btn-default.command-delete:focus {
+    background-color: rgba(tk(danger), 0.14);
+    color: tk(danger-strong);
+}
+
+/* Tabulator groupBy row styles */
+.tabulator-row.tabulator-group {
+    border: none;
+    pointer-events: none;
+    background-color: tk(surface-3);
+    font-weight: 600;
+}
+
+.tabulator-row.tabulator-group .span {
+    margin-left: 0;
+    color: tk(text);
+}
+
+.tabulator-row .badge.chip {
+    background-color: tk(primary-soft);
+    color: tk(primary);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 999px;
+    position: relative;
+    top: -1px;
+}
+
+.tabulator-row.tabulator-group .tabulator-group-toggle,
+.tabulator-row.tabulator-group .tabulator-group-toggle * {
+    pointer-events: auto;
+}
+
+.tabulator-row.tabulator-group:has(> .tabulator-group-toggle:only-child) {
+    display: none; /* Trick to hide empty groupBy header rows */
+}
+
+/* Checkbox column styles */
+.tabulator .tabulator-header .tabulator-frozen.tabulator-frozen-left {
+    border-right: none;
+    border-left: none;
+}
+.tabulator-row .tabulator-cell.tabulator-frozen.tabulator-frozen-left {
+    border-right: none;
+    border-top: none;
+    border-bottom: 1px solid tk(border);
+    border-left: none;
+}
+.tabulator-col.tabulator-row-header.tabulator-frozen.tabulator-frozen-left {
+}
+.tabulator-cell.tabulator-row-header.tabulator-frozen.tabulator-frozen-left {
+}
+.tabulator-row:last-child >
+.tabulator-cell.tabulator-row-header.tabulator-frozen.tabulator-frozen-left:first-child {
+}
+/*------------*/
+
+/* theme: cells (no vertical borders) */
+.tabulator-row .tabulator-cell {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.2;
+    vertical-align: top;
+    border-bottom: 1px solid tk(border);
+    border-right: none;
+}
+.tabulator-row .tabulator-cell code {
+    font-family: $font-mono;
+}
+/*-------------*/
+
+/* theme: footer */
+.tabulator .tabulator-footer {
+    border-top: none;
+    background-color: transparent;
+    color: tk(text-muted);
+}
+.tabulator .tabulator-footer .tabulator-page {
+    background-color: tk(surface);
+    color: tk(text);
+    font-variant-numeric: tabular-nums;
+    transition: color $transition-fast, background-color $transition-fast, border-color $transition-fast;
+}
+.tabulator .tabulator-footer .tabulator-page.active {
+    background-color: tk(primary);
+    border-color: tk(primary);
+    cursor: default;
+    color: tk(primary-contrast);
+}
+.tabulator .tabulator-footer .tabulator-page:not(disabled):hover {
+    color: tk(primary);
+    background-color: tk(primary-soft);
+    border-color: tk(primary);
+}
+.tabulator .tabulator-footer .tabulator-page:not(disabled).active:hover {
+    background-color: tk(primary);
+    border-color: tk(primary);
+    color: tk(primary-contrast);
+    cursor: default;
+}
+.tabulator .tabulator-footer .tabulator-page:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px tk(focus-ring);
+}
+.tabulator .tabulator-footer .tabulator-page:disabled {
+    opacity: 0.45;
+}
+.tabulator-page-counter {
+    color: tk(text-muted);
+}
+.tabulator .tabulator-footer .tabulator-paginator {
+    color: tk(text-muted);
+}
+.tabulator .tabulator-footer .tabulator-page-size {
+    border: 1px solid tk(border-strong);
+    border-radius: $radius-sm;
+    background-color: tk(surface);
+    color: tk(text);
+}
+.tabulator .tabulator-footer .tabulator-page {
+    border-radius: $radius-sm;
+    margin: 0 2px;
+    padding: 6px 12px;
+    border: 1px solid tk(border-strong);
+}
+/*----------*/
+
+/* end of main theming elements */
+
+.tabulator-paginator {
+    flex: 0 !important;
+}
+.tabulator-page-counter {
+    flex: 1;
+    text-align: right;
+}
+.tabulator-col-sorter i {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tabulator .tabulator-header .tabulator-col {
+    padding: 5px;
+}
+
+.tabulator .tabulator-headers > :first-child {
+    padding-left: 10px;
+}
+
+
+.opnsense-bootgrid-responsive {
+    white-space: wrap !important;
+    text-overflow: inherit !important;
+    overflow: visible !important;
+    word-break: break-word !important;
+}
+
+.opnsense-bootgrid-ellipsis {
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+}
+
+
+.tabulator-row > :first-child {
+    padding-left: 10px;
+}
+
+.tabulator .tabulator-header .tabulator-col .tabulator-col-content {
+    padding: 0px;
+}
+
+.tabulator-page-counter {
+    padding-right: 20px;
+}
+
+.tabulator-tableholder::after {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 1px;
+    min-width: 100%;
+}
+
+.tabulator .tabulator-footer .tabulator-paginator .tabulator-page:first-child {
+    border-bottom-left-radius: $radius-sm;
+    border-top-left-radius: $radius-sm;
+}
+
+.tabulator .tabulator-footer .tabulator-paginator .tabulator-page:last-child {
+    border-bottom-right-radius: $radius-sm;
+    border-top-right-radius: $radius-sm;
+}
+
+/* border line corrections and hover/selection behavior */
+.tabulator-row:first-child >  .tabulator-cell {
+    border-top: none;
+}
+
+.tabulator .tabulator-header .tabulator-col.tabulator-sortable .tabulator-col-title {
+    padding: 0px;
+}
+
+/* Row highlight behavior */
+@keyframes highlight {
+    0% {
+        background: $grid-highlight;
+    }
+    100% {
+        background: none;
+    }
+}
+.highlight-bg {
+    animation: highlight 2s;
+}
+
+/* Tabulator "loading" and "error" overrides */
+.tabulator .tabulator-alert {
+    background: none;
+}
+.tabulator .tabulator-alert .tabulator-alert-msg.tabulator-alert-state-msg {
+    border: none;
+}
+.tabulator .tabulator-alert .tabulator-alert-msg {
+    background: initial;
+    font-size: 18px;
+}
+.tabulator .tabulator-alert .tabulator-alert-msg.tabulator-alert-state-error {
+    border: none;
+    color: tk(danger-strong);
+}
+
+.bootgrid-placeholder {
+    font-size: 15px;
+    text-align: center;
+    white-space: normal;
+    font-weight: 400;
+    color: tk(text-muted);
+}
+
+.bootgrid-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(tk(surface), 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99;
+}
+.overlay > i {
+    font-size: 20px;
+    color: tk(primary);
+}
+
+// ---------------------------------------------------------------------------
+// Firewall > Log Files > Live View (#livelog-table): the page paints the whole row
+// (.fw-pass/.fw-block/.fw-nat, and .fw-match in 27.1, at 30%). Here: light tint + side bar in the
+// action color, time/IPs in mono, action as a pill. Same pattern as the dashboard Live Log.
+// match (normalization rules, 27.1) = warning, as in the Firewall widget (text-warning) and the Sonar.
+// ---------------------------------------------------------------------------
+$fw-actions: (fw-pass: success, fw-block: danger, fw-nat: info, fw-match: warning);
+
+#livelog-table {
+    font-size: 13.5px;
+
+    // OPNsense puts .fw-pass/.fw-block/.fw-nat on EVERY cell: clears the cell and paints the row via :has()
+    @each $cls, $tok in $fw-actions {
+        .tabulator-cell.#{$cls} {
+            background: transparent !important;
+        }
+        .tabulator-row:has(> .#{$cls}) {
+            background-color: rgba(tk($tok), if($mode == dark, .07, .05)) !important;
+            box-shadow: inset 3px 0 0 tk($tok);
+        }
+        .tabulator-row:has(> .#{$cls}):hover {
+            background-color: rgba(tk($tok), if($mode == dark, .16, .11)) !important;
+        }
+        .tabulator-cell.#{$cls}[tabulator-field="action"] {
+            color: tk(#{$tok}-strong);
+        }
+    }
+
+    .tabulator-row {
+        border-bottom: 1px solid tk(border);
+    }
+
+    .tabulator-cell {
+        padding-top: 5px;
+        padding-bottom: 5px;
+        line-height: 18px;
+        vertical-align: middle;
+    }
+
+    // network data in mono, as on the dashboard
+    .tabulator-cell[tabulator-field="__timestamp__"],
+    .tabulator-cell[tabulator-field="src"],
+    .tabulator-cell[tabulator-field="dst"],
+    .tabulator-cell[tabulator-field="srchostname"],
+    .tabulator-cell[tabulator-field="dsthostname"] {
+        font-family: $font-mono;
+        font-size: 12px;
+        font-variant-numeric: tabular-nums;
+    }
+    // the time column is a fixed 150px on the page: at 11.5px "2026-11-07T09:38:04" fits entirely
+    .tabulator-cell[tabulator-field="__timestamp__"] { color: tk(text-muted); font-size: 11.5px; letter-spacing: -0.01em; }
+
+    .tabulator-cell[tabulator-field="interface"] { font-weight: 600; }
+    .tabulator-cell[tabulator-field="dir"],
+    .tabulator-cell[tabulator-field="protoname"] { color: tk(text-muted); }
+
+    // action as a small uppercase pill
+    .tabulator-cell[tabulator-field="action"] {
+        font-family: $font-label;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+    }
+
+    .tabulator-cell[tabulator-field="label"] { color: tk(text); }
+}

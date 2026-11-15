@@ -1,0 +1,26 @@
+// Nexo theme for OPNsense.
+// Copyright (C) 2026 Igor Toledo <contato@igor.eti.br>
+// BSD 2-Clause License, see LICENSE-nexo.
+
+// Compatibility: the SCSS inherited from the default theme reads map-get($colors, ...).
+// Here each old key points to a Nexo token. New code should use tk().
+@import "tokens";
+
+$colors: (
+  brand-primary:                tk(primary),
+  content-background:           tk(bg-app),
+  body-background:              tk(surface),
+  navbar-default-color:         tk(text),
+  page-content-head-background: tk(surface),
+  page-foot-background:         tk(surface),
+  table-bg-accent:              tk(surface-2),
+  login-modal-head-background:  tk(surface),
+  navbar-default-bg:            tk(surface),
+  list-group-link-color:        tk(text),
+  text-color:                   tk(text),
+  border-default:               tk(border),
+  dashboard-widget-error:       tk(danger),
+  border-highlight:             tk(border-strong),
+  chip-background:              tk(primary-soft),
+  chip-text:                    tk(primary),
+);

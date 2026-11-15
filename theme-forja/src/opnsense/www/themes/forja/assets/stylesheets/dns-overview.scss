@@ -1,0 +1,305 @@
+// Nexo theme for OPNsense.
+// Copyright (C) 2026 Igor Toledo <contato@igor.eti.br>
+// Derived from the OPNsense default theme. BSD 2-Clause License, see LICENSE-nexo.
+
+@import "config/colors";
+
+$font-heading: $font-sans !default;
+
+.tab-content {
+    padding: 10px;
+    border-top: 1px solid tk(border);
+}
+
+.banner {
+    width: 25%;
+}
+
+.stats-element {
+    height: 5em;
+    background: tk(surface);
+    overflow: hidden;
+    display: flex;
+    justify-content: flex-start;
+    border-radius: $radius-lg;
+    margin:auto;
+    border: 1px solid tk(border);
+    box-shadow: tk(shadow-sm);
+    transition: border-color $transition, box-shadow $transition;
+}
+
+.stats-icon {
+    height: auto;
+    width: 50%;
+    object-fit:cover;
+    background: tk(primary-soft);
+    color: tk(primary);
+    border-radius: 0 2em 2em 0 / 0 3em 3em 0;
+    box-shadow: inset -2px 0 0 rgba(tk(primary), 0.35);
+}
+
+.large-icon {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2em;
+}
+
+.stats-text {
+    height: 5em;
+    width: 15em;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.stats-counter-text {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    font-size: 15px;
+    font-family: $font-mono;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    color: tk(text);
+}
+
+.stats-inner-text {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    font-size: 15px;
+    color: tk(text-muted);
+}
+
+#bannersub {
+    text-align: center;
+    margin: 5px;
+}
+
+.list-group-wrapper {
+    margin: 0px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.list-item-domain {
+    height: 2.5em;
+}
+
+.list-group-item-border {
+    border: 1px solid tk(border);
+    background-color: tk(surface);
+}
+
+.list-group-item-border:first-child {
+    border-top-left-radius: $radius;
+    border-top-right-radius: $radius;
+    border-bottom: 2px solid tk(border-strong);
+    font-family: $font-label;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: tk(text-muted);
+}
+
+.list-group-item-border:last-child {
+    border-bottom-left-radius: $radius;
+    border-bottom-right-radius: $radius;
+}
+.btn.pull-right {
+    margin-left: 3px;
+}
+
+.odd-bg {
+    background: tk(surface-2);
+}
+
+.top-item {
+    display: flex;
+    white-space: nowrap;
+}
+
+.group-p {
+    overflow: hidden;
+    height: 20px;
+    margin-right: 5px;
+    text-overflow: ellipsis;
+}
+
+.counter {
+    position: relative;
+    top: -3px;
+    font-size: 14px;
+    line-height: 1.4;
+    flex: 1;
+    text-align: right;
+    font-family: $font-mono;
+    font-variant-numeric: tabular-nums;
+    color: tk(text-muted);
+}
+
+.vertical-center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+.query-success {
+    background-color: rgba(tk(success), 0.16);
+    color: tk(success-strong);
+}
+
+.query-info {
+    background-color: rgba(tk(info), 0.16);
+    color: tk(info-strong);
+}
+
+.query-danger {
+    background-color: rgba(tk(danger), 0.16);
+    color: tk(danger-strong);
+}
+
+.query-warning {
+    background-color: rgba(tk(warning), 0.16);
+    color: tk(warning-strong);
+}
+
+.query-error {
+    background-color: rgba(mix(tk(danger), tk(accent-2), 70%), 0.16);
+    color: mix(tk(danger-strong), tk(accent-2), 70%);
+}
+
+#searchFilter {
+    display: inline-block;
+    margin: 0 20px 0 0;
+    vertical-align: middle;
+}
+
+.tag {
+    font-size: 14px;
+    padding: .3em .4em .4em;
+    margin: 0 .1em;
+}
+
+.tag a {
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.9;
+}
+
+.tag a {
+  margin: 0 0 0 .3em;
+}
+
+.tag a fa-times {
+  color: inherit;
+  margin-bottom: 2px;
+}
+
+.tooltip-inner {
+  max-width: 1000px !important;
+}
+
+.stats-element:hover {
+    border-color: tk(border-strong);
+    box-shadow: tk(shadow-md);
+}
+
+.list-item-domain {
+    font-family: $font-mono;
+    font-size: 13px;
+}
+
+.tag a:hover {
+  opacity: 1;
+}
+
+// ---------------------------------------------------------------- modern KPI tiles and query rows (2026-11-14)
+// tiles: round icon badge in the state colour, big tabular number, small-caps label, accent bar on top
+.stats-element {
+    position: relative;
+    height: 88px;
+    align-items: center;
+    padding: 0 18px;
+    gap: 16px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(0, 0, 0, 0.08)), tk(surface);
+    &::before {
+        content: "";
+        position: absolute;
+        left: 0; right: 0; top: 0;
+        height: 3px;
+        background: var(--nexo-kpi, #{tk(primary)});
+        opacity: 0.85;
+    }
+    &:has(.text-success) { --nexo-kpi: #{tk(success)}; }
+    &:has(.text-info) { --nexo-kpi: #{tk(info)}; }
+    &:has(.text-danger) { --nexo-kpi: #{tk(danger)}; }
+    &:has(.fa-list), &:has(.fa-list-ul) { --nexo-kpi: #{tk(primary)}; }
+}
+.stats-icon {
+    flex: 0 0 48px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--nexo-kpi, #{tk(primary)}) 18%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--nexo-kpi, #{tk(primary)}) 45%, transparent);
+    position: relative;
+}
+.stats-icon .large-icon {
+    font-size: 21px;
+    color: var(--nexo-kpi, #{tk(primary)}) !important;
+}
+.stats-text {
+    flex: 1 1 auto;
+    width: auto;
+    height: auto;
+    align-items: flex-start;
+    text-align: left;
+}
+.stats-counter-text {
+    font-family: $font-sans;
+    white-space: nowrap;
+    font-size: clamp(16px, 1.45vw, 22px);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    text-align: left;
+    line-height: 1.15;
+}
+.stats-inner-text {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-align: left;
+}
+
+// query rows: a thin state bar on the left and a faint tint, the text keeps the normal colour; only the Action
+// cell keeps the state colour (whole rows painted in blue/green/orange made the grid hard to read).
+// Bootgrid puts the class on <tr>, the Tabulator grid of 26.7 on every cell.
+@each $cls, $key in (query-success: success, query-info: info, query-warning: warning, query-danger: danger,
+                     query-error: danger) {
+    tr.#{$cls}, .tabulator-cell.#{$cls} {
+        background-color: rgba(tk($key), 0.05) !important;
+        color: tk(text) !important;
+    }
+    tr.#{$cls} > td:first-child, .tabulator-cell.#{$cls}[tabulator-field="time"] { box-shadow: inset 3px 0 0 tk($key); }
+    .tabulator-cell.#{$cls}[tabulator-field="action"], .tabulator-cell.#{$cls}[tabulator-field="rcode"] {
+        color: tk(#{$key}-strong) !important;
+        font-weight: 600;
+    }
+    .tabulator-row:hover > .tabulator-cell.#{$cls} { background-color: rgba(tk($key), 0.11) !important; }
+}
+@media (max-width: 800px) {
+    .stats-element { height: auto; min-height: 76px; padding: 10px 12px; gap: 10px; }
+    .stats-icon { flex-basis: 38px; width: 38px; height: 38px; }
+    .stats-icon .large-icon { font-size: 17px; }
+    .stats-counter-text { white-space: normal; font-size: 16px; overflow-wrap: anywhere; }
+    .stats-inner-text { font-size: 10px; letter-spacing: 0.06em; }
+}

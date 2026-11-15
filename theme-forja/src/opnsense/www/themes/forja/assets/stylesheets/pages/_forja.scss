@@ -1,0 +1,908 @@
+// Nexo theme for OPNsense — Forja family (metal).
+// Copyright (C) 2026 Igor Toledo <contato@igor.eti.br>
+// BSD 2-Clause License, see LICENSE-nexo.
+//
+// Look only, on top of the shared stylesheet: brushed steel plates with bevel and Phillips screws, sunken
+// fields, raised buttons that press in, stamped/engraved lettering on titles, menu, buttons and
+// headers, and a specular reflection that follows the cursor (position in --fx-x/--fx-y, written by
+// src/js/forja-fx.js; without JS the reflection sits at the centre on :hover).
+// Body text and grid data stay plain for readability.
+// Everything is nested under `html` so these rules win over the base ones without !important.
+
+// Definitions are global (libsass does not allow functions inside @if); output only for forja.
+
+// ---------------------------------------------------------------- metal palette (per mode)
+$dark: $mode == dark;
+$plate-hi:   if($dark, #2B2F35, #F8F9FA);    // top of a plate (light catches it)
+$plate-lo:   if($dark, tk(surface), tk(surface));
+$bevel-hi:   if($dark, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.95));
+$bevel-lo:   if($dark, rgba(0, 0, 0, 0.65), rgba(20, 24, 30, 0.20));
+$sunken:     if($dark, rgba(0, 0, 0, 0.55), rgba(20, 24, 30, 0.16));
+// inner seat of a framed window and engraved dividers: dark cut + light lower edge (stronger in dark mode)
+$seat-dark:  if($dark, rgba(0, 0, 0, 0.80), rgba(20, 24, 30, 0.22));
+$seat-light: if($dark, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.90));
+$seat:       (inset 0 0 0 1px $seat-dark, inset 0 0 0 2px $seat-light, inset 0 2px 4px $sunken);
+$sheen:      if($dark, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.95));
+$sheen-wide: if($dark, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.55));
+// engraved text: shadow above (inside the cut) and light below (lower edge of the cut)
+$engrave:    if($dark,
+                (0 -1px 0 rgba(0, 0, 0, 0.85), 0 1px 0 rgba(255, 255, 255, 0.07)),
+                (0 1px 0 rgba(255, 255, 255, 0.85), 0 -1px 0 rgba(20, 24, 30, 0.10)));
+$engrave-on-color: 0 -1px 0 rgba(0, 0, 0, 0.35);
+// polished steel lettering (gradient clipped to the text)
+$steel-text: if($dark,
+                linear-gradient(180deg, #F7F8FA 0%, #C3C9D0 46%, #8D959F 54%, #E4E7EB 100%),
+                linear-gradient(180deg, #3A424C 0%, #5E6773 46%, #22282F 54%, #4A535E 100%));
+$steel-drop: if($dark,
+                drop-shadow(0 -1px 0 rgba(0, 0, 0, 0.9)) drop-shadow(0 1px 0 rgba(255, 255, 255, 0.06)),
+                drop-shadow(0 1px 0 rgba(255, 255, 255, 0.9)) drop-shadow(0 -1px 0 rgba(20, 24, 30, 0.12)));
+
+// raised relief: lit on the upper-left edge, hard shadow down-right (user name, page title, logo in the top bar)
+$steel-relief: if($dark,
+  drop-shadow(-1px -1px 0 rgba(255, 255, 255, 0.22)) drop-shadow(1px 1px 0 rgba(0, 0, 0, 0.95))
+    drop-shadow(1px 2px 2px rgba(0, 0, 0, 0.6)),
+  drop-shadow(-1px -1px 0 rgba(255, 255, 255, 0.95)) drop-shadow(1px 1px 0 rgba(20, 24, 30, 0.35))
+    drop-shadow(1px 2px 2px rgba(20, 24, 30, 0.25)));
+
+// brushed texture: stretched fractal noise (horizontal streaks), grey with low alpha, no external file
+$brush-alpha: if($dark, 0.10, 0.12);
+@function brush($alpha, $freq: '0.004 0.85') {
+  @return url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='160'%3E%3Cfilter id='b' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='#{$freq}' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 #{$alpha}'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23b)'/%3E%3C/svg%3E");
+}
+$brush: brush($brush-alpha);
+// One brushed-steel material for the whole screen (references: brushed steel textures of 2026-11-13), in three
+// tones so each layer reads against the next: floor (page background, darkest) < rails (top bar, side menu,
+// footer) < plates (content boxes, panels, widgets, modals). Cool blue-grey, fine long horizontal grain, soft
+// anisotropic light bands like a satin-finished sheet. Fields stay sunken below the plate.
+$floor-hi:  if($dark, #191C21, #D9DFE5);
+$floor-lo:  if($dark, #101215, #C9D0D7);
+$rail-hi:   if($dark, #2F343B, #FBFCFD);
+$rail-lo:   if($dark, #191C20, #DCE2E8);
+$steel-hi:  if($dark, #3A4049, #FFFFFF);
+$steel-mid: if($dark, #2A2F36, #EEF1F4);
+$steel-lo:  if($dark, #1E2227, #DFE4EA);
+$brush-strong: brush(if($dark, 0.18, 0.20), '0.0025 1.15');
+// plates: a bright band just under the top edge, then a slow fade to cooler steel (like a sheet under a strip light)
+$plate-grad: linear-gradient(180deg, $steel-mid 0, $steel-hi 26px, $steel-mid 150px, $steel-lo 100%);
+// satin sheen: broad vertical light bands across the grain
+$sheen-bands: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, if($dark, 0.045, 0.35)) 24%,
+                rgba(255, 255, 255, 0) 42%, rgba(255, 255, 255, if($dark, 0.03, 0.25)) 71%, rgba(255, 255, 255, 0) 90%);
+$floor-grad: linear-gradient(170deg, $floor-hi 0%, $floor-lo 60%);
+// rails: a rolled bar, lit in a band along its length
+$rail-v: linear-gradient(180deg, $rail-hi 0%, $rail-lo 100%);
+$rail-h: linear-gradient(90deg, $rail-lo 0%, $rail-hi 36%, mix($rail-hi, $rail-lo, 45%) 70%, $rail-lo 100%);
+// gloss over solid colours (buttons): light top, dark bottom
+$gloss: linear-gradient(180deg, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0.04) 50%, rgba(0, 0, 0, 0.10) 51%, rgba(0, 0, 0, 0.14) 100%);
+
+// Rivets at the four corners of each metal window (widget, content box, modal), as on the reference slab: a low
+// domed head lit from the top-left, a drop shadow on the plate and a dark recessed hole in the centre.
+$screw-size: 7px;
+$screw-inset: 5px;
+$screw-hi:    if($dark, '%239CA3AC', '%23FFFFFF');
+$screw-mid:   if($dark, '%234B5159', '%23B9BFC7');
+$screw-lo:    if($dark, '%2322262B', '%236E7680');
+$screw-rim:   if($dark, '%230C0D0F', '%235F6770');
+$screw-slot:  if($dark, '%2306070A', '%23394048');
+$screw-shine: if($dark, 'rgba(255,255,255,.22)', 'rgba(255,255,255,.75)');
+@function screw($angle: 0) {
+  @return url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cdefs%3E%3CradialGradient id='g' cx='35%25' cy='30%25' r='80%25'%3E%3Cstop offset='0' stop-color='#{$screw-hi}'/%3E%3Cstop offset='.5' stop-color='#{$screw-mid}'/%3E%3Cstop offset='1' stop-color='#{$screw-lo}'/%3E%3C/radialGradient%3E%3ClinearGradient id='h' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='#{$screw-rim}'/%3E%3Cstop offset='1' stop-color='#{$screw-hi}'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='10.7' cy='11' r='8.6' fill='rgba(0,0,0,.45)'/%3E%3Ccircle cx='10' cy='10' r='8.4' fill='url(%23g)' stroke='#{$screw-rim}' stroke-width='.9'/%3E%3Cellipse cx='7.4' cy='6.6' rx='3.2' ry='1.8' transform='rotate(-35 7.4 6.6)' fill='#{$screw-shine}'/%3E%3Ccircle cx='10' cy='10' r='3.9' fill='url(%23h)'/%3E%3Ccircle cx='10' cy='10' r='2.7' fill='#{$screw-slot}'/%3E%3C/svg%3E");
+}
+$screws: screw(), screw(), screw(), screw();
+
+// Steel chains in the gaps between dashboard widgets: from the corner screw of one plate to the next one
+// (horizontal: to the side neighbours; vertical: up to the header / the plate above). Three links over 14px:
+// ring seen flat, link seen edge-on, ring; the ends slip under the frames, as if fixed to the screws.
+$chain-hi:   if($dark, '%23B8BEC6', '%23FFFFFF');
+$chain-lo:   if($dark, '%2345494F', '%237A828C');
+$chain-edge: if($dark, 'rgba(0,0,0,.75)', 'rgba(40,46,54,.55)');
+@function chain($vertical: false) {
+  $rot: if($vertical, " transform='translate(8 0) rotate(90) translate(0 3)'", " transform='translate(0 3)'");
+  $vb: if($vertical, '0 0 8 14', '0 0 14 8');
+  $g: if($vertical, "x1='0' y1='0' x2='1' y2='0'", "x1='0' y1='0' x2='0' y2='1'");
+  @return url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='#{$vb}'%3E%3Cdefs%3E%3ClinearGradient id='s' #{$g}%3E%3Cstop offset='0' stop-color='#{$chain-hi}'/%3E%3Cstop offset='1' stop-color='#{$chain-lo}'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg#{$rot}%3E%3Cg fill='none' stroke='#{$chain-edge}' stroke-width='2.4'%3E%3Cellipse cx='2.8' cy='1' rx='2.4' ry='2.7'/%3E%3Cellipse cx='11.2' cy='1' rx='2.4' ry='2.7'/%3E%3C/g%3E%3Cg fill='none' stroke='url(%23s)' stroke-width='1.3'%3E%3Cellipse cx='2.8' cy='1' rx='2.4' ry='2.7'/%3E%3Cellipse cx='11.2' cy='1' rx='2.4' ry='2.7'/%3E%3C/g%3E%3Crect x='4.2' y='0' width='5.6' height='2' rx='1' fill='url(%23s)' stroke='#{$chain-edge}' stroke-width='.5'/%3E%3C/g%3E%3C/svg%3E");
+}
+// $right: distance of the right-hand screws from the edge (widgets: clear of their scrollbar)
+@function screw-pos($right: $screw-inset, $inset: $screw-inset) {
+  @if $right == $screw-inset { $right: $inset; }
+  @return ($inset $inset, right $right top $inset,
+           left $inset bottom $inset, right $right bottom $inset);
+}
+// frame of windows: screw centred in the 9px border
+$frame-width: 5px;
+$frame-screw-inset: 1px;
+$screw-pos: screw-pos();
+$screw-sz:  $screw-size $screw-size, $screw-size $screw-size, $screw-size $screw-size, $screw-size $screw-size;
+
+// screwed plate: [optional reflection] + 4 screws + brush + plate gradient, with matching size/position/repeat lists
+@mixin screwed-plate($lit: false, $right: $screw-inset, $inset: $screw-inset, $size: $screw-size, $strong: false) {
+  $sz: $size $size, $size $size, $size $size, $size $size;
+  $metal: if($strong, ($sheen-bands, $brush-strong), $brush);
+  $metal-pos: if($strong, (0 0, 0 0), 0 0);
+  $metal-size: if($strong, (auto, auto), auto);
+  $metal-rep: if($strong, (no-repeat, repeat), repeat);
+  @if $lit {
+    background-image: reflection(220px, $sheen-wide), $screws, $metal, $plate-grad;
+    background-position: 0 0, screw-pos($right, $inset), $metal-pos, 0 0;
+    background-size: auto, $sz, $metal-size, auto;
+    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, $metal-rep, no-repeat;
+  } @else {
+    background-image: $screws, $metal, $plate-grad;
+    background-position: screw-pos($right, $inset), $metal-pos, 0 0;
+    background-size: $sz, $metal-size, auto;
+    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, $metal-rep, no-repeat;
+  }
+}
+
+@function reflection($radius, $color) {
+  @return radial-gradient(circle $radius at var(--fx-x, 50%) var(--fx-y, 50%), $color, rgba(255, 255, 255, 0) 70%);
+}
+
+@mixin plate {
+  background-color: $plate-lo;
+  background-image: $sheen-bands, $brush-strong, $plate-grad;
+  box-shadow: inset 0 1px 0 $bevel-hi, inset 0 -1px 0 $bevel-lo, tk(shadow-sm);
+}
+@mixin engraved { text-shadow: $engrave; }
+@mixin stamped-label {
+  @include engraved;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  font-weight: 700;
+}
+@mixin steel-lettering {
+  background-image: $steel-text;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  filter: $steel-drop;
+  text-shadow: none;
+}
+
+@if $variant == forja {
+
+  // ---------------------------------------------------------------- page, topbar, sidebar
+  // the floor goes on <html>: it paints the whole canvas. On <body> (height 100%, and <html> has its own colour)
+  // it only covered the first screen and long pages turned black below it when scrolled.
+  html {
+    background-color: tk(bg-app);
+    background-image: $brush-strong, $sheen-bands, $floor-grad;
+    background-attachment: fixed;
+  }
+  body {
+    background-color: transparent;
+    background-image: none;
+  }
+  // the content column paints the app colour over the body; let the brushed floor show through
+  html main.page-content,
+  html .page-content-main { background-color: transparent; }
+
+  html {
+    .navbar-default {
+      background-color: $rail-lo;
+      background-image: $brush-strong, $sheen-bands, $rail-v;
+      box-shadow: inset 0 -1px 0 $bevel-lo, inset 0 1px 0 $bevel-hi, tk(shadow-md);
+    }
+    // signed-in user (root@host): raised steel relief — polished steel letters standing off the bar, lit on the
+    // upper-left edge, casting a hard shadow down-right
+    // logo and icon: the image itself is untouched, only lifted off the bar with the same relief
+    .navbar-brand .brand-logo,
+    .navbar-brand .brand-icon {
+      filter: $steel-relief;
+    }
+    .navbar-text {
+      @include steel-lettering;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      filter: $steel-relief;
+    }
+
+    // footer: a brushed plate with engraved text; product in the accent, company in steel lettering
+    .page-foot {
+      background-color: $rail-lo;
+      background-image: $brush-strong, $sheen-bands, $rail-v;
+      box-shadow: inset 0 1px 0 $bevel-hi, 0 -1px 3px rgba(0, 0, 0, if($dark, 0.4, 0.08));
+      @include engraved;
+      a { @include engraved; letter-spacing: 0.03em; }
+      a:last-child { @include steel-lettering; }
+      a:last-child:hover { -webkit-text-fill-color: tk(accent); color: tk(accent); }
+    }
+
+    .page-side,
+    #navigation.col-sidebar-left > div.row > nav.page-side-nav {
+      background-color: $rail-lo;
+      background-image: $brush-strong, $rail-h;
+      box-shadow: inset -1px 0 0 $bevel-lo, inset 1px 0 0 $bevel-hi;
+    }
+
+    // open group of the side menu (desktop and phones): a groove cut into the rail instead of a flat grey block,
+    // so the brushed steel keeps showing under the sub-items
+    #mainmenu .collapse.in,
+    #mainmenu .collapsing {
+      background-color: rgba(0, 0, 0, if($dark, 0.22, 0.06));
+      box-shadow: inset 0 2px 4px $sunken, inset 0 -1px 0 $seat-light;
+    }
+
+    // focus ring: a click left the browser's white outline around menu items, tabs and buttons. A mouse click now
+    // shows none; keyboard focus (focus-visible) gets an ember ring inside the element, so it stays accessible.
+    a, .btn, button, .list-group-item, .nav-tabs > li > a, [tabindex] {
+      &:focus:not(:focus-visible) { outline: none; }
+      &:focus-visible {
+        outline: 2px solid rgba(tk(primary), 0.75);
+        outline-offset: -2px;
+      }
+    }
+
+    // third-level items (System > Trust > Authorities…): tree guides on the left — a vertical rail under the parent
+    // and a branch to each item ("└" on the last one), engraved into the steel; the current item's branch in ember
+    $tree-line: rgba(if($dark, #C4CDD7, #34404C), if($dark, 0.38, 0.45));
+    #mainmenu a.menu-level-3-item {
+      &::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 40px;
+        width: 9px;
+        pointer-events: none;
+        background-image: linear-gradient($tree-line, $tree-line), linear-gradient($tree-line, $tree-line);
+        background-repeat: no-repeat;
+        background-size: 1px 100%, 100% 1px;
+        background-position: 0 0, 0 50%;
+        filter: drop-shadow(0 1px 0 $seat-light);
+      }
+      &:last-child::after { background-size: 1px 50%, 100% 1px; }
+      &.active::after {
+        background-image: linear-gradient($tree-line, $tree-line), linear-gradient(tk(primary), tk(primary));
+        background-size: 1px 100%, 100% 2px;
+      }
+      &.active:last-child::after { background-size: 1px 50%, 100% 2px; }
+    }
+
+    // collapsed menu: OPNsense widens the transparent #navigation on hover; only the 70px rail is a plate
+    #navigation.col-sidebar-left {
+      background-image: none;
+      box-shadow: none;
+    }
+
+    #mainmenu .list-group-item {
+      @include engraved;
+      font-weight: 600;
+
+      &:hover, &:focus {
+        background-image: reflection(90px, $sheen-wide);
+      }
+    }
+    // active item: pressed into the plate, ember bar on the left
+    #mainmenu .active-menu a.active,
+    #mainmenu .list-group-item.active,
+    #mainmenu .active-menu-title {
+      box-shadow: inset 0 2px 4px $sunken, inset 0 -1px 0 $bevel-hi;
+    }
+
+    // ---------------------------------------------------------------- page title and plates
+    .page-content-head {
+      background-color: $plate-lo;
+      background-image: $brush, $plate-grad;
+      box-shadow: inset 0 -1px 0 $bevel-lo, inset 0 1px 0 $bevel-hi;
+
+      h1 {
+        @include steel-lettering;
+        filter: $steel-relief;     // same raised steel as the user name in the top bar
+        font-weight: 800;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        font-size: 21px;
+      }
+    }
+
+    .content-box,
+    .panel,
+    .modal-content,
+    .dropdown-menu,
+    .well {
+      @include plate;
+    }
+    // content boxes and modals: their content runs edge to edge (toolbars, grids), so the screws go in a
+    // 9px metal frame (the border, painted with the plate) and the bevel marks the inner seat of the content.
+    // Phones (≤800px): no frame and no screws, to keep the width.
+    @media (min-width: 801px) {
+      .content-box,
+      .modal-content {
+        @include screwed-plate($inset: 0px, $size: 9px, $strong: true);
+        background-origin: border-box;
+        border: $frame-width solid transparent;
+        box-shadow: 0 0 0 1px tk(border), $seat, tk(shadow-sm);
+      }
+      .content-box:hover {
+        @include screwed-plate(true, $inset: 0px, $size: 9px, $strong: true);
+      }
+    }
+    // dropdown menus (selectpicker lists, topbar menus): one steel plate with an ember edge on top. bootstrap-select
+    // nests a second .dropdown-menu (the list) inside the first, which painted a plate inside the plate; the inner
+    // one is now see-through. Items: engraved text; hover/keyboard focus pressed into the plate with the ember bar
+    // of the side menu; the selected item in the accent. The .bootstrap-select copy outranks bootstrap-select.css,
+    // which is loaded after main.css.
+    .dropdown-menu, .bootstrap-select .dropdown-menu {
+      border: 1px solid tk(border-strong);
+      border-top: 2px solid tk(primary);
+      border-radius: 0 0 6px 6px;
+      box-shadow: inset 0 1px 0 $bevel-hi, tk(shadow-lg);
+      padding: 4px 0;
+      scrollbar-color: tk(border-strong) transparent;
+      scrollbar-width: thin;
+      .dropdown-menu {
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+        border-radius: 0;
+        padding: 0;
+      }
+      > li > a, .dropdown-item, li > a {
+        @include engraved;
+        color: tk(text);
+        padding: 6px 16px;
+        transition: background-color 0.12s, box-shadow 0.12s, color 0.12s;
+      }
+      > li > a:hover, > li > a:focus, li > a:hover, li > a:focus,
+      li.active > a, .dropdown-item:hover, .dropdown-item:focus, .dropdown-item.active {
+        color: tk(sidebar-text-hi);
+        background-color: transparent;
+        background-image: linear-gradient(90deg, rgba(tk(primary), if($dark, 0.26, 0.18)), rgba(tk(primary), 0.04) 75%);
+        box-shadow: inset 3px 0 0 tk(primary), inset 0 1px 2px $sunken;
+        outline: 0;
+      }
+      li.selected > a, li.selected > a:hover {
+        color: tk(primary);
+        .check-mark, .fa, .glyphicon { color: tk(primary); }
+      }
+      li.disabled > a, li.disabled > a:hover {
+        color: tk(text-muted);
+        background-image: none;
+        box-shadow: none;
+      }
+      .dropdown-header {
+        @include stamped-label;
+        font-size: 11px;
+        color: tk(text-muted);
+        padding: 8px 16px 4px;
+      }
+      .divider {
+        background-color: $seat-dark;
+        border-bottom: 1px solid $seat-light;
+        margin: 4px 0;
+      }
+      .bs-searchbox {
+        padding: 6px 10px 8px;
+        border-bottom: 1px solid $seat-dark;
+        box-shadow: 0 1px 0 $seat-light;
+        margin-bottom: 4px;
+        .form-control {
+          background-color: tk(input-bg);
+          background-image: none;
+          box-shadow: inset 0 1px 3px $sunken;
+          border-color: tk(border);
+        }
+      }
+      .bs-actionsbox, .bs-donebutton { padding: 6px 10px; }
+    }
+
+    // form tables inside a plate (legacy pages such as Lobby > Password): rows and cells paint solid colours that
+    // hide the brushed steel; make them translucent so the plate shows through, stripes as a light tint
+    .content-box .table > thead > tr, .content-box .table > tbody > tr, .content-box .table > tfoot > tr,
+    .content-box .table > thead > tr > th, .content-box .table > tbody > tr > td,
+    .content-box .table > tbody > tr > th, .content-box .table > tfoot > tr > td {
+      background-color: transparent;
+    }
+    .content-box .table-striped > tbody > tr:nth-of-type(odd) > td,
+    .content-box .table-striped > tbody > tr:nth-of-type(odd) > th {
+      background-color: rgba(255, 255, 255, if($dark, 0.035, 0.30));
+    }
+    .content-box .table > tbody > tr:hover > td,
+    .content-box .table > tbody > tr:hover > th {
+      background-color: rgba(tk(primary), if($dark, 0.10, 0.08));
+    }
+    // phones (≤800px): no metal frame (it would cost width), but the plates keep their rivets, smaller and tucked
+    // into the corners, so the look matches the desktop
+    @media (max-width: 800px) {
+      // doubled classes: the base plate rules of widgets and of the license come later in this file
+      .content-box.content-box,
+      .grid-stack-item-content.grid-stack-item-content {
+        @include screwed-plate($inset: 3px, $size: 8px, $strong: true);
+      }
+      .page-content-main section.col-xs-12 > section.col-xs-11.col-xs-11 {
+        @include screwed-plate($inset: 6px, $size: 10px, $strong: true);
+      }
+    }
+    // Legacy settings forms (System > Settings > Administration and the like) end with a whole plate holding only
+    // the Save button, parked under the value column. It becomes an action bar: the button on the right edge, the
+    // bar stuck to the bottom of the window while the form scrolls, so Save is always at hand (desktop and phones).
+    // (a plate whose only control is the submit button, beside an optional Cancel; it may carry a hidden row
+    // before the button row; the table may sit straight in the plate or inside .table-responsive, as on
+    // Interfaces > [LAN])
+    .content-box:is(:has(> .table:only-child :is(input[type="submit"], button[type="submit"])),
+        :has(> .table-responsive:only-child > .table:only-child :is(input[type="submit"], button[type="submit"]))):not(
+        :has(label, select, textarea, input:is([type="text"], [type="checkbox"], [type="radio"],
+        [type="password"], [type="number"], [type="file"], [type="email"]))) {
+      position: sticky;
+      bottom: 28px;          // sits right on the fixed footer (28px), so no form line peeks in between
+      z-index: 5;
+      margin-top: 4px;
+      box-shadow: 0 0 0 1px tk(border-strong), $seat, 0 -6px 18px rgba(0, 0, 0, if($dark, 0.55, 0.18));
+      .table > tbody > tr > td {
+        background-color: transparent;
+        padding-top: 8px;
+        padding-bottom: 8px;
+      }
+      // the label cell is empty (only whitespace) and carries an inline width: drop it so the button starts at the
+      // left edge of the bar
+      .table > tbody > tr > td:first-child:not(:last-child):not(:has(*)) { display: none; }
+      // button on the left edge, like the Save buttons of the MVC pages
+      .table > tbody > tr > td:last-child {
+        text-align: left;
+        padding-left: 16px;
+      }
+      :is(input[type="submit"], button[type="submit"]) { min-width: 96px; }
+      // phones: the footer is not fixed there, and the cells stack (the empty label cell would add a blank line)
+      @media (max-width: 800px) {
+        bottom: 0;
+        margin-bottom: 0;
+        .table > tbody > tr > td:first-child:not(:last-child):not(:has(*)) { display: none; }
+        .table > tbody > tr:not(:has(:is(input[type="submit"], button[type="submit"]))) { display: none; }
+      }
+    }
+    // a tab pane straight inside a content box (Diagnostics > Statistics) holds a Bootstrap .row whose -20px gutters
+    // stuck out of the plate and gave the page a horizontal scrollbar
+    .content-box > .tab-pane > .row { margin-left: 0; margin-right: 0; }
+    // a content box nested in another one (same page) drew a second framed plate inside the first: the inner one
+    // is flat, the outer plate already frames it
+    .content-box .content-box {
+      background: none;
+      border: 0;
+      box-shadow: none;
+    }
+
+    // Key/value trees (jqTree: Diagnostics > Statistics and similar): the stock dark-blue keys vanished on the steel.
+    // Modern look: chevron togglers in ember that turn when a branch opens, guide rails for the depth, folder names
+    // in steel white, keys muted, values in a cool cyan monospace, soft row highlight on hover.
+    $kv-rail: rgba(if($dark, #C4CDD7, #34404C), if($dark, 0.22, 0.28));
+    // (ul + both classes: jqtree.css is loaded after the theme with "ul.jqtree-tree .jqtree-title")
+    ul.jqtree-tree.jqtree_common {
+      font-size: 13px;
+      line-height: 1.55;
+      ul.jqtree_common {
+        margin-left: 9px;
+        padding-left: 12px;
+        border-left: 1px solid $kv-rail;
+      }
+      .jqtree-element {
+        display: flex;
+        align-items: baseline;
+        gap: 2px;
+        padding: 1px 8px;
+        border-radius: 4px;
+        color: tk(info);
+        font-family: "JetBrains Mono", "Cascadia Code", ui-monospace, monospace;
+        font-size: 12.5px;
+        transition: background-color 0.12s;
+        &:hover { background-color: rgba(255, 255, 255, if($dark, 0.05, 0.45)); }
+      }
+      .jqtree-title {
+        color: tk(text-muted);
+        font-family: inherit;
+        margin-left: 0;
+      }
+      .jqtree-title-folder {
+        color: tk(text);
+        font-family: $font-family-base, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+      }
+      .jqtree-element > strong {
+        color: rgba(tk(text-muted), 0.6);
+        font-weight: 400;
+        margin: 0 6px 0 2px;
+      }
+      // chevron toggler instead of the boxed +/-
+      a.jqtree-toggler {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 14px;
+        margin-right: 4px;
+        color: tk(primary);
+        text-decoration: none;
+        > i { display: none; }
+        &::before {
+          content: "";
+          border-style: solid;
+          border-width: 4px 0 4px 6px;
+          border-color: transparent transparent transparent tk(primary);
+          transition: transform 0.15s;
+          transform: rotate(90deg);
+        }
+        &.jqtree-closed::before { transform: none; }
+        &:hover::before { border-left-color: tk(primary-hover); }
+      }
+      li.jqtree-selected > .jqtree-element {
+        background-color: rgba(tk(primary), 0.14);
+        box-shadow: inset 2px 0 0 tk(primary);
+      }
+    }
+
+    // Firewall > Diagnostics > Aliases toolbar (laid out in main.scss): a brushed plate like the others
+    .row:has(> .col-xs-4 > #flushtable) {
+      @include plate;
+      border-color: tk(border);
+    }
+
+    // grid heading strip (laid out in main.scss): engraved letters and an engraved divider
+    .bootgrid-header .theading-text {
+      @include engraved;
+      border-bottom: 1px solid $seat-dark;
+      box-shadow: 0 1px 0 $seat-light;
+    }
+
+    // "full help" switch of the MVC forms: it sits alone in a full-width row (an empty span on the left), which
+    // read as a tall empty band, striped and lit on hover. Now a slim strip: the switch on the right, no stripe
+    // or hover, an engraved line under it.
+    tr:has(> td[colspan]:only-child > .pull-right > small + a) {
+      > td {
+        height: auto;
+        padding: 3px 14px 2px;
+        line-height: 18px;
+        background-color: transparent !important;
+        background-image: none !important;
+        box-shadow: inset 0 -1px 0 $seat-dark, 0 1px 0 $seat-light !important;
+        font-size: 11px;
+      }
+      &:hover > td { background-color: transparent; }
+      small { @include stamped-label; font-size: 10px; color: tk(text-muted); }
+    }
+    // field help (shown with "full help", MVC and legacy forms): the stock small muted grey washed out on the steel.
+    // Plain text, no box: body size, bright steel-white ink with a soft dark edge so it stands off the brushed
+    // metal, a comfortable line length.
+    [data-for^="help_for_"] {
+      display: block;
+      margin-top: 5px;
+      max-width: 92ch;
+      &, small {
+        color: if($dark, #D5DCE4, #26303B);
+        font-size: 13px;
+        line-height: 1.5;
+        text-shadow: if($dark, 0 1px 1px rgba(0, 0, 0, 0.75), none);
+      }
+      a { color: tk(primary); }
+      code, kbd { font-size: 12px; }
+    }
+    // hidden help keeps the class OPNsense toggles
+    [data-for^="help_for_"].hidden { display: none; }
+    // System > Configuration > Defaults > Components: the Reset button sat at the left of a wide cell, stranded near
+    // the right; align it to the right edge like the Save buttons of the other forms
+    .table td:has(> #reset_sections) {
+      text-align: right;
+      padding-right: 16px;
+    }
+    // Lobby > License: the only view with a bare <section class="col-xs-11"> (text straight on the page); it
+    // becomes a brushed plate screwed at the corners, like the content boxes. The text stays plain.
+    .page-content-main section.col-xs-12 > section.col-xs-11 {
+      @include plate;
+      background-image: $sheen-bands, $brush-strong, $plate-grad;
+      float: none;
+      width: auto;
+      margin: 15px 0;
+      padding: 18px 24px 8px;
+      border-radius: 6px;
+      @media (min-width: 801px) {
+        @include screwed-plate($inset: 8px, $size: 12px, $strong: true);
+        box-shadow: inset 0 1px 0 $bevel-hi, inset 0 -1px 0 $bevel-lo, 0 0 0 1px tk(border), tk(shadow-sm);
+        padding: 26px 34px 16px;
+        &:hover { @include screwed-plate(true, $inset: 8px, $size: 12px, $strong: true); }
+      }
+    }
+
+    .content-box-head,
+    .panel-heading,
+    .modal-header {
+      background-color: transparent;
+      background-image: none;
+      box-shadow: inset 0 -1px 0 $bevel-lo, 0 1px 0 $bevel-hi;
+      @include stamped-label;
+      font-size: 13px;
+      h1, h2, h3, h4, .panel-title { @include stamped-label; font-size: 13px; }
+    }
+    .modal-title { @include steel-lettering; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; }
+    // 27.1: action icon before the inline title, in the ember accent with the same relief
+    .modal-header .model-header-icon { color: tk(primary); filter: drop-shadow(0 1px 0 $bevel-hi); }
+
+    // tabs: metal tabs, the active one flush with the plate
+    .nav-tabs > li > a {
+      @include engraved;
+      font-weight: 600;
+      background-image: $brush, linear-gradient(180deg, $plate-hi, $plate-lo);
+      box-shadow: inset 0 1px 0 $bevel-hi;
+      &:hover { background-image: reflection(70px, $sheen), $brush, linear-gradient(180deg, $plate-hi, $plate-lo); }
+    }
+    // inactive tabs: a step darker, dimmed text — the active one is the lit plate in front
+    .nav-tabs > li:not(.active) > a {
+      color: tk(text-muted);
+      background-image: $brush, linear-gradient(180deg, $plate-lo, rgba(0, 0, 0, if($dark, 0.18, 0.06)));
+    }
+    // active tab (every page): lit steel plate joined to the panel below, accent bar on top, accent text with a soft
+    // glow — it used to look like a black sunken slot
+    .nav-tabs > li.active > a,
+    .nav-tabs > li.active > a:hover,
+    .nav-tabs > li.active > a:focus {
+      color: tk(primary);
+      background-color: $plate-hi;
+      background-image:
+        linear-gradient(180deg, rgba(255, 255, 255, if($dark, 0.10, 0.60)), rgba(255, 255, 255, 0) 70%),
+        $brush,
+        linear-gradient(180deg, $plate-hi, $plate-hi);
+      border-color: tk(border-strong) tk(border-strong) transparent;
+      box-shadow:
+        inset 0 3px 0 tk(primary),
+        inset 0 4px 6px -3px color-mix(in srgb, #{tk(primary)} 55%, transparent),
+        inset 0 1px 0 $bevel-hi,
+        0 -3px 10px -4px color-mix(in srgb, #{tk(primary)} 45%, transparent);
+      text-shadow: 0 0 6px color-mix(in srgb, #{tk(primary)} 35%, transparent), 0 1px 0 $bevel-hi;
+    }
+
+    // table headers: stamped labels
+    table thead th,
+    .table > thead > tr > th,
+    .tabulator .tabulator-header .tabulator-col .tabulator-col-title {
+      @include engraved;
+    }
+    .tabulator .tabulator-header,
+    .tabulator .tabulator-header .tabulator-col {
+      background-color: $plate-lo;
+      background-image: $brush, linear-gradient(180deg, $plate-hi, $plate-lo);
+    }
+    .tabulator .tabulator-header {
+      box-shadow: inset 0 1px 0 $bevel-hi, inset 0 -1px 0 $bevel-lo;
+    }
+
+    // ---------------------------------------------------------------- buttons: raised plates that press in
+    .btn {
+      @include engraved;
+      font-weight: 600;
+      background-image: $gloss, $brush;
+      border-color: rgba(0, 0, 0, if($dark, 0.55, 0.22));
+      box-shadow: inset 0 1px 0 $bevel-hi, 0 1px 2px rgba(0, 0, 0, if($dark, 0.6, 0.22));
+      transition: transform 90ms ease, box-shadow $transition-fast, background-color $transition-fast, filter $transition-fast;
+
+      &:hover, &:focus:hover {
+        background-image: reflection(55px, $sheen), $gloss, $brush;
+        transform: translateY(-1px);
+        box-shadow: inset 0 1px 0 $bevel-hi, 0 3px 7px rgba(0, 0, 0, if($dark, 0.6, 0.25));
+      }
+      &:active, &.active {
+        background-image: $gloss, $brush;
+        transform: translateY(1px);
+        box-shadow: inset 0 2px 5px rgba(0, 0, 0, if($dark, 0.7, 0.30)), inset 0 -1px 0 $bevel-hi;
+      }
+      &:focus-visible {
+        box-shadow: inset 0 1px 0 $bevel-hi, 0 0 0 3px tk(focus-ring);
+      }
+      &.disabled, &[disabled] {
+        transform: none;
+        background-image: $brush;
+      }
+    }
+    .btn-default {
+      background-color: $plate-lo;
+      background-image: $brush, linear-gradient(180deg, $plate-hi, $plate-lo);
+      &:hover, &:focus:hover {
+        background-color: $plate-lo;
+        background-image: reflection(55px, $sheen), $brush, linear-gradient(180deg, $plate-hi, $plate-lo);
+      }
+      &:active, &.active, .open > &.dropdown-toggle {
+        background-color: tk(surface-3);
+        background-image: $brush;
+      }
+    }
+    // coloured buttons: white text cut into the coloured metal
+    .btn-primary, .btn-success, .btn-info, .btn-warning, .btn-danger {
+      text-shadow: $engrave-on-color;
+    }
+
+    // ---------------------------------------------------------------- fields: sunken into the plate
+    .form-control,
+    select.form-control,
+    textarea,
+    input[type="text"], input[type="password"], input[type="number"], input[type="email"],
+    input[type="search"], input[type="url"], input[type="tel"] {
+      background-color: tk(input-bg);
+      background-image: linear-gradient(180deg, rgba(0, 0, 0, if($dark, 0.22, 0.05)), rgba(0, 0, 0, 0) 10px);
+      box-shadow: inset 0 2px 3px $sunken, 0 1px 0 $bevel-hi;
+      transition: border-color $transition-fast, box-shadow $transition-fast;
+
+      &:hover:not(:focus):not([disabled]):not([readonly]) {
+        background-image: reflection(70px, if($dark, rgba(255, 255, 255, 0.07), rgba(178, 58, 12, 0.06))),
+                          linear-gradient(180deg, rgba(0, 0, 0, if($dark, 0.22, 0.05)), rgba(0, 0, 0, 0) 10px);
+        border-color: tk(border-strong);
+      }
+      &:focus {
+        box-shadow: inset 0 2px 3px $sunken, 0 0 0 3px tk(focus-ring);
+      }
+    }
+
+    // labels of form rows (MVC forms and legacy tables): engraved
+    .table > tbody > tr > td:first-child > label,
+    .control-label {
+      @include engraved;
+    }
+
+    // ---------------------------------------------------------------- alerts: metal plates with a coloured edge
+    // state colour only on the left bar, a faint tint and the strong text; info uses the ember accent
+    @each $state, $bar, $txt in (success, tk(success), tk(success-strong)),
+                                (info, tk(primary), tk(text)),
+                                (warning, tk(warning), tk(warning-strong)),
+                                (danger, tk(danger), tk(danger-strong)) {
+      .alert.alert-#{$state} {
+        background-color: $plate-lo;
+        background-image: linear-gradient(90deg, rgba($bar, if($dark, 0.10, 0.08)), rgba($bar, 0) 60%), $brush, $plate-grad;
+        border: 1px solid tk(border);
+        border-left: 4px solid $bar;
+        box-shadow: inset 0 1px 0 $bevel-hi, inset 0 -1px 0 $bevel-lo, tk(shadow-sm);
+        color: $txt;
+        @include engraved;
+        font-weight: 600;
+        .close { @include engraved; color: tk(text-muted); opacity: 1; }
+      }
+    }
+
+    // ---------------------------------------------------------------- dashboard: screwed plates
+    // widgets: same 9px screwed frame as content boxes (screws clear of headers, lists and scrollbars);
+    // phones: plain plate, no frame and no screws
+    .grid-stack-item-content {
+      background-color: $plate-lo;
+      background-image: $sheen-bands, $brush-strong, $plate-grad;
+      box-shadow: inset 0 1px 0 $bevel-hi, inset 0 -1px 0 $bevel-lo, tk(shadow-sm);
+    }
+    @media (min-width: 801px) {
+      // 9px screws from the outer edge (inset 0): same centre as before, so the chains still meet them
+      .grid-stack-item-content {
+        @include screwed-plate($inset: 0px, $size: 9px, $strong: true);
+        background-origin: border-box;
+        border: $frame-width solid transparent;
+        box-shadow: 0 0 0 1px tk(border), $seat, tk(shadow-sm);
+      }
+      // chains: drawn under the plates, so only the part crossing the gap shows
+      .grid-stack > .grid-stack-item > .grid-stack-item-content { z-index: 1; }
+      .grid-stack > .grid-stack-item::before,
+      .grid-stack > .grid-stack-item::after {
+        content: "";
+        position: absolute;
+        z-index: 0;
+        pointer-events: none;
+        background-repeat: no-repeat;
+      }
+      // sideways, at the top and bottom screws of both sides
+      .grid-stack > .grid-stack-item::before {
+        top: 0; bottom: 0; left: -7px; right: -7px;
+        background-image: chain(), chain(), chain(), chain();
+        background-size: 14px 8px;
+        background-position: left 0 top 5.5px, left 0 bottom 5.5px, right 0 top 5.5px, right 0 bottom 5.5px;
+      }
+      // no neighbour on the outer edges of the grid: the chain stays under the plate (no stub into the page
+      // padding, and on the right column no 3px past the viewport that made the page scroll sideways)
+      .grid-stack > .grid-stack-item:not([gs-x])::before,
+      .grid-stack > .grid-stack-item[gs-x="0"]::before { left: 0; }
+      @for $x from 0 through 11 {
+        .grid-stack > .grid-stack-item#{if($x == 0, ':not([gs-x])', '[gs-x="#{$x}"]')}[gs-w="#{12 - $x}"]::before {
+          right: 0;
+        }
+      }
+      .grid-stack > .grid-stack-item[gs-x="0"][gs-w="12"]::before { right: 0; }
+      // upwards, to the header or to the plate above
+      .grid-stack > .grid-stack-item::after {
+        top: -7px; height: 14px; left: 0; right: 0;
+        background-image: chain(true), chain(true);
+        background-size: 8px 14px;
+        background-position: left 5.5px top 0, right 5.5px top 0;
+      }
+      .grid-stack > .grid-stack-item.ui-draggable-dragging::before,
+      .grid-stack > .grid-stack-item.ui-draggable-dragging::after { display: none; }
+      .grid-stack-item:hover > .grid-stack-item-content {
+        @include screwed-plate(true, $inset: 0px, $size: 9px, $strong: true);
+        border-color: transparent;
+        box-shadow: 0 0 0 1px tk(border-strong), $seat, tk(shadow-md);
+      }
+      .grid-stack-item.ui-draggable-dragging > .grid-stack-item-content,
+      .grid-stack-item.ui-resizable-resizing > .grid-stack-item-content {
+        border-color: transparent;
+        box-shadow: 0 0 0 1px tk(primary), $seat, tk(shadow-lg);
+      }
+    }
+    // scrollbars of framed windows: thin metal bar, shorter than the inner area, always inside the frame
+    // (the screws stay outside, on the border)
+    @media (min-width: 801px) {
+      .grid-stack-item-content,
+      .content-box,
+      .modal-content,
+      .modal-body {
+        // Chromium ignores ::-webkit-scrollbar when scrollbar-width/-color are set (inherited from html):
+        // reset them here and set them again for Firefox only
+        scrollbar-width: auto;
+        scrollbar-color: auto;
+        @supports (-moz-appearance: none) {
+          scrollbar-width: thin;
+          scrollbar-color: tk(border-strong) transparent;
+        }
+        &::-webkit-scrollbar { width: 8px; height: 8px; }
+        &::-webkit-scrollbar-track { background: transparent; margin: 6px; }
+        &::-webkit-scrollbar-thumb {
+          background: linear-gradient(90deg, $plate-hi, tk(border-strong));
+          border: 1px solid rgba(0, 0, 0, if($dark, 0.6, 0.2));
+          border-radius: 4px;
+        }
+        &::-webkit-scrollbar-button { display: none; }
+      }
+    }
+
+    // compact widget header (the frame already separates widgets): less margin above the title and
+    // a thinner divider block; gridstack fits the height to the content, so every widget gets shorter
+    .widget-header {
+      margin-top: 3px;
+      min-height: 20px;
+    }
+    .panel-divider {
+      height: 4px;
+      margin-bottom: 6px;
+      .line { margin: 2px 5px; }
+    }
+
+    // Sonar widget styles: left out of the upstream package build ($with-sonar: false)
+    @if $with-sonar {
+      // Sonar widget: title in the accent colour. Keyed by gs-id (26.7 and the first 27.1 instance) and by
+      // data-widget-type (27.1: every instance, duplicates included). The frame, screws and chains above are
+      // keyed by .grid-stack-item/.grid-stack-item-content, so they hold for any instance.
+      .grid-stack-item[gs-id="sonar"] .widget-title,
+      .widget[data-widget-type="sonar"] .widget-title {
+        color: tk(primary);
+      }
+      // view selector, sound switch and fullscreen button: sunken grooves, knobs as accent/steel plates with gloss
+      .sonar-widget { --sonar-accent: #{tk(primary)}; }
+      .sonar-mode-name { text-shadow: 0 1px 0 $bevel-hi; }
+      .sonar-modes, .sonar-sound, .sonar-fs {
+        border: 1px solid tk(border-strong);
+        background-color: rgba(0, 0, 0, if($dark, 0.25, 0.06));
+        box-shadow: inset 0 2px 3px $sunken, 0 1px 0 $bevel-hi;
+      }
+      .sonar-sw-label:not(.active) svg { filter: drop-shadow(0 1px 0 $bevel-hi); }
+      .sonar-knob {
+        background-image: $gloss;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 0 0 1px rgba(0, 0, 0, 0.2);
+      }
+      .sonar-sound[aria-checked="true"] { background-image: $gloss; }
+      .sonar-sound-knob {
+        background: if($dark, linear-gradient(180deg, #D4D8DD, #8C939C), linear-gradient(180deg, #FFFFFF, #C9CED5));
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+      }
+      // larger drawing area on desktop (the dashboard fits the widget height to its content)
+      @media (min-width: 801px) {
+        .grid-stack-item[gs-id="sonar"] .sonar-area,
+        .widget[data-widget-type="sonar"] .sonar-area { min-height: 400px !important; }   // overrides the inline 300px
+      }
+    }
+
+    // widget header divider: engraved groove
+    .panel-divider .line {
+      background: $seat-dark;
+      box-shadow: 0 1px 0 $seat-light;
+    }
+
+    .widget-title {
+      @include stamped-label;
+      font-size: 11.5px;
+      b, strong { font-weight: 700; }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html .btn, html .btn:hover, html .btn:active { transform: none; }
+  }
+}
