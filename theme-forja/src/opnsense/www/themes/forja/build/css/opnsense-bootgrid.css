@@ -7,7 +7,7 @@
   border: none;
   border-top: none;
   border-radius: 4px;
-  color: #DFE4EA;
+  color: #171D25;
   font-variant-numeric: tabular-nums;
 }
 
@@ -16,13 +16,13 @@
   background-color: transparent;
   border-bottom: none;
   border-left: none;
-  color: #A3AEBA;
+  color: #46515E;
 }
 
 .tabulator .tabulator-header .tabulator-col {
   border-right: none;
-  background-color: #1B1E22;
-  color: #A3AEBA;
+  background-color: #ECEEF1;
+  color: #46515E;
   font-family: "Source Sans Pro", "SourceSansProRegular", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   font-size: 11px;
   font-weight: 600;
@@ -32,31 +32,31 @@
 }
 
 .tabulator .tabulator-header .tabulator-col.tabulator-sortable.tabulator-col-sorter-element:hover {
-  background-color: #202328;
-  color: #DFE4EA;
+  background-color: #E4E7EB;
+  color: #171D25;
 }
 
 .tabulator .tabulator-header .tabulator-col[aria-sort="ascending"],
 .tabulator .tabulator-header .tabulator-col[aria-sort="descending"] {
-  color: #DFE4EA;
+  color: #171D25;
 }
 
 .tabulator .tabulator-header .tabulator-col .tabulator-col-content .tabulator-col-sorter .tabulator-arrow {
-  border-bottom-color: #565D66;
+  border-bottom-color: #9AA3AD;
 }
 
 .tabulator .tabulator-header .tabulator-col[aria-sort="ascending"] .tabulator-col-content .tabulator-col-sorter .tabulator-arrow {
-  border-bottom-color: #F97316;
+  border-bottom-color: #B23A0C;
 }
 
 .tabulator .tabulator-header .tabulator-col[aria-sort="descending"] .tabulator-col-content .tabulator-col-sorter .tabulator-arrow {
-  border-top-color: #F97316;
+  border-top-color: #B23A0C;
 }
 
 .tabulator .tabulator-headers {
   height: 100% !important;
   /* make sure the border below appears */
-  border-bottom: 1px solid #565D66;
+  border-bottom: 1px solid #9AA3AD;
 }
 
 /*------------*/
@@ -64,29 +64,29 @@
 .tabulator .tabulator-tableholder .tabulator-table {
   background-color: transparent;
   border-left: none;
-  color: #DFE4EA;
+  color: #171D25;
 }
 
 .tabulator-row {
   background-color: transparent;
-  color: #DFE4EA;
+  color: #171D25;
   transition: background-color 120ms ease;
 }
 
 .tabulator-row.tabulator-row-odd {
-  background-color: #202328;
+  background-color: #E4E7EB;
 }
 
 .tabulator-row.tabulator-row-odd.tabulator-selectable:hover:not(.tabulator-selected) {
-  background-color: rgba(249, 115, 22, 0.14);
+  background-color: rgba(178, 58, 12, 0.1);
 }
 
 .tabulator-row.tabulator-row-even {
-  background-color: #1B1E22;
+  background-color: #ECEEF1;
 }
 
 .tabulator-row.tabulator-row-even.tabulator-selectable:hover:not(.tabulator-selected) {
-  background-color: rgba(249, 115, 22, 0.14);
+  background-color: rgba(178, 58, 12, 0.1);
 }
 
 .tabulator .tabulator-tableholder {
@@ -94,17 +94,17 @@
 }
 
 .tabulator-row.tabulator-selected {
-  background-color: rgba(249, 115, 22, 0.16);
-  box-shadow: inset 3px 0 0 #F97316;
+  background-color: rgba(178, 58, 12, 0.16);
+  box-shadow: inset 3px 0 0 #B23A0C;
 }
 
 .tabulator-row.tabulator-selected:hover {
   cursor: pointer;
-  background-color: rgba(249, 115, 22, 0.22);
+  background-color: rgba(178, 58, 12, 0.22);
 }
 
 .tabulator .tabulator-alert .tabulator-alert-msg.tabulator-alert-state-msg {
-  color: #F97316;
+  color: #B23A0C;
   /* spinner icon */
 }
 
@@ -113,7 +113,7 @@
 .tabulator-row .tabulator-cell .btn.btn-xs.btn-default {
   background-color: transparent;
   border-color: transparent;
-  color: #A3AEBA;
+  color: #46515E;
   box-shadow: none;
   border-radius: 3px;
   transition: color 120ms ease, background-color 120ms ease, border-color 120ms ease;
@@ -121,38 +121,38 @@
 
 .tabulator-row .tabulator-cell .btn.btn-xs.btn-default:hover,
 .tabulator-row .tabulator-cell .btn.btn-xs.btn-default:focus {
-  background-color: rgba(249, 115, 22, 0.14);
+  background-color: rgba(178, 58, 12, 0.1);
   border-color: transparent;
-  color: #F97316;
+  color: #B23A0C;
 }
 
 .tabulator-row .tabulator-cell .btn.btn-xs.btn-default:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.4);
+  box-shadow: 0 0 0 3px rgba(228, 86, 31, 0.35);
 }
 
 .tabulator-row .tabulator-cell .btn.btn-xs.btn-default.command-delete:hover,
 .tabulator-row .tabulator-cell .btn.btn-xs.btn-default.command-delete:focus {
-  background-color: rgba(248, 113, 113, 0.14);
-  color: #FCA5A5;
+  background-color: rgba(220, 38, 38, 0.14);
+  color: #B91C1C;
 }
 
 /* Tabulator groupBy row styles */
 .tabulator-row.tabulator-group {
   border: none;
   pointer-events: none;
-  background-color: #292D32;
+  background-color: #D9DDE2;
   font-weight: 600;
 }
 
 .tabulator-row.tabulator-group .span {
   margin-left: 0;
-  color: #DFE4EA;
+  color: #171D25;
 }
 
 .tabulator-row .badge.chip {
-  background-color: rgba(249, 115, 22, 0.14);
-  color: #F97316;
+  background-color: rgba(178, 58, 12, 0.1);
+  color: #B23A0C;
   font-size: 10px;
   font-weight: 600;
   padding: 2px 7px;
@@ -180,7 +180,7 @@
 .tabulator-row .tabulator-cell.tabulator-frozen.tabulator-frozen-left {
   border-right: none;
   border-top: none;
-  border-bottom: 1px solid #3A3F46;
+  border-bottom: 1px solid #BDC4CC;
   border-left: none;
 }
 
@@ -191,7 +191,7 @@
   white-space: nowrap;
   line-height: 1.2;
   vertical-align: top;
-  border-bottom: 1px solid #3A3F46;
+  border-bottom: 1px solid #BDC4CC;
   border-right: none;
 }
 
@@ -204,39 +204,39 @@
 .tabulator .tabulator-footer {
   border-top: none;
   background-color: transparent;
-  color: #A3AEBA;
+  color: #46515E;
 }
 
 .tabulator .tabulator-footer .tabulator-page {
-  background-color: #1B1E22;
-  color: #DFE4EA;
+  background-color: #ECEEF1;
+  color: #171D25;
   font-variant-numeric: tabular-nums;
   transition: color 120ms ease, background-color 120ms ease, border-color 120ms ease;
 }
 
 .tabulator .tabulator-footer .tabulator-page.active {
-  background-color: #F97316;
-  border-color: #F97316;
+  background-color: #B23A0C;
+  border-color: #B23A0C;
   cursor: default;
-  color: #160A03;
+  color: #FFFFFF;
 }
 
 .tabulator .tabulator-footer .tabulator-page:not(disabled):hover {
-  color: #F97316;
-  background-color: rgba(249, 115, 22, 0.14);
-  border-color: #F97316;
+  color: #B23A0C;
+  background-color: rgba(178, 58, 12, 0.1);
+  border-color: #B23A0C;
 }
 
 .tabulator .tabulator-footer .tabulator-page:not(disabled).active:hover {
-  background-color: #F97316;
-  border-color: #F97316;
-  color: #160A03;
+  background-color: #B23A0C;
+  border-color: #B23A0C;
+  color: #FFFFFF;
   cursor: default;
 }
 
 .tabulator .tabulator-footer .tabulator-page:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.4);
+  box-shadow: 0 0 0 3px rgba(228, 86, 31, 0.35);
 }
 
 .tabulator .tabulator-footer .tabulator-page:disabled {
@@ -244,25 +244,25 @@
 }
 
 .tabulator-page-counter {
-  color: #A3AEBA;
+  color: #46515E;
 }
 
 .tabulator .tabulator-footer .tabulator-paginator {
-  color: #A3AEBA;
+  color: #46515E;
 }
 
 .tabulator .tabulator-footer .tabulator-page-size {
-  border: 1px solid #565D66;
+  border: 1px solid #9AA3AD;
   border-radius: 3px;
-  background-color: #1B1E22;
-  color: #DFE4EA;
+  background-color: #ECEEF1;
+  color: #171D25;
 }
 
 .tabulator .tabulator-footer .tabulator-page {
   border-radius: 3px;
   margin: 0 2px;
   padding: 6px 12px;
-  border: 1px solid #565D66;
+  border: 1px solid #9AA3AD;
 }
 
 /*----------*/
@@ -345,7 +345,7 @@
 /* Row highlight behavior */
 @keyframes highlight {
   0% {
-    background: rgba(245, 158, 11, 0.28);
+    background: rgba(217, 119, 6, 0.28);
   }
   100% {
     background: none;
@@ -372,7 +372,7 @@
 
 .tabulator .tabulator-alert .tabulator-alert-msg.tabulator-alert-state-error {
   border: none;
-  color: #FCA5A5;
+  color: #B91C1C;
 }
 
 .bootgrid-placeholder {
@@ -380,7 +380,7 @@
   text-align: center;
   white-space: normal;
   font-weight: 400;
-  color: #A3AEBA;
+  color: #46515E;
 }
 
 .bootgrid-overlay {
@@ -389,7 +389,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(27, 30, 34, 0.6);
+  background: rgba(236, 238, 241, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -398,7 +398,7 @@
 
 .overlay > i {
   font-size: 20px;
-  color: #F97316;
+  color: #B23A0C;
 }
 
 #livelog-table {
@@ -410,16 +410,16 @@
 }
 
 #livelog-table .tabulator-row:has(> .fw-pass) {
-  background-color: rgba(34, 197, 94, 0.07) !important;
-  box-shadow: inset 3px 0 0 #22C55E;
+  background-color: rgba(22, 163, 74, 0.05) !important;
+  box-shadow: inset 3px 0 0 #16A34A;
 }
 
 #livelog-table .tabulator-row:has(> .fw-pass):hover {
-  background-color: rgba(34, 197, 94, 0.16) !important;
+  background-color: rgba(22, 163, 74, 0.11) !important;
 }
 
 #livelog-table .tabulator-cell.fw-pass[tabulator-field="action"] {
-  color: #4ADE80;
+  color: #166534;
 }
 
 #livelog-table .tabulator-cell.fw-block {
@@ -427,16 +427,16 @@
 }
 
 #livelog-table .tabulator-row:has(> .fw-block) {
-  background-color: rgba(248, 113, 113, 0.07) !important;
-  box-shadow: inset 3px 0 0 #F87171;
+  background-color: rgba(220, 38, 38, 0.05) !important;
+  box-shadow: inset 3px 0 0 #DC2626;
 }
 
 #livelog-table .tabulator-row:has(> .fw-block):hover {
-  background-color: rgba(248, 113, 113, 0.16) !important;
+  background-color: rgba(220, 38, 38, 0.11) !important;
 }
 
 #livelog-table .tabulator-cell.fw-block[tabulator-field="action"] {
-  color: #FCA5A5;
+  color: #B91C1C;
 }
 
 #livelog-table .tabulator-cell.fw-nat {
@@ -444,16 +444,16 @@
 }
 
 #livelog-table .tabulator-row:has(> .fw-nat) {
-  background-color: rgba(125, 211, 252, 0.07) !important;
-  box-shadow: inset 3px 0 0 #7DD3FC;
+  background-color: rgba(2, 132, 199, 0.05) !important;
+  box-shadow: inset 3px 0 0 #0284C7;
 }
 
 #livelog-table .tabulator-row:has(> .fw-nat):hover {
-  background-color: rgba(125, 211, 252, 0.16) !important;
+  background-color: rgba(2, 132, 199, 0.11) !important;
 }
 
 #livelog-table .tabulator-cell.fw-nat[tabulator-field="action"] {
-  color: #7DD3FC;
+  color: #0369A1;
 }
 
 #livelog-table .tabulator-cell.fw-match {
@@ -461,20 +461,20 @@
 }
 
 #livelog-table .tabulator-row:has(> .fw-match) {
-  background-color: rgba(245, 158, 11, 0.07) !important;
-  box-shadow: inset 3px 0 0 #F59E0B;
+  background-color: rgba(217, 119, 6, 0.05) !important;
+  box-shadow: inset 3px 0 0 #D97706;
 }
 
 #livelog-table .tabulator-row:has(> .fw-match):hover {
-  background-color: rgba(245, 158, 11, 0.16) !important;
+  background-color: rgba(217, 119, 6, 0.11) !important;
 }
 
 #livelog-table .tabulator-cell.fw-match[tabulator-field="action"] {
-  color: #FBBF24;
+  color: #92400E;
 }
 
 #livelog-table .tabulator-row {
-  border-bottom: 1px solid #3A3F46;
+  border-bottom: 1px solid #BDC4CC;
 }
 
 #livelog-table .tabulator-cell {
@@ -495,7 +495,7 @@
 }
 
 #livelog-table .tabulator-cell[tabulator-field="__timestamp__"] {
-  color: #A3AEBA;
+  color: #46515E;
   font-size: 11.5px;
   letter-spacing: -0.01em;
 }
@@ -506,7 +506,7 @@
 
 #livelog-table .tabulator-cell[tabulator-field="dir"],
 #livelog-table .tabulator-cell[tabulator-field="protoname"] {
-  color: #A3AEBA;
+  color: #46515E;
 }
 
 #livelog-table .tabulator-cell[tabulator-field="action"] {
@@ -518,5 +518,5 @@
 }
 
 #livelog-table .tabulator-cell[tabulator-field="label"] {
-  color: #DFE4EA;
+  color: #171D25;
 }

@@ -90,7 +90,7 @@ select.selectpicker {
 .bootstrap-select > .dropdown-toggle.bs-placeholder.btn-danger:active,
 .bootstrap-select > .dropdown-toggle.bs-placeholder.btn-info:active,
 .bootstrap-select > .dropdown-toggle.bs-placeholder.btn-dark:active {
-  color: rgba(22, 10, 3, 0.7);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .bootstrap-select > select {
@@ -118,12 +118,12 @@ select.selectpicker {
 .error .bootstrap-select .dropdown-toggle,
 .bootstrap-select.is-invalid .dropdown-toggle,
 .was-validated .bootstrap-select select:invalid + .dropdown-toggle {
-  border-color: #F87171;
+  border-color: #DC2626;
 }
 
 .bootstrap-select.is-valid .dropdown-toggle,
 .was-validated .bootstrap-select select:valid + .dropdown-toggle {
-  border-color: #22C55E;
+  border-color: #16A34A;
 }
 
 .bootstrap-select.fit-width {
@@ -137,8 +137,8 @@ select.selectpicker {
 .bootstrap-select > select.mobile-device:focus + .dropdown-toggle,
 .bootstrap-select .dropdown-toggle:focus {
   outline: 0 !important;
-  border-color: #F97316;
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.4);
+  border-color: #B23A0C;
+  box-shadow: 0 0 0 3px rgba(228, 86, 31, 0.35);
 }
 
 .bootstrap-select.form-control {
@@ -320,7 +320,7 @@ select.selectpicker {
 }
 
 .bootstrap-select .dropdown-menu li.active small {
-  color: #A3AEBA !important;
+  color: #46515E !important;
 }
 
 .bootstrap-select .dropdown-menu li.disabled a {
@@ -359,12 +359,12 @@ select.selectpicker {
   margin: 0 2%;
   min-height: 26px;
   padding: 3px 5px;
-  background: #202328;
-  color: #DFE4EA;
-  border: 1px solid #3A3F46;
+  background: #E4E7EB;
+  color: #171D25;
+  border: 1px solid #BDC4CC;
   border-radius: 3px;
-  -webkit-box-shadow: 0 4px 14px rgba(0, 0, 0, 0.55);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.55);
+  -webkit-box-shadow: 0 4px 12px rgba(20, 24, 30, 0.18), 0 2px 4px rgba(20, 24, 30, 0.1);
+  box-shadow: 0 4px 12px rgba(20, 24, 30, 0.18), 0 2px 4px rgba(20, 24, 30, 0.1);
   pointer-events: none;
   opacity: 0.9;
   -webkit-box-sizing: border-box;
@@ -380,8 +380,8 @@ select.selectpicker {
 
 .bootstrap-select .no-results {
   padding: 3px;
-  background: #202328;
-  color: #A3AEBA;
+  background: #E4E7EB;
+  color: #46515E;
   border-radius: 3px;
   margin: 0 5px;
   white-space: nowrap;
@@ -443,7 +443,7 @@ select.selectpicker {
   content: '';
   border-left: 7px solid transparent;
   border-right: 7px solid transparent;
-  border-bottom: 7px solid #3A3F46;
+  border-bottom: 7px solid #BDC4CC;
   position: absolute;
   bottom: -4px;
   left: 9px;
@@ -454,7 +454,7 @@ select.selectpicker {
   content: '';
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
-  border-bottom: 6px solid #1B1E22;
+  border-bottom: 6px solid #ECEEF1;
   position: absolute;
   bottom: -4px;
   left: 10px;
@@ -464,14 +464,14 @@ select.selectpicker {
 .bootstrap-select.show-menu-arrow.dropup .dropdown-toggle .filter-option:before {
   bottom: auto;
   top: -4px;
-  border-top: 7px solid #3A3F46;
+  border-top: 7px solid #BDC4CC;
   border-bottom: 0;
 }
 
 .bootstrap-select.show-menu-arrow.dropup .dropdown-toggle .filter-option:after {
   bottom: auto;
   top: -4px;
-  border-top: 6px solid #1B1E22;
+  border-top: 6px solid #ECEEF1;
   border-bottom: 0;
 }
 
@@ -537,7 +537,7 @@ select.selectpicker {
 .bootstrap-select > .dropdown-toggle.bs-placeholder,
 .bootstrap-select > .dropdown-toggle.bs-placeholder:hover,
 .bootstrap-select > .dropdown-toggle.bs-placeholder:focus {
-  color: #A3AEBA;
+  color: #46515E;
 }
 
 .bootstrap-select > .dropdown-toggle {
@@ -546,15 +546,15 @@ select.selectpicker {
 
 .bootstrap-select.open > .dropdown-toggle,
 .bootstrap-select.show > .dropdown-toggle {
-  border-color: #F97316;
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.4);
+  border-color: #B23A0C;
+  box-shadow: 0 0 0 3px rgba(228, 86, 31, 0.35);
 }
 
 .bootstrap-select .dropdown-menu {
-  background-color: #1B1E22;
-  border: 1px solid #3A3F46;
+  background-color: #ECEEF1;
+  border: 1px solid #BDC4CC;
   border-radius: 4px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.55);
+  box-shadow: 0 4px 12px rgba(20, 24, 30, 0.18), 0 2px 4px rgba(20, 24, 30, 0.1);
   padding: 4px;
 }
 
@@ -565,15 +565,15 @@ select.selectpicker {
 }
 
 .bootstrap-select .dropdown-menu > li > a {
-  color: #DFE4EA;
+  color: #171D25;
   border-radius: 3px;
   transition: background-color 120ms ease, color 120ms ease;
 }
 
 .bootstrap-select .dropdown-menu > li > a:hover,
 .bootstrap-select .dropdown-menu > li > a:focus {
-  background-color: #292D32;
-  color: #DFE4EA;
+  background-color: #D9DDE2;
+  color: #171D25;
 }
 
 .bootstrap-select .dropdown-menu > li.active > a,
@@ -581,17 +581,17 @@ select.selectpicker {
 .bootstrap-select .dropdown-menu > li.active > a:focus,
 .bootstrap-select .dropdown-menu > li.selected > a,
 .bootstrap-select .dropdown-menu > li.selected > a:hover {
-  background-color: rgba(249, 115, 22, 0.14);
-  color: #F97316;
+  background-color: rgba(178, 58, 12, 0.1);
+  color: #B23A0C;
 }
 
 .bootstrap-select .dropdown-menu > li.disabled > a {
-  color: #A3AEBA;
+  color: #46515E;
   opacity: 0.6;
 }
 
 .bootstrap-select .dropdown-menu .dropdown-header {
-  color: #A3AEBA;
+  color: #46515E;
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.06em;
@@ -599,28 +599,28 @@ select.selectpicker {
 }
 
 .bootstrap-select .dropdown-menu .divider {
-  background-color: #3A3F46;
+  background-color: #BDC4CC;
 }
 
 .bootstrap-select .dropdown-menu li small {
-  color: #A3AEBA;
+  color: #46515E;
 }
 
 .bootstrap-select.show-tick .dropdown-menu .selected span.check-mark,
 .bootstrap-select .bs-ok-default:after {
-  color: #F97316;
-  border-color: #F97316;
+  color: #B23A0C;
+  border-color: #B23A0C;
 }
 
 .bs-searchbox .form-control {
   border-radius: 3px;
-  border-color: #565D66;
-  background-color: #1B1E22;
-  color: #DFE4EA;
+  border-color: #9AA3AD;
+  background-color: #ECEEF1;
+  color: #171D25;
 }
 
 .bs-searchbox .form-control:focus {
-  border-color: #F97316;
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.4);
+  border-color: #B23A0C;
+  box-shadow: 0 0 0 3px rgba(228, 86, 31, 0.35);
   outline: 0;
 }

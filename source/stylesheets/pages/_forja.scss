@@ -259,6 +259,45 @@ $screw-sz:  $screw-size $screw-size, $screw-size $screw-size, $screw-size $screw
       &.active:last-child::after { background-size: 1px 50%, 100% 2px; }
     }
 
+    // second-level items (System > Access, Gateways…): the same tree guides one level up, so the whole branch
+    // reads as a tree; the rail keeps running past an open third level (div.collapse) until the last item
+    #mainmenu > .panel > div.collapse > a.list-group-item:not(.menu-level-3-item) {
+      &::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 26px;
+        width: 10px;
+        pointer-events: none;
+        background-image: linear-gradient($tree-line, $tree-line), linear-gradient($tree-line, $tree-line);
+        background-repeat: no-repeat;
+        background-size: 1px 100%, 100% 1px;
+        background-position: 0 0, 0 50%;
+        filter: drop-shadow(0 1px 0 $seat-light);
+      }
+      &:last-of-type::after { background-size: 1px 50%, 100% 1px; }
+      &.active::after {
+        background-image: linear-gradient($tree-line, $tree-line), linear-gradient(tk(primary), tk(primary));
+        background-size: 1px 100%, 100% 2px;
+      }
+      &.active:last-of-type::after { background-size: 1px 50%, 100% 2px; }
+    }
+    #mainmenu > .panel > div.collapse > div.collapse { position: relative; }
+    #mainmenu > .panel > div.collapse > div.collapse::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 26px;
+      width: 1px;
+      pointer-events: none;
+      background: $tree-line;
+      filter: drop-shadow(0 1px 0 $seat-light);
+    }
+    // no rail below the last second-level item
+    #mainmenu > .panel > div.collapse > a.list-group-item:last-of-type + div.collapse::before { display: none; }
+
     // collapsed menu: OPNsense widens the transparent #navigation on hover; only the 70px rail is a plate
     #navigation.col-sidebar-left {
       background-image: none;

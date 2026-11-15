@@ -6,7 +6,7 @@
 
 .nvd3 .nv-axis path {
   fill: none;
-  stroke: #565D66;
+  stroke: #9AA3AD;
   stroke-opacity: .75;
   shape-rendering: crispEdges;
 }
@@ -21,7 +21,7 @@
 
 .nvd3 .nv-axis line {
   fill: none;
-  stroke: #3A3F46;
+  stroke: #BDC4CC;
   shape-rendering: crispEdges;
 }
 
@@ -54,15 +54,15 @@
 }
 
 .nvd3 .nv-bars .hover rect {
-  fill: #FB923C;
+  fill: #8F2E0A;
 }
 
 .nvd3 .nv-bars text {
-  fill: rgba(223, 228, 234, 0);
+  fill: rgba(23, 29, 37, 0);
 }
 
 .nvd3 .nv-bars .hover text {
-  fill: #F87171;
+  fill: #DC2626;
 }
 
 .nvd3 .nv-multibar .nv-groups rect,
@@ -82,7 +82,7 @@
 .nvd3 .nv-discretebar .nv-groups text,
 .nvd3 .nv-multibarHorizontal .nv-groups text {
   font-weight: bold;
-  fill: #F87171;
+  fill: #DC2626;
   stroke: transparent;
 }
 
@@ -100,7 +100,7 @@
 }
 
 .nvd3 line.nv-boxplot-median {
-  stroke: #A3AEBA;
+  stroke: #46515E;
 }
 
 .nv-boxplot-tick:hover {
@@ -121,36 +121,36 @@
 }
 
 .nvd3.nv-bullet .nv-marker {
-  stroke: #565D66;
+  stroke: #9AA3AD;
   stroke-width: 2px;
 }
 
 .nvd3.nv-bullet .nv-markerTriangle {
-  stroke: #565D66;
-  fill: #A3AEBA;
+  stroke: #9AA3AD;
+  fill: #46515E;
   stroke-width: 1.5px;
 }
 
 .nvd3.nv-bullet .nv-markerLine {
-  stroke: #565D66;
+  stroke: #9AA3AD;
   stroke-width: 1.5px;
 }
 
 .nvd3.nv-bullet .nv-tick line {
-  stroke: #A3AEBA;
+  stroke: #46515E;
   stroke-width: .5px;
 }
 
 .nvd3.nv-bullet .nv-range.nv-s0 {
-  fill: #292D32;
+  fill: #D9DDE2;
 }
 
 .nvd3.nv-bullet .nv-range.nv-s1 {
-  fill: #3A3F46;
+  fill: #BDC4CC;
 }
 
 .nvd3.nv-bullet .nv-range.nv-s2 {
-  fill: #565D66;
+  fill: #9AA3AD;
 }
 
 .nvd3.nv-bullet .nv-title {
@@ -159,11 +159,11 @@
 }
 
 .nvd3.nv-bullet .nv-subtitle {
-  fill: #A3AEBA;
+  fill: #46515E;
 }
 
 .nvd3.nv-bullet .nv-range {
-  fill: #565D66;
+  fill: #9AA3AD;
   fill-opacity: .4;
 }
 
@@ -180,13 +180,13 @@
 }
 
 .nvd3.nv-candlestickBar .nv-ticks .nv-tick.positive rect {
-  stroke: #22C55E;
-  fill: #22C55E;
+  stroke: #16A34A;
+  fill: #16A34A;
 }
 
 .nvd3.nv-candlestickBar .nv-ticks .nv-tick.negative rect {
-  stroke: #F87171;
-  fill: #F87171;
+  stroke: #DC2626;
+  fill: #DC2626;
 }
 
 .with-transitions .nv-candlestickBar .nv-ticks .nv-tick {
@@ -194,16 +194,16 @@
 }
 
 .nvd3.nv-candlestickBar .nv-ticks line {
-  stroke: #DFE4EA;
+  stroke: #171D25;
 }
 
 .nv-force-node {
-  stroke: #1B1E22;
+  stroke: #ECEEF1;
   stroke-width: 1.5px;
 }
 
 .nv-force-link {
-  stroke: #A3AEBA;
+  stroke: #46515E;
   stroke-opacity: .6;
 }
 
@@ -273,9 +273,9 @@
 }
 
 .nvd3 .nv-point-paths path {
-  stroke: #565D66;
+  stroke: #9AA3AD;
   stroke-opacity: 0;
-  fill: #292D32;
+  fill: #D9DDE2;
   fill-opacity: 0;
 }
 
@@ -303,29 +303,29 @@ svg.nvd3-svg {
   Box shadow and border radius styling
 */
 .nvtooltip.with-3d-shadow, .with-3d-shadow .nvtooltip {
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.55);
+  box-shadow: 0 4px 12px rgba(20, 24, 30, 0.18), 0 2px 4px rgba(20, 24, 30, 0.1);
   border-radius: 3px;
 }
 
 .nvd3 text {
   font: normal 12px "Source Sans Pro", "SourceSansProRegular", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  fill: #A3AEBA;
+  fill: #46515E;
 }
 
 .nvd3 .title {
   font: 600 14px "Source Sans Pro", "SourceSansProRegular", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  fill: #DFE4EA;
+  fill: #171D25;
 }
 
 .nvd3 .nv-background {
-  fill: #1B1E22;
+  fill: #ECEEF1;
   fill-opacity: 0;
 }
 
 .nvd3.nv-noData {
   font-size: 18px;
   font-weight: 600;
-  fill: #A3AEBA;
+  fill: #46515E;
 }
 
 /**********
@@ -337,8 +337,8 @@ svg.nvd3-svg {
 }
 
 .nv-brush .resize path {
-  fill: #292D32;
-  stroke: #A3AEBA;
+  fill: #D9DDE2;
+  stroke: #46515E;
 }
 
 /**********
@@ -358,9 +358,9 @@ svg.nvd3-svg {
 }
 
 .nvd3 .nv-brushBackground rect {
-  stroke: #565D66;
+  stroke: #9AA3AD;
   stroke-width: .4;
-  fill: #1B1E22;
+  fill: #ECEEF1;
   fill-opacity: .7;
 }
 
@@ -385,16 +385,16 @@ svg.nvd3-svg {
 }
 
 .nvd3.nv-ohlcBar .nv-ticks .nv-tick.positive {
-  stroke: #22C55E;
+  stroke: #16A34A;
 }
 
 .nvd3.nv-ohlcBar .nv-ticks .nv-tick.negative {
-  stroke: #F87171;
+  stroke: #DC2626;
 }
 
 .nvd3 .background path {
   fill: none;
-  stroke: #3A3F46;
+  stroke: #BDC4CC;
   stroke-opacity: .4;
   shape-rendering: crispEdges;
 }
@@ -405,9 +405,9 @@ svg.nvd3-svg {
 }
 
 .nvd3 .nv-parallelCoordinates-brush .extent {
-  fill: #1B1E22;
+  fill: #ECEEF1;
   fill-opacity: .6;
-  stroke: #A3AEBA;
+  stroke: #46515E;
   shape-rendering: crispEdges;
 }
 
@@ -418,7 +418,7 @@ svg.nvd3-svg {
 
 .nvd3 .missingValuesline line {
   fill: none;
-  stroke: #A3AEBA;
+  stroke: #46515E;
   stroke-width: 1;
   stroke-opacity: 1;
   stroke-dasharray: 5, 5;
@@ -431,17 +431,17 @@ svg.nvd3-svg {
 
 .nvd3.nv-pie .nv-pie-title {
   font-size: 24px;
-  fill: #F97316;
+  fill: #B23A0C;
 }
 
 .nvd3.nv-pie .nv-slice text {
-  fill: #DFE4EA;
-  stroke: #565D66;
+  fill: #171D25;
+  stroke: #9AA3AD;
   stroke-width: 0;
 }
 
 .nvd3.nv-pie path {
-  stroke: #1B1E22;
+  stroke: #ECEEF1;
   stroke-width: 1px;
   stroke-opacity: 1;
 }
@@ -491,7 +491,7 @@ svg.nvd3-svg {
 }
 
 .nvd3.nv-sparklineplus .nv-hoverValue line {
-  stroke: #DFE4EA;
+  stroke: #171D25;
   stroke-width: 1.5px;
 }
 
@@ -513,17 +513,17 @@ svg.nvd3-svg {
 }
 
 .nvd3.nv-sparklineplus .nv-yValue {
-  stroke: #F87171;
+  stroke: #DC2626;
 }
 
 .nvd3.nv-sparklineplus .nv-maxValue {
-  stroke: #22C55E;
-  fill: #22C55E;
+  stroke: #16A34A;
+  fill: #16A34A;
 }
 
 .nvd3.nv-sparklineplus .nv-minValue {
-  stroke: #F87171;
-  fill: #F87171;
+  stroke: #DC2626;
+  fill: #DC2626;
 }
 
 .nvd3.nv-sparklineplus .nv-currentValue {
@@ -549,10 +549,10 @@ svg.nvd3-svg {
 
 .nvtooltip {
   position: absolute;
-  background-color: #1B1E22;
-  color: #DFE4EA;
+  background-color: #ECEEF1;
+  color: #171D25;
   padding: 1px;
-  border: 1px solid #3A3F46;
+  border: 1px solid #BDC4CC;
   z-index: 10000;
   display: block;
   font-family: "Source Sans Pro", "SourceSansProRegular", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -567,10 +567,10 @@ svg.nvd3-svg {
 }
 
 .nvtooltip {
-  background: #1B1E22;
-  border: 1px solid #3A3F46;
+  background: #ECEEF1;
+  border: 1px solid #BDC4CC;
   border-radius: 3px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.55);
+  box-shadow: 0 4px 12px rgba(20, 24, 30, 0.18), 0 2px 4px rgba(20, 24, 30, 0.1);
   font-variant-numeric: tabular-nums;
 }
 
@@ -592,11 +592,11 @@ svg.nvd3-svg {
   padding: 4px 14px;
   line-height: 18px;
   font-weight: normal;
-  background-color: #202328;
-  color: #DFE4EA;
+  background-color: #E4E7EB;
+  color: #171D25;
   font-weight: 600;
   text-align: center;
-  border-bottom: 1px solid #3A3F46;
+  border-bottom: 1px solid #BDC4CC;
   border-radius: 3px 3px 0 0;
 }
 
@@ -636,7 +636,7 @@ svg.nvd3-svg {
 }
 
 .nvtooltip table td.percent {
-  color: #A3AEBA;
+  color: #46515E;
 }
 
 .nvtooltip table tr.highlight td {
@@ -656,7 +656,7 @@ svg.nvd3-svg {
 .nvtooltip table td.legend-color-guide div {
   width: 12px;
   height: 12px;
-  border: 1px solid #565D66;
+  border: 1px solid #9AA3AD;
   border-radius: 3px;
 }
 
@@ -678,7 +678,7 @@ Interactive Layer
 }
 
 .nvd3 line.nv-guideline {
-  stroke: #565D66;
+  stroke: #9AA3AD;
 }
 
 /* ---------------------------------------------------------------------------
@@ -688,135 +688,135 @@ Interactive Layer
 .nvd3 .nv-groups .nv-series-0,
 .nvd3 .nv-stackedarea path.nv-area.nv-area-0,
 .nvd3.nv-pie .nv-pie .nv-slice:nth-child(1) path {
-  fill: #F97316 !important;
-  stroke: #F97316 !important;
+  fill: #B23A0C !important;
+  stroke: #B23A0C !important;
 }
 
 .nvd3.nv-pie .nv-pie .nv-slice:nth-child(1) path {
-  stroke: #1B1E22 !important;
+  stroke: #ECEEF1 !important;
 }
 
 .nvd3 .nv-legend .nv-series:nth-child(1) .nv-legend-symbol {
-  fill: #F97316 !important;
-  stroke: #F97316 !important;
+  fill: #B23A0C !important;
+  stroke: #B23A0C !important;
 }
 
 .nvd3 .nv-groups .nv-series-1,
 .nvd3 .nv-stackedarea path.nv-area.nv-area-1,
 .nvd3.nv-pie .nv-pie .nv-slice:nth-child(2) path {
-  fill: #EA580C !important;
-  stroke: #EA580C !important;
+  fill: #D97706 !important;
+  stroke: #D97706 !important;
 }
 
 .nvd3.nv-pie .nv-pie .nv-slice:nth-child(2) path {
-  stroke: #1B1E22 !important;
+  stroke: #ECEEF1 !important;
 }
 
 .nvd3 .nv-legend .nv-series:nth-child(2) .nv-legend-symbol {
-  fill: #EA580C !important;
-  stroke: #EA580C !important;
+  fill: #D97706 !important;
+  stroke: #D97706 !important;
 }
 
 .nvd3 .nv-groups .nv-series-2,
 .nvd3 .nv-stackedarea path.nv-area.nv-area-2,
 .nvd3.nv-pie .nv-pie .nv-slice:nth-child(3) path {
-  fill: #FBBF24 !important;
-  stroke: #FBBF24 !important;
+  fill: #E4561F !important;
+  stroke: #E4561F !important;
 }
 
 .nvd3.nv-pie .nv-pie .nv-slice:nth-child(3) path {
-  stroke: #1B1E22 !important;
+  stroke: #ECEEF1 !important;
 }
 
 .nvd3 .nv-legend .nv-series:nth-child(3) .nv-legend-symbol {
-  fill: #FBBF24 !important;
-  stroke: #FBBF24 !important;
+  fill: #E4561F !important;
+  stroke: #E4561F !important;
 }
 
 .nvd3 .nv-groups .nv-series-3,
 .nvd3 .nv-stackedarea path.nv-area.nv-area-3,
 .nvd3.nv-pie .nv-pie .nv-slice:nth-child(4) path {
-  fill: #22C55E !important;
-  stroke: #22C55E !important;
+  fill: #16A34A !important;
+  stroke: #16A34A !important;
 }
 
 .nvd3.nv-pie .nv-pie .nv-slice:nth-child(4) path {
-  stroke: #1B1E22 !important;
+  stroke: #ECEEF1 !important;
 }
 
 .nvd3 .nv-legend .nv-series:nth-child(4) .nv-legend-symbol {
-  fill: #22C55E !important;
-  stroke: #22C55E !important;
+  fill: #16A34A !important;
+  stroke: #16A34A !important;
 }
 
 .nvd3 .nv-groups .nv-series-4,
 .nvd3 .nv-stackedarea path.nv-area.nv-area-4,
 .nvd3.nv-pie .nv-pie .nv-slice:nth-child(5) path {
-  fill: #F59E0B !important;
-  stroke: #F59E0B !important;
+  fill: #D97706 !important;
+  stroke: #D97706 !important;
 }
 
 .nvd3.nv-pie .nv-pie .nv-slice:nth-child(5) path {
-  stroke: #1B1E22 !important;
+  stroke: #ECEEF1 !important;
 }
 
 .nvd3 .nv-legend .nv-series:nth-child(5) .nv-legend-symbol {
-  fill: #F59E0B !important;
-  stroke: #F59E0B !important;
+  fill: #D97706 !important;
+  stroke: #D97706 !important;
 }
 
 .nvd3 .nv-groups .nv-series-5,
 .nvd3 .nv-stackedarea path.nv-area.nv-area-5,
 .nvd3.nv-pie .nv-pie .nv-slice:nth-child(6) path {
-  fill: #f26611 !important;
-  stroke: #f26611 !important;
+  fill: #c65909 !important;
+  stroke: #c65909 !important;
 }
 
 .nvd3.nv-pie .nv-pie .nv-slice:nth-child(6) path {
-  stroke: #1B1E22 !important;
+  stroke: #ECEEF1 !important;
 }
 
 .nvd3 .nv-legend .nv-series:nth-child(6) .nv-legend-symbol {
-  fill: #f26611 !important;
-  stroke: #f26611 !important;
+  fill: #c65909 !important;
+  stroke: #c65909 !important;
 }
 
 .nvd3 .nv-groups .nv-series-6,
 .nvd3 .nv-stackedarea path.nv-area.nv-area-6,
 .nvd3.nv-pie .nv-pie .nv-slice:nth-child(7) path {
-  fill: #8fc241 !important;
-  stroke: #8fc241 !important;
+  fill: #7d7d35 !important;
+  stroke: #7d7d35 !important;
 }
 
 .nvd3.nv-pie .nv-pie .nv-slice:nth-child(7) path {
-  stroke: #1B1E22 !important;
+  stroke: #ECEEF1 !important;
 }
 
 .nvd3 .nv-legend .nv-series:nth-child(7) .nv-legend-symbol {
-  fill: #8fc241 !important;
-  stroke: #8fc241 !important;
+  fill: #7d7d35 !important;
+  stroke: #7d7d35 !important;
 }
 
 .nvd3 .nv-groups .nv-series-7,
 .nvd3 .nv-stackedarea path.nv-area.nv-area-7,
 .nvd3.nv-pie .nv-pie .nv-slice:nth-child(8) path {
-  fill: #A3AEBA !important;
-  stroke: #A3AEBA !important;
+  fill: #46515E !important;
+  stroke: #46515E !important;
 }
 
 .nvd3.nv-pie .nv-pie .nv-slice:nth-child(8) path {
-  stroke: #1B1E22 !important;
+  stroke: #ECEEF1 !important;
 }
 
 .nvd3 .nv-legend .nv-series:nth-child(8) .nv-legend-symbol {
-  fill: #A3AEBA !important;
-  stroke: #A3AEBA !important;
+  fill: #46515E !important;
+  stroke: #46515E !important;
 }
 
 .nvd3 .nv-legend .nv-legend-text {
-  fill: #DFE4EA;
+  fill: #171D25;
 }
 
 .nvd3 .nv-legend .nv-disabled .nv-legend-text {
-  fill: #A3AEBA;
+  fill: #46515E;
 }
