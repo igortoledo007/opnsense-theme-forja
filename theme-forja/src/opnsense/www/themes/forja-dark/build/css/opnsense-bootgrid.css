@@ -1,0 +1,522 @@
+/**
+* Main theming elements
+*/
+.tabulator {
+  font-size: 14px;
+  background-color: transparent;
+  border: none;
+  border-top: none;
+  border-radius: 4px;
+  color: #DFE4EA;
+  font-variant-numeric: tabular-nums;
+}
+
+/* theme: header */
+.tabulator .tabulator-header {
+  background-color: transparent;
+  border-bottom: none;
+  border-left: none;
+  color: #A3AEBA;
+}
+
+.tabulator .tabulator-header .tabulator-col {
+  border-right: none;
+  background-color: #1B1E22;
+  color: #A3AEBA;
+  font-family: "Source Sans Pro", "SourceSansProRegular", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: color 120ms ease, background-color 120ms ease;
+}
+
+.tabulator .tabulator-header .tabulator-col.tabulator-sortable.tabulator-col-sorter-element:hover {
+  background-color: #202328;
+  color: #DFE4EA;
+}
+
+.tabulator .tabulator-header .tabulator-col[aria-sort="ascending"],
+.tabulator .tabulator-header .tabulator-col[aria-sort="descending"] {
+  color: #DFE4EA;
+}
+
+.tabulator .tabulator-header .tabulator-col .tabulator-col-content .tabulator-col-sorter .tabulator-arrow {
+  border-bottom-color: #565D66;
+}
+
+.tabulator .tabulator-header .tabulator-col[aria-sort="ascending"] .tabulator-col-content .tabulator-col-sorter .tabulator-arrow {
+  border-bottom-color: #F97316;
+}
+
+.tabulator .tabulator-header .tabulator-col[aria-sort="descending"] .tabulator-col-content .tabulator-col-sorter .tabulator-arrow {
+  border-top-color: #F97316;
+}
+
+.tabulator .tabulator-headers {
+  height: 100% !important;
+  /* make sure the border below appears */
+  border-bottom: 1px solid #565D66;
+}
+
+/*------------*/
+/* theme: body */
+.tabulator .tabulator-tableholder .tabulator-table {
+  background-color: transparent;
+  border-left: none;
+  color: #DFE4EA;
+}
+
+.tabulator-row {
+  background-color: transparent;
+  color: #DFE4EA;
+  transition: background-color 120ms ease;
+}
+
+.tabulator-row.tabulator-row-odd {
+  background-color: #202328;
+}
+
+.tabulator-row.tabulator-row-odd.tabulator-selectable:hover:not(.tabulator-selected) {
+  background-color: rgba(249, 115, 22, 0.14);
+}
+
+.tabulator-row.tabulator-row-even {
+  background-color: #1B1E22;
+}
+
+.tabulator-row.tabulator-row-even.tabulator-selectable:hover:not(.tabulator-selected) {
+  background-color: rgba(249, 115, 22, 0.14);
+}
+
+.tabulator .tabulator-tableholder {
+  background-color: transparent;
+}
+
+.tabulator-row.tabulator-selected {
+  background-color: rgba(249, 115, 22, 0.16);
+  box-shadow: inset 3px 0 0 #F97316;
+}
+
+.tabulator-row.tabulator-selected:hover {
+  cursor: pointer;
+  background-color: rgba(249, 115, 22, 0.22);
+}
+
+.tabulator .tabulator-alert .tabulator-alert-msg.tabulator-alert-state-msg {
+  color: #F97316;
+  /* spinner icon */
+}
+
+/* Command column styles */
+/* row action icons: "ghost" buttons with hover */
+.tabulator-row .tabulator-cell .btn.btn-xs.btn-default {
+  background-color: transparent;
+  border-color: transparent;
+  color: #A3AEBA;
+  box-shadow: none;
+  border-radius: 3px;
+  transition: color 120ms ease, background-color 120ms ease, border-color 120ms ease;
+}
+
+.tabulator-row .tabulator-cell .btn.btn-xs.btn-default:hover,
+.tabulator-row .tabulator-cell .btn.btn-xs.btn-default:focus {
+  background-color: rgba(249, 115, 22, 0.14);
+  border-color: transparent;
+  color: #F97316;
+}
+
+.tabulator-row .tabulator-cell .btn.btn-xs.btn-default:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.4);
+}
+
+.tabulator-row .tabulator-cell .btn.btn-xs.btn-default.command-delete:hover,
+.tabulator-row .tabulator-cell .btn.btn-xs.btn-default.command-delete:focus {
+  background-color: rgba(248, 113, 113, 0.14);
+  color: #FCA5A5;
+}
+
+/* Tabulator groupBy row styles */
+.tabulator-row.tabulator-group {
+  border: none;
+  pointer-events: none;
+  background-color: #292D32;
+  font-weight: 600;
+}
+
+.tabulator-row.tabulator-group .span {
+  margin-left: 0;
+  color: #DFE4EA;
+}
+
+.tabulator-row .badge.chip {
+  background-color: rgba(249, 115, 22, 0.14);
+  color: #F97316;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 999px;
+  position: relative;
+  top: -1px;
+}
+
+.tabulator-row.tabulator-group .tabulator-group-toggle,
+.tabulator-row.tabulator-group .tabulator-group-toggle * {
+  pointer-events: auto;
+}
+
+.tabulator-row.tabulator-group:has(> .tabulator-group-toggle:only-child) {
+  display: none;
+  /* Trick to hide empty groupBy header rows */
+}
+
+/* Checkbox column styles */
+.tabulator .tabulator-header .tabulator-frozen.tabulator-frozen-left {
+  border-right: none;
+  border-left: none;
+}
+
+.tabulator-row .tabulator-cell.tabulator-frozen.tabulator-frozen-left {
+  border-right: none;
+  border-top: none;
+  border-bottom: 1px solid #3A3F46;
+  border-left: none;
+}
+
+/*------------*/
+/* theme: cells (no vertical borders) */
+.tabulator-row .tabulator-cell {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.2;
+  vertical-align: top;
+  border-bottom: 1px solid #3A3F46;
+  border-right: none;
+}
+
+.tabulator-row .tabulator-cell code {
+  font-family: "JetBrains Mono", "Cascadia Code", "Fira Code", "SFMono-Regular", Menlo, Consolas, "DejaVu Sans Mono", "Noto Sans Mono", "Droid Sans Mono", monospace;
+}
+
+/*-------------*/
+/* theme: footer */
+.tabulator .tabulator-footer {
+  border-top: none;
+  background-color: transparent;
+  color: #A3AEBA;
+}
+
+.tabulator .tabulator-footer .tabulator-page {
+  background-color: #1B1E22;
+  color: #DFE4EA;
+  font-variant-numeric: tabular-nums;
+  transition: color 120ms ease, background-color 120ms ease, border-color 120ms ease;
+}
+
+.tabulator .tabulator-footer .tabulator-page.active {
+  background-color: #F97316;
+  border-color: #F97316;
+  cursor: default;
+  color: #160A03;
+}
+
+.tabulator .tabulator-footer .tabulator-page:not(disabled):hover {
+  color: #F97316;
+  background-color: rgba(249, 115, 22, 0.14);
+  border-color: #F97316;
+}
+
+.tabulator .tabulator-footer .tabulator-page:not(disabled).active:hover {
+  background-color: #F97316;
+  border-color: #F97316;
+  color: #160A03;
+  cursor: default;
+}
+
+.tabulator .tabulator-footer .tabulator-page:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.4);
+}
+
+.tabulator .tabulator-footer .tabulator-page:disabled {
+  opacity: 0.45;
+}
+
+.tabulator-page-counter {
+  color: #A3AEBA;
+}
+
+.tabulator .tabulator-footer .tabulator-paginator {
+  color: #A3AEBA;
+}
+
+.tabulator .tabulator-footer .tabulator-page-size {
+  border: 1px solid #565D66;
+  border-radius: 3px;
+  background-color: #1B1E22;
+  color: #DFE4EA;
+}
+
+.tabulator .tabulator-footer .tabulator-page {
+  border-radius: 3px;
+  margin: 0 2px;
+  padding: 6px 12px;
+  border: 1px solid #565D66;
+}
+
+/*----------*/
+/* end of main theming elements */
+.tabulator-paginator {
+  flex: 0 !important;
+}
+
+.tabulator-page-counter {
+  flex: 1;
+  text-align: right;
+}
+
+.tabulator-col-sorter i {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tabulator .tabulator-header .tabulator-col {
+  padding: 5px;
+}
+
+.tabulator .tabulator-headers > :first-child {
+  padding-left: 10px;
+}
+
+.opnsense-bootgrid-responsive {
+  white-space: wrap !important;
+  text-overflow: inherit !important;
+  overflow: visible !important;
+  word-break: break-word !important;
+}
+
+.opnsense-bootgrid-ellipsis {
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+}
+
+.tabulator-row > :first-child {
+  padding-left: 10px;
+}
+
+.tabulator .tabulator-header .tabulator-col .tabulator-col-content {
+  padding: 0px;
+}
+
+.tabulator-page-counter {
+  padding-right: 20px;
+}
+
+.tabulator-tableholder::after {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 1px;
+  min-width: 100%;
+}
+
+.tabulator .tabulator-footer .tabulator-paginator .tabulator-page:first-child {
+  border-bottom-left-radius: 3px;
+  border-top-left-radius: 3px;
+}
+
+.tabulator .tabulator-footer .tabulator-paginator .tabulator-page:last-child {
+  border-bottom-right-radius: 3px;
+  border-top-right-radius: 3px;
+}
+
+/* border line corrections and hover/selection behavior */
+.tabulator-row:first-child > .tabulator-cell {
+  border-top: none;
+}
+
+.tabulator .tabulator-header .tabulator-col.tabulator-sortable .tabulator-col-title {
+  padding: 0px;
+}
+
+/* Row highlight behavior */
+@keyframes highlight {
+  0% {
+    background: rgba(245, 158, 11, 0.28);
+  }
+  100% {
+    background: none;
+  }
+}
+
+.highlight-bg {
+  animation: highlight 2s;
+}
+
+/* Tabulator "loading" and "error" overrides */
+.tabulator .tabulator-alert {
+  background: none;
+}
+
+.tabulator .tabulator-alert .tabulator-alert-msg.tabulator-alert-state-msg {
+  border: none;
+}
+
+.tabulator .tabulator-alert .tabulator-alert-msg {
+  background: initial;
+  font-size: 18px;
+}
+
+.tabulator .tabulator-alert .tabulator-alert-msg.tabulator-alert-state-error {
+  border: none;
+  color: #FCA5A5;
+}
+
+.bootgrid-placeholder {
+  font-size: 15px;
+  text-align: center;
+  white-space: normal;
+  font-weight: 400;
+  color: #A3AEBA;
+}
+
+.bootgrid-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(27, 30, 34, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99;
+}
+
+.overlay > i {
+  font-size: 20px;
+  color: #F97316;
+}
+
+#livelog-table {
+  font-size: 13.5px;
+}
+
+#livelog-table .tabulator-cell.fw-pass {
+  background: transparent !important;
+}
+
+#livelog-table .tabulator-row:has(> .fw-pass) {
+  background-color: rgba(34, 197, 94, 0.07) !important;
+  box-shadow: inset 3px 0 0 #22C55E;
+}
+
+#livelog-table .tabulator-row:has(> .fw-pass):hover {
+  background-color: rgba(34, 197, 94, 0.16) !important;
+}
+
+#livelog-table .tabulator-cell.fw-pass[tabulator-field="action"] {
+  color: #4ADE80;
+}
+
+#livelog-table .tabulator-cell.fw-block {
+  background: transparent !important;
+}
+
+#livelog-table .tabulator-row:has(> .fw-block) {
+  background-color: rgba(248, 113, 113, 0.07) !important;
+  box-shadow: inset 3px 0 0 #F87171;
+}
+
+#livelog-table .tabulator-row:has(> .fw-block):hover {
+  background-color: rgba(248, 113, 113, 0.16) !important;
+}
+
+#livelog-table .tabulator-cell.fw-block[tabulator-field="action"] {
+  color: #FCA5A5;
+}
+
+#livelog-table .tabulator-cell.fw-nat {
+  background: transparent !important;
+}
+
+#livelog-table .tabulator-row:has(> .fw-nat) {
+  background-color: rgba(125, 211, 252, 0.07) !important;
+  box-shadow: inset 3px 0 0 #7DD3FC;
+}
+
+#livelog-table .tabulator-row:has(> .fw-nat):hover {
+  background-color: rgba(125, 211, 252, 0.16) !important;
+}
+
+#livelog-table .tabulator-cell.fw-nat[tabulator-field="action"] {
+  color: #7DD3FC;
+}
+
+#livelog-table .tabulator-cell.fw-match {
+  background: transparent !important;
+}
+
+#livelog-table .tabulator-row:has(> .fw-match) {
+  background-color: rgba(245, 158, 11, 0.07) !important;
+  box-shadow: inset 3px 0 0 #F59E0B;
+}
+
+#livelog-table .tabulator-row:has(> .fw-match):hover {
+  background-color: rgba(245, 158, 11, 0.16) !important;
+}
+
+#livelog-table .tabulator-cell.fw-match[tabulator-field="action"] {
+  color: #FBBF24;
+}
+
+#livelog-table .tabulator-row {
+  border-bottom: 1px solid #3A3F46;
+}
+
+#livelog-table .tabulator-cell {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  line-height: 18px;
+  vertical-align: middle;
+}
+
+#livelog-table .tabulator-cell[tabulator-field="__timestamp__"],
+#livelog-table .tabulator-cell[tabulator-field="src"],
+#livelog-table .tabulator-cell[tabulator-field="dst"],
+#livelog-table .tabulator-cell[tabulator-field="srchostname"],
+#livelog-table .tabulator-cell[tabulator-field="dsthostname"] {
+  font-family: "JetBrains Mono", "Cascadia Code", "Fira Code", "SFMono-Regular", Menlo, Consolas, "DejaVu Sans Mono", "Noto Sans Mono", "Droid Sans Mono", monospace;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+#livelog-table .tabulator-cell[tabulator-field="__timestamp__"] {
+  color: #A3AEBA;
+  font-size: 11.5px;
+  letter-spacing: -0.01em;
+}
+
+#livelog-table .tabulator-cell[tabulator-field="interface"] {
+  font-weight: 600;
+}
+
+#livelog-table .tabulator-cell[tabulator-field="dir"],
+#livelog-table .tabulator-cell[tabulator-field="protoname"] {
+  color: #A3AEBA;
+}
+
+#livelog-table .tabulator-cell[tabulator-field="action"] {
+  font-family: "Source Sans Pro", "SourceSansProRegular", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+#livelog-table .tabulator-cell[tabulator-field="label"] {
+  color: #DFE4EA;
+}

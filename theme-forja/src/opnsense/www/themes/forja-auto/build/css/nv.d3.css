@@ -1,0 +1,822 @@
+/* nvd3 version 1.8.6 (https://github.com/novus/nvd3) 2017-08-23 */
+.nvd3 .nv-axis {
+  pointer-events: none;
+  opacity: 1;
+}
+
+.nvd3 .nv-axis path {
+  fill: none;
+  stroke: #9AA3AD;
+  stroke-opacity: .75;
+  shape-rendering: crispEdges;
+}
+
+.nvd3 .nv-axis path.domain {
+  stroke-opacity: .75;
+}
+
+.nvd3 .nv-axis.nv-x path.domain {
+  stroke-opacity: 0;
+}
+
+.nvd3 .nv-axis line {
+  fill: none;
+  stroke: #BDC4CC;
+  shape-rendering: crispEdges;
+}
+
+.nvd3 .nv-axis .zero line,
+.nvd3 .nv-axis line.zero {
+  stroke-opacity: .75;
+}
+
+.nvd3 .nv-axis .nv-axisMaxMin text {
+  font-weight: bold;
+}
+
+.nvd3 .x .nv-axis .nv-axisMaxMin text,
+.nvd3 .x2 .nv-axis .nv-axisMaxMin text,
+.nvd3 .x3 .nv-axis .nv-axisMaxMin text {
+  text-anchor: middle;
+}
+
+.nvd3 .nv-axis.nv-disabled {
+  opacity: 0;
+}
+
+.nvd3 .nv-bars rect {
+  fill-opacity: .75;
+  transition: fill-opacity 250ms linear;
+}
+
+.nvd3 .nv-bars rect.hover {
+  fill-opacity: 1;
+}
+
+.nvd3 .nv-bars .hover rect {
+  fill: #8F2E0A;
+}
+
+.nvd3 .nv-bars text {
+  fill: rgba(23, 29, 37, 0);
+}
+
+.nvd3 .nv-bars .hover text {
+  fill: #DC2626;
+}
+
+.nvd3 .nv-multibar .nv-groups rect,
+.nvd3 .nv-multibarHorizontal .nv-groups rect,
+.nvd3 .nv-discretebar .nv-groups rect {
+  stroke-opacity: 0;
+  transition: fill-opacity 250ms linear;
+}
+
+.nvd3 .nv-multibar .nv-groups rect:hover,
+.nvd3 .nv-multibarHorizontal .nv-groups rect:hover,
+.nvd3 .nv-candlestickBar .nv-ticks rect:hover,
+.nvd3 .nv-discretebar .nv-groups rect:hover {
+  fill-opacity: 1;
+}
+
+.nvd3 .nv-discretebar .nv-groups text,
+.nvd3 .nv-multibarHorizontal .nv-groups text {
+  font-weight: bold;
+  fill: #DC2626;
+  stroke: transparent;
+}
+
+/* boxplot CSS */
+.nvd3 .nv-boxplot circle {
+  fill-opacity: 0.5;
+}
+
+.nvd3 .nv-boxplot circle:hover {
+  fill-opacity: 1;
+}
+
+.nvd3 .nv-boxplot rect:hover {
+  fill-opacity: 1;
+}
+
+.nvd3 line.nv-boxplot-median {
+  stroke: #46515E;
+}
+
+.nv-boxplot-tick:hover {
+  stroke-width: 2.5px;
+}
+
+/* bullet */
+.nvd3.nv-bullet {
+  font: 10px "Source Sans Pro", "SourceSansProRegular", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.nvd3.nv-bullet .nv-measure {
+  fill-opacity: .8;
+}
+
+.nvd3.nv-bullet .nv-measure:hover {
+  fill-opacity: 1;
+}
+
+.nvd3.nv-bullet .nv-marker {
+  stroke: #9AA3AD;
+  stroke-width: 2px;
+}
+
+.nvd3.nv-bullet .nv-markerTriangle {
+  stroke: #9AA3AD;
+  fill: #46515E;
+  stroke-width: 1.5px;
+}
+
+.nvd3.nv-bullet .nv-markerLine {
+  stroke: #9AA3AD;
+  stroke-width: 1.5px;
+}
+
+.nvd3.nv-bullet .nv-tick line {
+  stroke: #46515E;
+  stroke-width: .5px;
+}
+
+.nvd3.nv-bullet .nv-range.nv-s0 {
+  fill: #D9DDE2;
+}
+
+.nvd3.nv-bullet .nv-range.nv-s1 {
+  fill: #BDC4CC;
+}
+
+.nvd3.nv-bullet .nv-range.nv-s2 {
+  fill: #9AA3AD;
+}
+
+.nvd3.nv-bullet .nv-title {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.nvd3.nv-bullet .nv-subtitle {
+  fill: #46515E;
+}
+
+.nvd3.nv-bullet .nv-range {
+  fill: #9AA3AD;
+  fill-opacity: .4;
+}
+
+.nvd3.nv-bullet .nv-range:hover {
+  fill-opacity: .1;
+}
+
+.nvd3.nv-candlestickBar .nv-ticks .nv-tick {
+  stroke-width: 1px;
+}
+
+.nvd3.nv-candlestickBar .nv-ticks .nv-tick.hover {
+  stroke-width: 2px;
+}
+
+.nvd3.nv-candlestickBar .nv-ticks .nv-tick.positive rect {
+  stroke: #16A34A;
+  fill: #16A34A;
+}
+
+.nvd3.nv-candlestickBar .nv-ticks .nv-tick.negative rect {
+  stroke: #DC2626;
+  fill: #DC2626;
+}
+
+.with-transitions .nv-candlestickBar .nv-ticks .nv-tick {
+  transition: stroke-width 250ms linear, stroke-opacity 250ms linear;
+}
+
+.nvd3.nv-candlestickBar .nv-ticks line {
+  stroke: #171D25;
+}
+
+.nv-force-node {
+  stroke: #ECEEF1;
+  stroke-width: 1.5px;
+}
+
+.nv-force-link {
+  stroke: #46515E;
+  stroke-opacity: .6;
+}
+
+.nv-force-node text {
+  stroke-width: 0px;
+}
+
+.nvd3 .nv-legend .nv-disabled rect {
+  /*fill-opacity: 0;*/
+}
+
+.nvd3 .nv-check-box .nv-box {
+  fill-opacity: 0;
+  stroke-width: 2;
+}
+
+.nvd3 .nv-check-box .nv-check {
+  fill-opacity: 0;
+  stroke-width: 4;
+}
+
+.nvd3 .nv-series.nv-disabled .nv-check-box .nv-check {
+  fill-opacity: 0;
+  stroke-opacity: 0;
+}
+
+.nvd3 .nv-controlsWrap .nv-legend .nv-check-box .nv-check {
+  opacity: 0;
+}
+
+/* line plus bar */
+.nvd3.nv-linePlusBar .nv-bar rect {
+  fill-opacity: .75;
+}
+
+.nvd3.nv-linePlusBar .nv-bar rect:hover {
+  fill-opacity: 1;
+}
+
+.nvd3 .nv-groups path.nv-line {
+  fill: none;
+}
+
+.nvd3 .nv-groups path.nv-area {
+  stroke: none;
+}
+
+.nvd3.nv-line .nvd3.nv-scatter .nv-groups .nv-point {
+  fill-opacity: 0;
+  stroke-opacity: 0;
+}
+
+.nvd3.nv-scatter.nv-single-point .nv-groups .nv-point {
+  fill-opacity: .5 !important;
+  stroke-opacity: .5 !important;
+}
+
+.with-transitions .nvd3 .nv-groups .nv-point {
+  transition: stroke-width 250ms linear, stroke-opacity 250ms linear;
+}
+
+.nvd3.nv-scatter .nv-groups .nv-point.hover,
+.nvd3 .nv-groups .nv-point.hover {
+  stroke-width: 7px;
+  fill-opacity: .95 !important;
+  stroke-opacity: .95 !important;
+}
+
+.nvd3 .nv-point-paths path {
+  stroke: #9AA3AD;
+  stroke-opacity: 0;
+  fill: #D9DDE2;
+  fill-opacity: 0;
+}
+
+.nvd3 .nv-indexLine {
+  cursor: ew-resize;
+}
+
+/********************
+ * SVG CSS
+ */
+/********************
+  Default CSS for an svg element nvd3 used
+*/
+svg.nvd3-svg {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/********************
+  Box shadow and border radius styling
+*/
+.nvtooltip.with-3d-shadow, .with-3d-shadow .nvtooltip {
+  box-shadow: 0 4px 12px rgba(20, 24, 30, 0.18), 0 2px 4px rgba(20, 24, 30, 0.1);
+  border-radius: 3px;
+}
+
+.nvd3 text {
+  font: normal 12px "Source Sans Pro", "SourceSansProRegular", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  fill: #46515E;
+}
+
+.nvd3 .title {
+  font: 600 14px "Source Sans Pro", "SourceSansProRegular", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  fill: #171D25;
+}
+
+.nvd3 .nv-background {
+  fill: #ECEEF1;
+  fill-opacity: 0;
+}
+
+.nvd3.nv-noData {
+  font-size: 18px;
+  font-weight: 600;
+  fill: #46515E;
+}
+
+/**********
+*  Brush
+*/
+.nv-brush .extent {
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}
+
+.nv-brush .resize path {
+  fill: #D9DDE2;
+  stroke: #46515E;
+}
+
+/**********
+*  Legend
+*/
+.nvd3 .nv-legend .nv-series {
+  cursor: pointer;
+}
+
+.nvd3 .nv-legend .nv-disabled circle {
+  fill-opacity: 0;
+}
+
+/* focus */
+.nvd3 .nv-brush .extent {
+  fill-opacity: 0 !important;
+}
+
+.nvd3 .nv-brushBackground rect {
+  stroke: #9AA3AD;
+  stroke-width: .4;
+  fill: #ECEEF1;
+  fill-opacity: .7;
+}
+
+/**********
+*  Print
+*/
+@media print {
+  .nvd3 text {
+    fill: black;
+    /* print: always black on paper */
+    stroke-width: 0;
+    fill-opacity: 1;
+  }
+}
+
+.nvd3.nv-ohlcBar .nv-ticks .nv-tick {
+  stroke-width: 1px;
+}
+
+.nvd3.nv-ohlcBar .nv-ticks .nv-tick.hover {
+  stroke-width: 2px;
+}
+
+.nvd3.nv-ohlcBar .nv-ticks .nv-tick.positive {
+  stroke: #16A34A;
+}
+
+.nvd3.nv-ohlcBar .nv-ticks .nv-tick.negative {
+  stroke: #DC2626;
+}
+
+.nvd3 .background path {
+  fill: none;
+  stroke: #BDC4CC;
+  stroke-opacity: .4;
+  shape-rendering: crispEdges;
+}
+
+.nvd3 .foreground path {
+  fill: none;
+  stroke-opacity: .7;
+}
+
+.nvd3 .nv-parallelCoordinates-brush .extent {
+  fill: #ECEEF1;
+  fill-opacity: .6;
+  stroke: #46515E;
+  shape-rendering: crispEdges;
+}
+
+.nvd3 .nv-parallelCoordinates .hover {
+  fill-opacity: 1;
+  stroke-width: 3px;
+}
+
+.nvd3 .missingValuesline line {
+  fill: none;
+  stroke: #46515E;
+  stroke-width: 1;
+  stroke-opacity: 1;
+  stroke-dasharray: 5, 5;
+}
+
+.nvd3.nv-pie path {
+  stroke-opacity: 0;
+  transition: fill-opacity 250ms linear, stroke-width 250ms linear, stroke-opacity 250ms linear;
+}
+
+.nvd3.nv-pie .nv-pie-title {
+  font-size: 24px;
+  fill: #B23A0C;
+}
+
+.nvd3.nv-pie .nv-slice text {
+  fill: #171D25;
+  stroke: #9AA3AD;
+  stroke-width: 0;
+}
+
+.nvd3.nv-pie path {
+  stroke: #ECEEF1;
+  stroke-width: 1px;
+  stroke-opacity: 1;
+}
+
+.nvd3.nv-pie path {
+  fill-opacity: .7;
+}
+
+.nvd3.nv-pie .hover path {
+  fill-opacity: 1;
+}
+
+.nvd3.nv-pie .nv-label {
+  pointer-events: none;
+}
+
+.nvd3.nv-pie .nv-label rect {
+  fill-opacity: 0;
+  stroke-opacity: 0;
+}
+
+/* scatter */
+.nvd3 .nv-groups .nv-point.hover {
+  stroke-width: 20px;
+  stroke-opacity: .5;
+}
+
+.nvd3 .nv-scatter .nv-point.hover {
+  fill-opacity: 1;
+}
+
+.nv-noninteractive {
+  pointer-events: none;
+}
+
+.nv-distx, .nv-disty {
+  pointer-events: none;
+}
+
+/* sparkline */
+.nvd3.nv-sparkline path {
+  fill: none;
+}
+
+.nvd3.nv-sparklineplus g.nv-hoverValue {
+  pointer-events: none;
+}
+
+.nvd3.nv-sparklineplus .nv-hoverValue line {
+  stroke: #171D25;
+  stroke-width: 1.5px;
+}
+
+.nvd3.nv-sparklineplus,
+.nvd3.nv-sparklineplus g {
+  pointer-events: all;
+}
+
+.nvd3 .nv-hoverArea {
+  fill-opacity: 0;
+  stroke-opacity: 0;
+}
+
+.nvd3.nv-sparklineplus .nv-xValue,
+.nvd3.nv-sparklineplus .nv-yValue {
+  stroke-width: 0;
+  font-size: .9em;
+  font-weight: normal;
+}
+
+.nvd3.nv-sparklineplus .nv-yValue {
+  stroke: #DC2626;
+}
+
+.nvd3.nv-sparklineplus .nv-maxValue {
+  stroke: #16A34A;
+  fill: #16A34A;
+}
+
+.nvd3.nv-sparklineplus .nv-minValue {
+  stroke: #DC2626;
+  fill: #DC2626;
+}
+
+.nvd3.nv-sparklineplus .nv-currentValue {
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+/* stacked area */
+.nvd3.nv-stackedarea path.nv-area {
+  fill-opacity: .7;
+  stroke-opacity: 0;
+  transition: fill-opacity 250ms linear, stroke-opacity 250ms linear;
+}
+
+.nvd3.nv-stackedarea path.nv-area.hover {
+  fill-opacity: .9;
+}
+
+.nvd3.nv-stackedarea .nv-groups .nv-point {
+  stroke-opacity: 0;
+  fill-opacity: 0;
+}
+
+.nvtooltip {
+  position: absolute;
+  background-color: #ECEEF1;
+  color: #171D25;
+  padding: 1px;
+  border: 1px solid #BDC4CC;
+  z-index: 10000;
+  display: block;
+  font-family: "Source Sans Pro", "SourceSansProRegular", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 13px;
+  text-align: left;
+  pointer-events: none;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.nvtooltip {
+  background: #ECEEF1;
+  border: 1px solid #BDC4CC;
+  border-radius: 3px;
+  box-shadow: 0 4px 12px rgba(20, 24, 30, 0.18), 0 2px 4px rgba(20, 24, 30, 0.1);
+  font-variant-numeric: tabular-nums;
+}
+
+/*Give tooltips that old fade in transition by
+    putting a "with-transitions" class on the container div.
+*/
+.nvtooltip.with-transitions, .with-transitions .nvtooltip {
+  transition: opacity 50ms linear;
+  transition-delay: 200ms;
+}
+
+.nvtooltip.x-nvtooltip,
+.nvtooltip.y-nvtooltip {
+  padding: 8px;
+}
+
+.nvtooltip h3 {
+  margin: 0;
+  padding: 4px 14px;
+  line-height: 18px;
+  font-weight: normal;
+  background-color: #E4E7EB;
+  color: #171D25;
+  font-weight: 600;
+  text-align: center;
+  border-bottom: 1px solid #BDC4CC;
+  border-radius: 3px 3px 0 0;
+}
+
+.nvtooltip p {
+  margin: 0;
+  padding: 5px 14px;
+  text-align: center;
+}
+
+.nvtooltip span {
+  display: inline-block;
+  margin: 2px 0;
+}
+
+.nvtooltip table {
+  margin: 6px;
+  border-spacing: 0;
+}
+
+.nvtooltip table td {
+  padding: 2px 9px 2px 0;
+  vertical-align: middle;
+}
+
+.nvtooltip table td.key {
+  font-weight: normal;
+}
+
+.nvtooltip table td.key.total {
+  font-weight: bold;
+}
+
+.nvtooltip table td.value {
+  font-family: "JetBrains Mono", "Cascadia Code", "Fira Code", "SFMono-Regular", Menlo, Consolas, "DejaVu Sans Mono", "Noto Sans Mono", "Droid Sans Mono", monospace;
+  text-align: right;
+  font-weight: bold;
+}
+
+.nvtooltip table td.percent {
+  color: #46515E;
+}
+
+.nvtooltip table tr.highlight td {
+  padding: 1px 9px 1px 0;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-top-style: solid;
+  border-top-width: 1px;
+}
+
+.nvtooltip table td.legend-color-guide div {
+  width: 8px;
+  height: 8px;
+  vertical-align: middle;
+}
+
+.nvtooltip table td.legend-color-guide div {
+  width: 12px;
+  height: 12px;
+  border: 1px solid #9AA3AD;
+  border-radius: 3px;
+}
+
+.nvtooltip .footer {
+  padding: 3px;
+  text-align: center;
+}
+
+.nvtooltip-pending-removal {
+  pointer-events: none;
+  display: none;
+}
+
+/****
+Interactive Layer
+*/
+.nvd3 .nv-interactiveGuideLine {
+  pointer-events: none;
+}
+
+.nvd3 line.nv-guideline {
+  stroke: #9AA3AD;
+}
+
+/* ---------------------------------------------------------------------------
+ * Nexo: series colors (nvd3 applies color via inline style; !important to
+ * beat the inline). Groups and legend use the same series index.
+ * ------------------------------------------------------------------------- */
+.nvd3 .nv-groups .nv-series-0,
+.nvd3 .nv-stackedarea path.nv-area.nv-area-0,
+.nvd3.nv-pie .nv-pie .nv-slice:nth-child(1) path {
+  fill: #B23A0C !important;
+  stroke: #B23A0C !important;
+}
+
+.nvd3.nv-pie .nv-pie .nv-slice:nth-child(1) path {
+  stroke: #ECEEF1 !important;
+}
+
+.nvd3 .nv-legend .nv-series:nth-child(1) .nv-legend-symbol {
+  fill: #B23A0C !important;
+  stroke: #B23A0C !important;
+}
+
+.nvd3 .nv-groups .nv-series-1,
+.nvd3 .nv-stackedarea path.nv-area.nv-area-1,
+.nvd3.nv-pie .nv-pie .nv-slice:nth-child(2) path {
+  fill: #D97706 !important;
+  stroke: #D97706 !important;
+}
+
+.nvd3.nv-pie .nv-pie .nv-slice:nth-child(2) path {
+  stroke: #ECEEF1 !important;
+}
+
+.nvd3 .nv-legend .nv-series:nth-child(2) .nv-legend-symbol {
+  fill: #D97706 !important;
+  stroke: #D97706 !important;
+}
+
+.nvd3 .nv-groups .nv-series-2,
+.nvd3 .nv-stackedarea path.nv-area.nv-area-2,
+.nvd3.nv-pie .nv-pie .nv-slice:nth-child(3) path {
+  fill: #E4561F !important;
+  stroke: #E4561F !important;
+}
+
+.nvd3.nv-pie .nv-pie .nv-slice:nth-child(3) path {
+  stroke: #ECEEF1 !important;
+}
+
+.nvd3 .nv-legend .nv-series:nth-child(3) .nv-legend-symbol {
+  fill: #E4561F !important;
+  stroke: #E4561F !important;
+}
+
+.nvd3 .nv-groups .nv-series-3,
+.nvd3 .nv-stackedarea path.nv-area.nv-area-3,
+.nvd3.nv-pie .nv-pie .nv-slice:nth-child(4) path {
+  fill: #16A34A !important;
+  stroke: #16A34A !important;
+}
+
+.nvd3.nv-pie .nv-pie .nv-slice:nth-child(4) path {
+  stroke: #ECEEF1 !important;
+}
+
+.nvd3 .nv-legend .nv-series:nth-child(4) .nv-legend-symbol {
+  fill: #16A34A !important;
+  stroke: #16A34A !important;
+}
+
+.nvd3 .nv-groups .nv-series-4,
+.nvd3 .nv-stackedarea path.nv-area.nv-area-4,
+.nvd3.nv-pie .nv-pie .nv-slice:nth-child(5) path {
+  fill: #D97706 !important;
+  stroke: #D97706 !important;
+}
+
+.nvd3.nv-pie .nv-pie .nv-slice:nth-child(5) path {
+  stroke: #ECEEF1 !important;
+}
+
+.nvd3 .nv-legend .nv-series:nth-child(5) .nv-legend-symbol {
+  fill: #D97706 !important;
+  stroke: #D97706 !important;
+}
+
+.nvd3 .nv-groups .nv-series-5,
+.nvd3 .nv-stackedarea path.nv-area.nv-area-5,
+.nvd3.nv-pie .nv-pie .nv-slice:nth-child(6) path {
+  fill: #c65909 !important;
+  stroke: #c65909 !important;
+}
+
+.nvd3.nv-pie .nv-pie .nv-slice:nth-child(6) path {
+  stroke: #ECEEF1 !important;
+}
+
+.nvd3 .nv-legend .nv-series:nth-child(6) .nv-legend-symbol {
+  fill: #c65909 !important;
+  stroke: #c65909 !important;
+}
+
+.nvd3 .nv-groups .nv-series-6,
+.nvd3 .nv-stackedarea path.nv-area.nv-area-6,
+.nvd3.nv-pie .nv-pie .nv-slice:nth-child(7) path {
+  fill: #7d7d35 !important;
+  stroke: #7d7d35 !important;
+}
+
+.nvd3.nv-pie .nv-pie .nv-slice:nth-child(7) path {
+  stroke: #ECEEF1 !important;
+}
+
+.nvd3 .nv-legend .nv-series:nth-child(7) .nv-legend-symbol {
+  fill: #7d7d35 !important;
+  stroke: #7d7d35 !important;
+}
+
+.nvd3 .nv-groups .nv-series-7,
+.nvd3 .nv-stackedarea path.nv-area.nv-area-7,
+.nvd3.nv-pie .nv-pie .nv-slice:nth-child(8) path {
+  fill: #46515E !important;
+  stroke: #46515E !important;
+}
+
+.nvd3.nv-pie .nv-pie .nv-slice:nth-child(8) path {
+  stroke: #ECEEF1 !important;
+}
+
+.nvd3 .nv-legend .nv-series:nth-child(8) .nv-legend-symbol {
+  fill: #46515E !important;
+  stroke: #46515E !important;
+}
+
+.nvd3 .nv-legend .nv-legend-text {
+  fill: #171D25;
+}
+
+.nvd3 .nv-legend .nv-disabled .nv-legend-text {
+  fill: #46515E;
+}

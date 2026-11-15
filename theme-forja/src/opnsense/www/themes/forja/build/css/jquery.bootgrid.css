@@ -69,8 +69,8 @@
 .bootgrid-header .actionBar .btn-group > .btn-group .dropdown-menu .dropdown-item:focus,
 .bootgrid-footer .infoBar .btn-group > .btn-group .dropdown-menu .dropdown-item:focus {
   text-decoration: none;
-  background-color: rgba(249, 115, 22, 0.14);
-  color: #DFE4EA;
+  background-color: rgba(178, 58, 12, 0.1);
+  color: #171D25;
 }
 
 .bootgrid-header .actionBar .btn-group > .btn-group .dropdown-menu .dropdown-item.dropdown-item-checkbox,
@@ -95,7 +95,7 @@
 }
 
 .bootgrid-table th > .column-header-anchor {
-  color: #A3AEBA;
+  color: #46515E;
   cursor: not-allowed;
   display: block;
   position: relative;
@@ -130,7 +130,7 @@
 
 .bootgrid-table th:hover > .column-header-anchor.sortable,
 .bootgrid-table th:active > .column-header-anchor.sortable {
-  color: #DFE4EA;
+  color: #171D25;
 }
 
 .bootgrid-table td {
@@ -155,7 +155,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(16, 18, 21, 0.6);
+  background: rgba(213, 218, 224, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -164,7 +164,7 @@
 
 .overlay > i {
   font-size: 20px;
-  color: #F97316;
+  color: #B23A0C;
 }
 
 .bootgrid-table th.select-cell,
@@ -212,9 +212,9 @@
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #A3AEBA;
-  background-color: #1B1E22;
-  border-bottom: 1px solid #565D66;
+  color: #46515E;
+  background-color: #ECEEF1;
+  border-bottom: 1px solid #9AA3AD;
   border-left: none;
   border-right: none;
 }
@@ -224,29 +224,29 @@
   border-left: none;
   border-right: none;
   border-top: none;
-  border-bottom: 1px solid #3A3F46;
+  border-bottom: 1px solid #BDC4CC;
   transition: background-color 120ms ease;
 }
 
 .table.bootgrid-table.table-striped > tbody > tr:nth-of-type(odd) {
-  background-color: #202328;
+  background-color: #E4E7EB;
 }
 
 .table.bootgrid-table.table-striped > tbody > tr:nth-of-type(even) {
-  background-color: #1B1E22;
+  background-color: #ECEEF1;
 }
 
 .table.bootgrid-table.table-hover > tbody > tr:hover {
-  background-color: rgba(249, 115, 22, 0.14);
+  background-color: rgba(178, 58, 12, 0.1);
 }
 
 .table.bootgrid-table > tbody > tr.active > td,
 .table.bootgrid-table.table-hover > tbody > tr.active:hover > td {
-  background-color: rgba(249, 115, 22, 0.16);
+  background-color: rgba(178, 58, 12, 0.16);
 }
 
 .table.bootgrid-table > tbody > tr.active > td:first-child {
-  box-shadow: inset 3px 0 0 #F97316;
+  box-shadow: inset 3px 0 0 #B23A0C;
 }
 
 .table.bootgrid-table td code {
@@ -254,15 +254,15 @@
 }
 
 .table.bootgrid-table td.no-results {
-  color: #A3AEBA;
+  color: #46515E;
 }
 
 /* search */
 .bootgrid-header .search .input-group-addon,
 .bootgrid-footer .search .input-group-addon {
-  background-color: #202328;
-  border-color: #565D66;
-  color: #A3AEBA;
+  background-color: #E4E7EB;
+  border-color: #9AA3AD;
+  color: #46515E;
   border-radius: 4px 0 0 4px;
 }
 
@@ -270,9 +270,9 @@
 .bootgrid-footer .search .search-field,
 .bootgrid-header .search .form-control,
 .bootgrid-footer .search .form-control {
-  background-color: #1B1E22;
-  border-color: #565D66;
-  color: #DFE4EA;
+  background-color: #ECEEF1;
+  border-color: #9AA3AD;
+  color: #171D25;
   border-radius: 0 4px 4px 0;
   box-shadow: none;
   transition: border-color 120ms ease, box-shadow 120ms ease;
@@ -287,8 +287,8 @@
 .bootgrid-footer .search .search-field:focus,
 .bootgrid-header .search .form-control:focus,
 .bootgrid-footer .search .form-control:focus {
-  border-color: #F97316;
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.4);
+  border-color: #B23A0C;
+  box-shadow: 0 0 0 3px rgba(228, 86, 31, 0.35);
   outline: 0;
 }
 
@@ -299,9 +299,9 @@
 .bootgrid-header .pagination > li > span {
   margin: 0 2px;
   border-radius: 3px !important;
-  border-color: #565D66;
-  background-color: #1B1E22;
-  color: #DFE4EA;
+  border-color: #9AA3AD;
+  background-color: #ECEEF1;
+  color: #171D25;
   font-variant-numeric: tabular-nums;
   transition: color 120ms ease, background-color 120ms ease, border-color 120ms ease;
 }
@@ -310,15 +310,15 @@
 .bootgrid-footer .pagination > li > a:focus,
 .bootgrid-header .pagination > li > a:hover,
 .bootgrid-header .pagination > li > a:focus {
-  background-color: rgba(249, 115, 22, 0.14);
-  border-color: #F97316;
-  color: #F97316;
+  background-color: rgba(178, 58, 12, 0.1);
+  border-color: #B23A0C;
+  color: #B23A0C;
 }
 
 .bootgrid-footer .pagination > li > a:focus-visible,
 .bootgrid-header .pagination > li > a:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.4);
+  box-shadow: 0 0 0 3px rgba(228, 86, 31, 0.35);
 }
 
 .bootgrid-footer .pagination > .active > a,
@@ -327,21 +327,21 @@
 .bootgrid-header .pagination > .active > a,
 .bootgrid-header .pagination > .active > a:hover,
 .bootgrid-header .pagination > .active > a:focus {
-  background-color: #F97316;
-  border-color: #F97316;
-  color: #160A03;
+  background-color: #B23A0C;
+  border-color: #B23A0C;
+  color: #FFFFFF;
 }
 
 .bootgrid-footer .pagination > .disabled > a,
 .bootgrid-header .pagination > .disabled > a {
-  background-color: #1B1E22;
-  color: #A3AEBA;
+  background-color: #ECEEF1;
+  color: #46515E;
   opacity: 0.5;
 }
 
 .bootgrid-footer .infoBar,
 .bootgrid-footer .infos {
-  color: #A3AEBA;
+  color: #46515E;
   font-variant-numeric: tabular-nums;
 }
 
@@ -349,7 +349,7 @@
 .bootgrid-table td .btn.btn-xs.btn-default {
   background-color: transparent;
   border-color: transparent;
-  color: #A3AEBA;
+  color: #46515E;
   box-shadow: none;
   border-radius: 3px;
   transition: color 120ms ease, background-color 120ms ease;
@@ -357,12 +357,12 @@
 
 .bootgrid-table td .btn.btn-xs.btn-default:hover,
 .bootgrid-table td .btn.btn-xs.btn-default:focus {
-  background-color: rgba(249, 115, 22, 0.14);
-  color: #F97316;
+  background-color: rgba(178, 58, 12, 0.1);
+  color: #B23A0C;
 }
 
 .bootgrid-table td .btn.btn-xs.btn-default.command-delete:hover,
 .bootgrid-table td .btn.btn-xs.btn-default.command-delete:focus {
-  background-color: rgba(248, 113, 113, 0.14);
-  color: #FCA5A5;
+  background-color: rgba(220, 38, 38, 0.14);
+  color: #B91C1C;
 }

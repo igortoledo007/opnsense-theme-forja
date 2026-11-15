@@ -5,24 +5,24 @@
   height: auto;
   min-height: 34px;
   cursor: text;
-  background-color: #1B1E22;
-  color: #DFE4EA;
-  border: 1px solid #565D66;
+  background-color: #ECEEF1;
+  color: #171D25;
+  border: 1px solid #9AA3AD;
   border-radius: 4px;
   transition: border-color 120ms ease, box-shadow 120ms ease;
 }
 
 .tokenize > .tokens-container.disabled {
-  background-color: #292D32;
-  color: #A3AEBA;
+  background-color: #D9DDE2;
+  color: #46515E;
   cursor: not-allowed;
 }
 
 .tokenize.focus > .tokens-container {
   outline: 0;
-  border-color: #F97316;
-  -webkit-box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.4);
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.4);
+  border-color: #B23A0C;
+  -webkit-box-shadow: 0 0 0 3px rgba(228, 86, 31, 0.35);
+  box-shadow: 0 0 0 3px rgba(228, 86, 31, 0.35);
 }
 
 .tokenize > .tokens-container.input-sm {
@@ -37,8 +37,8 @@
 
 .tokenize > .tokens-container > .token {
   padding: 0 1.6em 0 0.7em;
-  background-color: rgba(249, 115, 22, 0.14);
-  color: #F97316;
+  background-color: rgba(178, 58, 12, 0.1);
+  color: #B23A0C;
   font-weight: 500;
   -webkit-border-radius: 999px;
   -moz-border-radius: 999px;
@@ -49,7 +49,7 @@
 .tokenize > .tokens-container > .token,
 .tokenize > .tokens-container > .placeholder,
 .tokenize > .tokens-container > .token-search {
-  border: 1px solid rgba(249, 115, 22, 0.28);
+  border: 1px solid rgba(178, 58, 12, 0.28);
   display: inline-block;
   margin: 5px 5px 0 0;
   position: relative;
@@ -64,13 +64,13 @@
   display: block;
   border-color: transparent;
   background-color: transparent;
-  color: #DFE4EA;
+  color: #171D25;
   font-weight: 400;
 }
 
 .tokenize.sortable > .tokens-container > .token.shadow {
-  border-color: #565D66;
-  background-color: #565D66;
+  border-color: #9AA3AD;
+  background-color: #9AA3AD;
   filter: alpha(opacity=50);
   opacity: .2;
 }
@@ -82,7 +82,7 @@
 }
 
 .tokenize > .tokens-container > .placeholder {
-  color: #A3AEBA;
+  color: #46515E;
 }
 
 .tokenize > .tokens-container > .token-search > input {
@@ -91,7 +91,7 @@
   line-height: 1em;
   border: 1px solid transparent;
   background: transparent;
-  color: #DFE4EA;
+  color: #171D25;
   border-left: none;
   border-right: none;
   outline: none;
@@ -115,15 +115,15 @@
 }
 
 .tokenize > .tokens-container > .token.pending-delete {
-  background-color: rgba(248, 113, 113, 0.14);
-  border-color: #F87171;
-  color: #FCA5A5;
+  background-color: rgba(220, 38, 38, 0.14);
+  border-color: #DC2626;
+  color: #B91C1C;
 }
 
 .tokenize > .tokens-container > .token > .dismiss {
   position: absolute;
   right: 7px;
-  color: #F97316;
+  color: #B23A0C;
   opacity: 0.6;
   transition: opacity 120ms ease;
   text-decoration: none;
@@ -135,7 +135,7 @@
 }
 
 .tokenize > .tokens-container > .token.pending-delete > .dismiss {
-  color: #FCA5A5;
+  color: #B91C1C;
   opacity: 1;
 }
 
@@ -159,12 +159,12 @@
 
 .tokenize-dropdown > .dropdown-menu li > a .tokenize-highlight {
   font-weight: 600;
-  color: #F97316;
+  color: #B23A0C;
 }
 
 .tokenize-dropdown > .dropdown-menu li.locked {
   padding: 3px 20px;
-  color: #A3AEBA;
+  color: #46515E;
   white-space: nowrap;
 }
 
@@ -182,11 +182,11 @@
 /* Nexo: dismiss with hover and autocomplete menu */
 .tokenize > .tokens-container > .token > .dismiss:hover {
   opacity: 1;
-  color: #F97316;
+  color: #B23A0C;
 }
 
 .tokenize > .tokens-container > .token:hover {
-  border-color: #F97316;
+  border-color: #B23A0C;
 }
 
 .tokenize.single > .tokens-container > .token:hover {
@@ -194,21 +194,21 @@
 }
 
 .tokenize-dropdown > .dropdown-menu {
-  background-color: #1B1E22;
-  border: 1px solid #3A3F46;
+  background-color: #ECEEF1;
+  border: 1px solid #BDC4CC;
   border-radius: 4px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.55);
+  box-shadow: 0 4px 12px rgba(20, 24, 30, 0.18), 0 2px 4px rgba(20, 24, 30, 0.1);
   padding: 4px;
 }
 
 .tokenize-dropdown > .dropdown-menu li > a {
-  color: #DFE4EA;
+  color: #171D25;
   border-radius: 3px;
 }
 
 .tokenize-dropdown > .dropdown-menu li.active > a,
 .tokenize-dropdown > .dropdown-menu li.active > a:hover,
 .tokenize-dropdown > .dropdown-menu li.active > a:focus {
-  background-color: rgba(249, 115, 22, 0.14);
-  color: #F97316;
+  background-color: rgba(178, 58, 12, 0.1);
+  color: #B23A0C;
 }
